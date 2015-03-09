@@ -2,7 +2,7 @@
 
 module.exports = {
 	db: {
-		uri: process.env.MONGOHQ_URL || process.env.MONGOLAB_URI || 'mongodb://' + (process.env.DB_1_PORT_27017_TCP_ADDR || 'localhost') + '/mean',
+		uri: process.env.MONGOHQ_URL || process.env.MONGOLAB_URI || 'mongodb://frozen:frozen@c894.candidate.18.mongolayer.com:10894,c155.candidate.48.mongolayer.com:10155/frozen?replicaSet=set-54fe0a6a94942f4e0a0001da',
 		options: {
 			user: '',
 			pass: ''
@@ -13,7 +13,7 @@ module.exports = {
 		format: 'combined',
 		// Stream defaults to process.stdout
 		// Uncomment to enable logging to a log on the file system
-		
+
 		options: {
 			stream: 'access.log'
 		}
