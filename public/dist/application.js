@@ -6,9 +6,7 @@ var ApplicationConfiguration = (function() {
 	var applicationModuleName = 'mean';
 	var applicationModuleVendorDependencies = ['ngResource', 'ngAnimate', 'ui.router', 'ui.bootstrap', 'ui.utils'];
 
-
 	// Add a new vertical module
-	
 	var registerModule = function(moduleName, dependencies) {
 		// Create angular module
 		angular.module(moduleName, dependencies || []);
@@ -53,6 +51,10 @@ ApplicationConfiguration.registerModule('articles');
 // Use Application configuration module to register a new module
 ApplicationConfiguration.registerModule('core');
 
+'use strict';
+
+// Use applicaion configuration module to register a new module
+ApplicationConfiguration.registerModule('statuses');
 'use strict';
 
 // Use Application configuration module to register a new module
@@ -372,6 +374,121 @@ angular.module('core').service('Menus', [
 
 		//Adding the topbar menu
 		this.addMenu('topbar');
+	}
+]);
+'use strict';
+
+// Configuring the Articles module
+angular.module('statuses').run(['Menus',
+	function(Menus) {
+		// Set top bar menu items
+		Menus.addMenuItem('topbar', 'Statuses', 'statuses', 'dropdown', '/statuses(/create)?');
+		Menus.addSubMenuItem('topbar', 'statuses', 'List Statuses', 'statuses');
+		Menus.addSubMenuItem('topbar', 'statuses', 'New Status', 'statuses/create');
+	}
+]);
+'use strict';
+
+//Setting up route
+angular.module('statuses').config(['$stateProvider',
+	function($stateProvider) {
+		// Statuses state routing
+		$stateProvider.
+		state('listStatuses', {
+			url: '/statuses',
+			templateUrl: 'modules/statuses/views/list-statuses.client.view.html'
+		}).
+		state('createStatus', {
+			url: '/statuses/create',
+			templateUrl: 'modules/statuses/views/create-status.client.view.html'
+		}).
+		state('viewStatus', {
+			url: '/statuses/:statusId',
+			templateUrl: 'modules/statuses/views/view-status.client.view.html'
+		}).
+		state('editStatus', {
+			url: '/statuses/:statusId/edit',
+			templateUrl: 'modules/statuses/views/edit-status.client.view.html'
+		});
+	}
+]);
+'use strict';
+
+// Statuses controller
+angular.module('statuses').controller('StatusesController', ['$scope', '$stateParams', '$location', 'Authentication', 'Statuses',
+	function($scope, $stateParams, $location, Authentication, Statuses) {
+		$scope.authentication = Authentication;
+
+		// Create new Status
+		$scope.create = function() {
+			// Create new Status object
+			var status = new Statuses ({
+				name: this.name
+			});
+
+			// Redirect after save
+			status.$save(function(response) {
+				$location.path('statuses/' + response._id);
+
+				// Clear form fields
+				$scope.name = '';
+			}, function(errorResponse) {
+				$scope.error = errorResponse.data.message;
+			});
+		};
+
+		// Remove existing Status
+		$scope.remove = function(status) {
+			if ( status ) { 
+				status.$remove();
+
+				for (var i in $scope.statuses) {
+					if ($scope.statuses [i] === status) {
+						$scope.statuses.splice(i, 1);
+					}
+				}
+			} else {
+				$scope.status.$remove(function() {
+					$location.path('statuses');
+				});
+			}
+		};
+
+		// Update existing Status
+		$scope.update = function() {
+			var status = $scope.status;
+
+			status.$update(function() {
+				$location.path('statuses/' + status._id);
+			}, function(errorResponse) {
+				$scope.error = errorResponse.data.message;
+			});
+		};
+
+		// Find a list of Statuses
+		$scope.find = function() {
+			$scope.statuses = Statuses.query();
+		};
+
+		// Find existing Status
+		$scope.findOne = function() {
+			$scope.status = Statuses.get({ 
+				statusId: $stateParams.statusId
+			});
+		};
+	}
+]);
+'use strict';
+
+//Statuses service used to communicate Statuses REST endpoints
+angular.module('statuses').factory('Statuses', ['$resource',
+	function($resource) {
+		return $resource('statuses/:statusId', { statusId: '@_id'
+		}, {
+			update: {
+				method: 'PUT'
+			}
+		});
 	}
 ]);
 'use strict';
