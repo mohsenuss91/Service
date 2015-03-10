@@ -47,9 +47,9 @@ module.exports = {
 		callbackURL: '/auth/twitter/callback'
 	},
 	google: {
-		clientID: process.env.GOOGLE_ID || 'APP_ID',
-		clientSecret: process.env.GOOGLE_SECRET || 'APP_SECRET',
-		callbackURL: '/auth/google/callback'
+		clientID: process.env.GOOGLE_ID || '999650700029-skcd11bs41argak7f6v8bt2ba2u8fk55.apps.googleusercontent.com',
+		clientSecret: process.env.GOOGLE_SECRET || 'fzxaZk7f0NdAXqEaU6dTBplv',
+		callbackURL: 'http://frozen-peak-9792.herokuapp.com/oauth2callback'
 	},
 	linkedin: {
 		clientID: process.env.LINKEDIN_ID || 'APP_ID',
