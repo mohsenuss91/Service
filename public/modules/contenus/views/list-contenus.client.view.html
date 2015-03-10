@@ -1,0 +1,19 @@
+<section data-ng-controller="ContenusController" data-ng-init="find()">
+    <div class="page-header">
+        <h1>Contenus</h1>
+    </div>
+    <div class="list-group">
+        <a data-ng-repeat="contenu in contenus" data-ng-href="#!/contenus/{{contenu._id}}" class="list-group-item">
+			<small class="list-group-item-text">
+				Posted on
+				<span data-ng-bind="contenu.created | date:'medium'"></span>
+				by
+				<span data-ng-bind="contenu.user.displayName"></span>
+			</small>
+			<h4 class="list-group-item-heading" data-ng-bind="contenu.name"></h4>
+        </a>
+    </div>
+    <div class="alert alert-warning text-center" data-ng-hide="!contenus.$resolved || contenus.length">
+    	No Contenus yet, why don't you <a href="/#!/contenus/create">create one</a>?
+    </div>
+</section>
