@@ -47,8 +47,8 @@ module.exports = {
 		callbackURL: '/auth/twitter/callback'
 	},
 	google: {
-		clientID: process.env.GOOGLE_ID || '999650700029-skcd11bs41argak7f6v8bt2ba2u8fk55.apps.googleusercontent.com',
-		clientSecret: process.env.GOOGLE_SECRET || 'fzxaZk7f0NdAXqEaU6dTBplv',
+		clientID: process.env.GOOGLE_ID || '999650700029-sqrdfs1ilro62kh69kjra1u5ppcsldqg.apps.googleusercontent.com',
+		clientSecret: process.env.GOOGLE_SECRET || 'ThQpkh3y9zZUPQDyZiZdQw-x',
 		callbackURL: 'http://frozen-peak-9792.herokuapp.com/auth/google/callback'
 	},
 	linkedin: {
