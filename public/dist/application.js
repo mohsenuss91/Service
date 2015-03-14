@@ -48,6 +48,10 @@ ApplicationConfiguration.registerModule('articles');
 
 'use strict';
 
+// Use applicaion configuration module to register a new module
+ApplicationConfiguration.registerModule('contenus');
+'use strict';
+
 // Use Application configuration module to register a new module
 ApplicationConfiguration.registerModule('core');
 
@@ -160,6 +164,121 @@ angular.module('articles').factory('Articles', ['$resource',
 	function($resource) {
 		return $resource('articles/:articleId', {
 			articleId: '@_id'
+		}, {
+			update: {
+				method: 'PUT'
+			}
+		});
+	}
+]);
+'use strict';
+
+// Configuring the Articles module
+angular.module('contenus').run(['Menus',
+	function(Menus) {
+		// Set top bar menu items
+		Menus.addMenuItem('topbar', 'Contenus', 'contenus', 'dropdown', '/contenus(/create)?');
+		Menus.addSubMenuItem('topbar', 'contenus', 'List Contenus', 'contenus');
+		Menus.addSubMenuItem('topbar', 'contenus', 'New Contenu', 'contenus/create');
+	}
+]);
+'use strict';
+
+//Setting up route
+angular.module('contenus').config(['$stateProvider',
+	function($stateProvider) {
+		// Contenus state routing
+		$stateProvider.
+		state('listContenus', {
+			url: '/contenus',
+			templateUrl: 'modules/contenus/views/list-contenus.client.view.html'
+		}).
+		state('createContenu', {
+			url: '/contenus/create',
+			templateUrl: 'modules/contenus/views/create-contenu.client.view.html'
+		}).
+		state('viewContenu', {
+			url: '/contenus/:contenuId',
+			templateUrl: 'modules/contenus/views/view-contenu.client.view.html'
+		}).
+		state('editContenu', {
+			url: '/contenus/:contenuId/edit',
+			templateUrl: 'modules/contenus/views/edit-contenu.client.view.html'
+		});
+	}
+]);
+'use strict';
+
+// Contenus controller
+angular.module('contenus').controller('ContenusController', ['$scope', '$stateParams', '$location', 'Authentication', 'Contenus',
+	function($scope, $stateParams, $location, Authentication, Contenus) {
+		$scope.authentication = Authentication;
+
+		// Create new Contenu
+		$scope.create = function() {
+			// Create new Contenu object
+			var contenu = new Contenus ({
+				name: this.name
+			});
+
+			// Redirect after save
+			contenu.$save(function(response) {
+				$location.path('contenus/' + response._id);
+
+				// Clear form fields
+				$scope.name = '';
+			}, function(errorResponse) {
+				$scope.error = errorResponse.data.message;
+			});
+		};
+
+		// Remove existing Contenu
+		$scope.remove = function(contenu) {
+			if ( contenu ) { 
+				contenu.$remove();
+
+				for (var i in $scope.contenus) {
+					if ($scope.contenus [i] === contenu) {
+						$scope.contenus.splice(i, 1);
+					}
+				}
+			} else {
+				$scope.contenu.$remove(function() {
+					$location.path('contenus');
+				});
+			}
+		};
+
+		// Update existing Contenu
+		$scope.update = function() {
+			var contenu = $scope.contenu;
+
+			contenu.$update(function() {
+				$location.path('contenus/' + contenu._id);
+			}, function(errorResponse) {
+				$scope.error = errorResponse.data.message;
+			});
+		};
+
+		// Find a list of Contenus
+		$scope.find = function() {
+			$scope.contenus = Contenus.query();
+		};
+
+		// Find existing Contenu
+		$scope.findOne = function() {
+			$scope.contenu = Contenus.get({ 
+				contenuId: $stateParams.contenuId
+			});
+		};
+	}
+]);
+'use strict';
+
+//Contenus service used to communicate Contenus REST endpoints
+angular.module('contenus').factory('Contenus', ['$resource',
+	function($resource) {
+		return $resource('contenus/:contenuId', { contenuId: '@_id'
 		}, {
 			update: {
 				method: 'PUT'
