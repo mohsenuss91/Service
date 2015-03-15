@@ -1,0 +1,123 @@
+{% extends "app/html/docs/_layout.html" %}
+
+{% block sidebar %}
+    {% include "app/html/docs/_sidebar_index.html" %}
+{% endblock %}
+
+{% block content %}
+    <h1 class="h3">Package Overview</h1>
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <p>This template is built with Bootstrap 3.2.0 and provides multiple themes, layouts and skins. The package is structured in two branches:</p>
+            <ul class="margin-none">
+                <li><strong>dist</strong> - includes the static end product (HTML, images, compiled CSS and JavaScript)</li>
+                <li><strong>dev</strong> - includes a full development suite based on the latest tools in front-end development, like Grunt, Jekyll, LESS, SASS and even a dedicated Vagrant environment so you can be developing in minutes with zero effort.</li>
+            </ul>
+        </div>
+    </div>
+    <h3 id="whats-included">What's Included</h3>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">Package Structure</div>
+        <div class="panel-body-lrb">
+            <div class="highlight">
+<pre>
+{% highlight %}
+{% include "app/html/docs/components/_package_structure.html" %}
+{% endhighlight %}</pre>
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">Static Branch Structure</div>
+        <div class="panel-body">
+            The structure of <code>dist</code> branch or more simple, the static end product.
+        </div>
+        <div class="panel-body-lrb">
+            <div class="highlight">
+<pre>
+{% highlight %}
+{% include "app/html/docs/components/_static_structure.html" %}
+{% endhighlight %}</pre>
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">Development Branch Structure</div>
+        <div class="panel-body">
+            The structure of <code>dev</code> branch or more simple, the files from our development suite used to build <code>dist</code>
+        </div>
+        <div class="panel-body-lrb">
+            <div class="highlight">
+                <pre>
+{% highlight %}
+{% include "app/html/docs/components/_dev_structure.html" %}
+{% endhighlight %}</pre>
+            </div>
+        </div>
+        <div class="panel-body">
+            <p>To make use of the development suite, depending on the specific functionality you'd like, you need to have installed node with npm, ruby, bower, grunt, gem, bundler and jekyll.</p>
+            <p class="margin-none"><strong>Easy alternative:</strong> If you'd like to experiment with the development suite but not bother with installing and configuring all these various tools, you can use the included Vagrant Environment - a dedicated virtual environment with everything you need pre-installed. You'll get a fully isolated virtual machine and be up &amp; running in minutes.
+                See more about <a href="dev.html">how to use Vagrant</a> on the development suite documentation.</p>
+        </div>
+    </div>
+    <hr/>
+    <h3  id="javascript">JavaScript</h3>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 class="panel-title">Application scripts</h4>
+        </div>
+        <div class="panel-body">
+            <p class="margin-none">All the various custom application scripts are bundled in a single file at <code>dist/&lt;theme_name&gt;/js/scripts.js</code> &amp; also into a minified version <code>scripts.min.js</code> within the same directory.</p>
+        </div>
+        <div class="panel-heading">
+            <h4 class="panel-title">Vendor scripts</h4>
+        </div>
+        <div class="panel-body">
+            <p>All the vendor and 3rd party javascript files are bundled into a single file at <code>dist&lt;theme&gt;/js/vendor.js</code> &amp; also into a minified version <code>vendor.min.js</code> within the same directory.</p>
+            <p class="margin-none">Here's a breakdown of plugins we used as well as the exact version, branch, tag or commit of each library:</p>
+        </div>
+        <div class="panel-body-lrb">
+            <div class="highlight">
+                <pre>
+{% highlight 'html' %}
+├── Grid-A-Licious#b7a75df04d                       <!-- Javascript Grids -->
+├── animated-climacons#a2c1d33e43                   <!-- Animated Weather Icons  -->
+├── bootstrap#3.2.0                                 <!-- Bootstrap Front-end framework -->
+├── bootstrap-sass#3.2.0 (latest is 3.2.0+2)        <!-- Bootstrap SASS -->
+├── bootstrap-select#1.6.3                          <!-- Forms Select for Bootstrap -->
+├── bootstrap3-datepicker#1.2.1                     <!-- Datepicker for Bootstrap -->
+├── datatables#1.10.3                               <!-- Javascript Tables -->
+├── datatables-plugins#f99d15aa1d                   <!-- Javascript Table Plugins (required by datatables) -->
+├── font-awesome#4.2.0                              <!-- Font Awesome Icons -->
+├── handlebars#2.0.0                                <!-- Javascript Template Engine -->
+├── holderjs#2.3.2 (latest is 2.4.0)                <!-- Image Holder -->
+├── jquery-minicolors#2.1.7                         <!-- Javascript Color Picker -->
+├── jquery.breakpoints#9310e15aea                   <!-- Javascript breakpoints for your responsive design -->
+├── jquery.cookie#1.4.1                             <!-- Jquery Cookie -->
+├── jquery.nicescroll#be4f1a2bfe                    <!-- Jquery NiceScroll (scroll) -->
+├── morrisjs#0.5.1                                  <!-- Charts -->
+├── seiyria-bootstrap-slider#4.0.8                  <!-- Bootstrap Sliders -->
+{% endhighlight %}</pre>
+            </div>
+        </div>
+        <div class="panel-body">
+            <strong>PRO TIP:</strong> You can get an updated list of all the various libraries installed and also check for available updates for each library in seconds, anytime! Just go into a <em>Terminal</em> to the <code>dev</code> directory and type <code>bower list</code>.
+        </div>
+    </div>
+    <hr/>
+    <h3 id="stylesheet">Styling</h3>
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <p>This amazing theme supports CSS pre-processing, not just from one, but two of the top industry-approved and mass-adopted CSS pre-processors: <strong>Less</strong> and <strong>Sass (CSS with superpowers)</strong></strong>.</p>
+            <p class="margin-none">All the styling source is located within <code>dev/app/less</code> or <code>dev/app/scss</code> directories and are broken down in the following:</p>
+        </div>
+        <div class="panel-body-lrb">
+            <div class="highlight">
+<pre>{% highlight %}
+{% include "app/html/docs/components/_style_structure.html" %}
+{% endhighlight %}</pre>
+            </div>
+        </div>
+    </div>
+{% endblock %}

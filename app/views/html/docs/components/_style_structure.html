@@ -1,0 +1,37 @@
+<common> <!-- Common Styling used for both Theme 1 & 2 -->
+├── <components>
+├── <mixins>
+├── <variables>
+├── _app.less
+├── _demo.less
+├── _vendor.less
+├── common.less
+│
+<demo> <!-- Styling used for DEMO purposes (can be removed) -->
+├── skins.less
+├── demo.less
+│
+<skins> <!-- Styling used for Skins -->
+├── <1>
+├── <2>
+│
+<themes> <!-- Specific Theme Styling -->
+├── <1>
+│   ├── <layout>
+│   ├── _cover.less
+│   ├── _helpers.less
+│   ├── _scaffolding.less
+│   ├── _styles.less
+│   ├── _variables.less
+│   └── default.less <!-- Loads the required partials for theme 1 -->
+├── <2>
+│   ├── <layout>
+│   ├── _cover.less
+│   ├── _scaffolding.less
+│   ├── _styles.less
+│   ├── _variables.less
+│   └── default.less <!-- Loads the required partials for theme 2 -->
+│
+<vendor> <!-- 3rd Party Styling (required for LESS to SASS conversion) -->
+├── <bootstrap>
+└── <bootstrap-select>

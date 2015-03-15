@@ -1,0 +1,81 @@
+<!-- Fixed navbar -->
+<div class="navbar navbar-main navbar-default navbar-fixed-top" role="navigation">
+    <div class="container-fluid">
+        <a href="#" data-toggle="sidebar-menu" id="toggle-sidebar-menu" class="visible-xs"><i class="fa fa-bars fa-2x"></i></a>
+        <ul class="nav navbar-nav hidden-xs">
+            <!-- Notifications -->
+            <li class="dropdown notifications">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    <i class="icon-envelope-1"></i>
+                </a>
+                <ul class="dropdown-menu">
+                    <li class="media">
+                        <a class="pull-left" href="#"><img class="media-object thumb" src="images/people/50/child-1.jpg" alt="people"></a>
+                        <div class="media-body">
+                            <span class="label label-default pull-right">5 min</span>
+                            <h5 class="media-heading">Adrian D.</h5>
+                            <p class="margin-none">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+                        </div>
+                    </li>
+                    <li class="media">
+                        <a class="pull-left" href="#"><img class="media-object thumb" src="images/people/50/guy-7.jpg" alt="people"></a>
+                        <div class="media-body">
+                            <span class="label label-default pull-right">2 days</span>
+                            <h5 class="media-heading">Jane B.</h5>
+                            <p class="margin-none">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+                        </div>
+                    </li>
+                    <li class="media">
+                        <a class="pull-left" href="#"><img class="media-object thumb" src="images/people/50/guy-5.jpg" alt="people"></a>
+                        <div class="media-body">
+                            <span class="label label-default pull-right">3 days</span>
+                            <h5 class="media-heading">Andrew M.</h5>
+                            <p class="margin-none">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+                        </div>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+        <ul class="nav navbar-nav navbar-user">
+            <!-- User -->
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    <img src="images/people/50/guy-5.jpg" width="35" alt="Bill" class="img-circle"/>
+                    Redha Bourabaa    <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu" role="menu">
+                    <li><a href="profile.html">Profile</a></li>
+                    <li><a href="messages.html">Messages</a></li>
+                    <li><a href="login.html">Logout</a></li>
+                </ul>
+            </li>
+        </ul>
+        <ul class="nav navbar-nav hidden-xs">
+            <!-- Search -->
+            <div class="input-group pull-left">
+                <span class="input-group-addon"><i class="icon-search"></i></span>
+                <input type="text" class="form-control" placeholder="Trouver un Amis">
+            </div>
+            <div class="pull-left visible-md visible-lg" data-toggle="tooltip" data-placement="bottom" title="A few Color Examples. Download includes CSS Files for all color examples & the tools to Generate any Color combination. This Color-Switcher is for previewing purposes only.">
+                {% include "../../common/components/skins.html" { theme: 1 } %}
+            </div>
+        </ul>
+
+        <ul class="nav navbar-nav navbar-right">
+            <li class="alert hidden-xs">
+                <a href="#" data-toggle="chat-box" data-hide>
+                <span class="hidden-sm">
+                    Nouveau message depuis
+                    <strong>Jonathan</strong>
+                </span>
+                    <span class="visible-sm">New <strong>message</strong></span>
+                </a>
+            </li>
+            <li class="pull-right">
+                <a href="#" data-toggle="sidebar-chat">
+                    <i class="fa fa-comments"></i>
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>

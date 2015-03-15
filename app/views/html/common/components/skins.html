@@ -1,0 +1,5 @@
+<ul class="skins">
+    {% for skin in config.skins[theme] %}
+    <li><span data-skin="{{ loop.key }}" style="background: {% if config.skins[theme][loop.key]['color-block'] %}{{ config.skins[theme][loop.key]['color-block'] }} {% else %}{{ config.skins[theme][loop.key]['primary-color'] }} {% endif %}"></span></li>
+    {% endfor %}
+</ul>

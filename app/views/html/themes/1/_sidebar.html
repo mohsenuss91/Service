@@ -1,0 +1,93 @@
+<div class="sidebar left hidden-xs">
+    <a id="brand" href="index.html">Esi-Life</a>
+    <div id="menu" data-scrollable>
+        <ul>
+            <li class="category">Navigation</li>
+            <li class="hasSubmenu  {% if (page.slug == 'index' or page.slug == 'timeline-list' or page.slug == 'timeline-mirror') %} open {% endif %}">
+                <a href="/#!/statuses" ui-route="/#!/statuses" data-toggle="collapse"><i class="icon-ship-wheel"></i> Mur </a>
+                <ul class="collapse {% if (page.slug == 'index' or page.slug == 'timeline-list' or page.slug == 'timeline-mirror') %} in {% endif %}" id="timeline">
+                    <li{% if (page.slug == 'index') %} class="active"{% endif %}>
+                        <a href="/#!/statuses" ui-route="/#!/statuses"><i class="fa fa-circle-o"></i> Blocs</a>
+                    </li>
+                    <li{% if (page.slug == 'timeline-list') %} class="active"{% endif %}>
+                        <a href="timeline-list.html"><i class="fa fa-circle-o"></i> Inscription</a>
+                    </li>
+                    
+                </ul>
+            </li>
+
+            <li class="{% if (page.slug == 'profile') %} active {% endif %}">
+                <a href="profile.html"><i class="icon-user-1"></i> Profile</a>
+            </li>
+            <li class="{% if (page.slug == 'users') %} active{% endif %}">
+                <a href="users.html"><i class="fa fa-group"></i> Utilisateurs</a>
+            </li>
+            <li class="{% if (page.slug == 'messages') %} active{% endif %}">
+                <a href="messages.html"><i class="icon-comment-fill-1"></i> Messages</a>
+            </li>
+            <li class="{% if (page.slug == 'login') %} active{% endif %}">
+                <a href="login.html"><i class="icon-lock-fill"></i> S'identifier</a>
+            </li>
+            <li class="category border top">Fils d'actualités</li>
+            <li class="reset">
+                <ul>
+                    <li class="media news-item">
+                        <span class="news-item-success pull-right "><i class="fa fa-circle"></i></span>
+                        <span class="pull-left media-object">
+                            <i class="fa fa-fw fa-bell"></i>
+                        </span>
+                        <div class="media-body">
+                            <a href="" class="text-white">Adrian</a> Vient de se connecter
+                            <span class="time">Il ya 2 minutes</span>
+                        </div>
+                    </li>
+                    <li class="media news-item">
+                        <span class="news-item-success pull-right "><i class="fa fa-circle"></i></span>
+                        <span class="pull-left media-object">
+                            <i class="fa fa-fw fa-bell"></i>
+                        </span>
+                        <div class="media-body">
+                            <a href="" class="text-white">Adrian</a> Venez d'ajouter  <a href="" class="text-white">mosaicpro</a> Comme leur bureau
+                            <span class="time">Il ya 2 minutes</span>
+                        </div>
+                    </li>
+                    <li class="media news-item">
+                        <span class="pull-left media-object">
+                            <i class="fa fa-fw fa-bell"></i>
+                        </span>
+                        <div class="media-body">
+                            <a href="" class="text-white">Adrian</a> Vient de se connecter
+                            <span class="time">Il ya 2 minutes</span>
+                        </div>
+                    </li>
+                    <li class="media news-item">
+                        <span class="pull-left media-object">
+                            <i class="fa fa-fw fa-bell"></i>
+                        </span>
+                        <div class="media-body">
+                            <a href="" class="text-white">Adrian</a> Vient de se connecter
+                            <span class="time">Il ya 2 minutes</span>
+                        </div>
+                    </li>
+                    <li class="media news-item">
+                        <span class="pull-left media-object">
+                            <i class="fa fa-fw fa-bell"></i>
+                        </span>
+                        <div class="media-body">
+                            <a href="" class="text-white">Adrian</a> Vient de se connecter
+                            <span class="time">Il ya 2 minutes</span>
+                        </div>
+                    </li>
+                </ul>
+            </li>
+            <li class="category">Filtre</li>
+            <li class="reset">
+                <ul>
+                    <li><a href="#"><span class="fa fa-fw fa-circle-o text-success"></span> Travaux connexes</a></li>
+                    <li><a href="#"><span class="fa fa-fw fa-circle-o text-primary"></span> Très important</a></li>
+                    <li><a href="#"><span class="fa fa-fw fa-circle-o text-info"></span> Amis &amp; Famille</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</div>

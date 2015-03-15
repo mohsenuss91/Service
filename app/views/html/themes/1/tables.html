@@ -1,0 +1,6 @@
+{% extends "app/html/themes/1/_layout.html" %}
+
+{% block content %}
+    {% set tpl = "app/html/common/pages/" + page.basename %}
+    {% include tpl %}
+{% endblock %}

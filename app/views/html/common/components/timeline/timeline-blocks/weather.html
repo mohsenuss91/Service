@@ -1,0 +1,49 @@
+<div class="panel panel-default">
+    {% if header !== false %}
+    <div class="panel-heading">
+        <div class="media">
+            <a href="" class="pull-left"><img src="images/people/50/guy-4.jpg" class="media-object"></a>
+            <div class="media-body">
+                <a href="#" class="pull-right text-muted"><i class="icon-reply-all-fill fa fa-2x "></i></a>
+                <a href="">Michelle</a>
+                <span>on 15th January, 2014</span>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    <div class="weather-svg">
+        <div class="list">
+            <div class="row">
+                <div class="col-xs-4 text-center">
+                    <div>Aujourd huit</div>
+                    {% include "app/html/common/components/weather_icons/svg/cloudDrizzleSunFill.html" %}
+                </div>
+                <div class="col-xs-4 text-center">
+                    <div>Demain</div>
+                    {% include "app/html/common/components/weather_icons/svg/sun.html" %}
+                </div>
+                <div class="col-xs-4 text-center">
+                    <div>Samedi</div>
+                    {% include "app/html/common/components/weather_icons/svg/cloudRainFill.html" %}
+                </div>
+            </div>
+        </div>
+        <div class="today text-center">
+            {% include "app/html/common/components/weather_icons/svg/cloudDrizzleSunFill.html" %}
+            <div class="clearfix"></div>
+            <div class="details">Aujourd huit: <strong>10&deg; C</strong></div>
+        </div>
+    </div>
+
+    <div class="view-all-comments"><i class="fa fa-comments-o"></i> Rédiger le premier commentaire</div>
+    <ul class="comments">
+        <li class="comment-form">
+            <div class="input-group">
+                <input type="text" class="form-control"/>
+                <span class="input-group-addon">
+                   <a href=""><i class="fa fa-photo"></i></a>
+                </span>
+            </div>
+        </li>
+    </ul>
+</div>

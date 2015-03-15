@@ -1,0 +1,177 @@
+<h1>Forms</h1>
+<div class="row">
+    <div class="col-md-6">
+        <div class="panel panel-default">
+            <div class="panel-heading panel-heading-gray">Elements</div>
+            <div class="panel-body">
+                <form class="form-horizontal" role="form">
+                    <div class="form-group">
+                        <label for="inputEmail3" class="col-sm-3 control-label">Input</label>
+                        <div class="col-sm-9">
+                                <input type="email" class="form-control" id="inputEmail3" placeholder="Type here..">
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Zone de texte</label>
+                        <div class="col-sm-9">
+                            <textarea class="form-control" rows="5"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Add-On</label>
+                        <div class="col-sm-9">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                                <input type="text" class="form-control" placeholder="Username">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Select</label>
+                        <div class="col-sm-9">
+                            <select name="select" class="selectpicker" data-style="btn-white" data-live-search="true"  data-size="5">
+                                <option>Mustard</option>
+                                <option>Ketchup</option>
+                                <option>Relish</option>
+                                <option>Garlic</option>
+                                <option>Tomatoes</option>
+                                <option>Onion</option>
+
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Multiple</label>
+                        <div class="col-sm-9">
+                            <select class="selectpicker" multiple data-style="btn-white"  title='Choose one of the following...'>
+                                <option>Mustard</option>
+                                <option>Ketchup</option>
+                                <option>Relish</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Input Button</label>
+                        <div class="col-sm-9">
+
+
+                            <div class="input-group">
+                                <input type="text" class="form-control">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-inverse" type="button">Go!</button>
+                                </span>
+                            </div><!-- /input-group -->
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label  class="col-sm-3 control-label">Datepicker</label>
+                        <div class="col-sm-9">
+                            <input type="text" type="text" class="form-control datepicker">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label  class="col-sm-3 control-label">Colorpicker</label>
+                        <div class="col-sm-9">
+                            <input type="text" type="text" class="form-control minicolors" data-defaultValue="#25ad9f">
+
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Checkboxes</label>
+                        <div class="col-sm-9">
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" value="">
+                                    Option one
+                                </label>
+                            </div>
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" value="">
+                                    Option two
+                                </label>
+                            </div>
+                            <div class="checkbox disabled">
+                                <label>
+                                    <input type="checkbox" value="" disabled>
+                                    Option three is disabled
+                                </label>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Radio</label>
+                        <div class="col-sm-9">
+                            <label class="radio-inline">
+                                <input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1"> 1
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2"> 2
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option3"> 3
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Disabled</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" placeholder="Disabled input" disabled>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-offset-3 col-sm-9">
+                            <button type="submit" class="btn btn-primary">Sign in</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="panel panel-default">
+            <div class="panel-heading panel-heading-gray">
+                Sliders
+            </div>
+            <div class="panel-body">
+                <input id="ex1" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="14" data-slider-handle="square"/>
+                <hr/>
+                <input id="ex2" type="text" class="span2" value="" data-slider-min="10" data-slider-max="1000" data-slider-step="5" data-slider-value="[250,450]" data-slider-handle="square"/>
+                <hr/>
+                <div class="media">
+                    <strong id="ex6SliderVal" class="pull-right">3</strong>
+                    <div class="media-body">
+                        <input id="ex6" type="text" data-slider-min="-5" data-slider-max="20" data-slider-step="1" data-slider-value="3" data-slider-handle="square"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading panel-heading-gray">
+                Input with Color
+            </div>
+            <div class="panel-body">
+                    <div class="form-group has-success">
+                        <label class="control-label" for="inputSuccess1">Input with success</label>
+                        <input type="text" class="form-control" id="inputSuccess1">
+                    </div>
+                    <div class="form-group has-warning">
+                        <label class="control-label" for="inputWarning1">Input with warning</label>
+                        <input type="text" class="form-control" id="inputWarning1">
+                    </div>
+                    <div class="form-group has-error">
+                        <label class="control-label" for="inputError1">Input with error</label>
+                        <input type="text" class="form-control" id="inputError1">
+                    </div>
+            </div>
+        </div>
+
+    </div>
+</div>
