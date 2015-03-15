@@ -3,24 +3,14 @@
     <div id="menu" data-scrollable>
         <ul>
             <li class="category">Navigation</li>
-            <li class="hasSubmenu  {% if (page.slug == 'index' or page.slug == 'timeline-list' or page.slug == 'timeline-mirror') %} open {% endif %}">
-                <a href="/#!/statuses" ui-route="/#!/statuses" data-toggle="collapse"><i class="icon-ship-wheel"></i> Mur </a>
-                <ul class="collapse {% if (page.slug == 'index' or page.slug == 'timeline-list' or page.slug == 'timeline-mirror') %} in {% endif %}" id="timeline">
-                    <li{% if (page.slug == 'index') %} class="active"{% endif %}>
-                        <a href="/#!/statuses" ui-route="/#!/statuses"><i class="fa fa-circle-o"></i> Blocs</a>
-                    </li>
-                    <li{% if (page.slug == 'timeline-list') %} class="active"{% endif %}>
-                        <a href="timeline-list.html"><i class="fa fa-circle-o"></i> Inscription</a>
-                    </li>
-                    
-                </ul>
+            <li class="{% if (page.slug == '') %} active {% endif %}">
+                <a href="/#!/statuses"><i class="icon-ship-wheel"></i> Mur</a>
             </li>
-
             <li class="{% if (page.slug == 'profile') %} active {% endif %}">
-                <a href="profile.html"><i class="icon-user-1"></i> Profile</a>
+                <a href="/#!/profile"><i class="icon-user-1"></i> Profile</a>
             </li>
             <li class="{% if (page.slug == 'users') %} active{% endif %}">
-                <a href="users.html"><i class="fa fa-group"></i> Utilisateurs</a>
+                <a href="/#!/users"><i class="fa fa-group"></i> Utilisateurs</a>
             </li>
             <li class="{% if (page.slug == 'messages') %} active{% endif %}">
                 <a href="messages.html"><i class="icon-comment-fill-1"></i> Messages</a>
