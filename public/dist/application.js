@@ -58,6 +58,14 @@ ApplicationConfiguration.registerModule('core');
 'use strict';
 
 // Use applicaion configuration module to register a new module
+ApplicationConfiguration.registerModule('pub-imags');
+'use strict';
+
+// Use applicaion configuration module to register a new module
+ApplicationConfiguration.registerModule('pub-videos');
+'use strict';
+
+// Use applicaion configuration module to register a new module
 ApplicationConfiguration.registerModule('statuses');
 'use strict';
 
@@ -493,6 +501,270 @@ angular.module('core').service('Menus', [
 
 		//Adding the topbar menu
 		this.addMenu('topbar');
+	}
+]);
+'use strict';
+
+//Setting up route
+angular.module('pub-imags').config(['$stateProvider',
+	function($stateProvider) {
+		// Pub imags state routing
+		$stateProvider.
+		state('listPubImags', {
+			url: '/pub-imags',
+			templateUrl: 'modules/pub-imags/views/list-pub-imags.client.view.html'
+		}).
+		state('createPubImag', {
+			url: '/pub-imags/create',
+			templateUrl: 'modules/pub-imags/views/create-pub-imag.client.view.html'
+		}).
+		state('viewPubImag', {
+			url: '/pub-imags/:pubImagId',
+			templateUrl: 'modules/pub-imags/views/view-pub-imag.client.view.html'
+		}).
+		state('editPubImag', {
+			url: '/pub-imags/:pubImagId/edit',
+			templateUrl: 'modules/pub-imags/views/edit-pub-imag.client.view.html'
+		});
+	}
+]);
+'use strict';
+
+// Pub imags controller
+angular.module('pub-imags').controller('PubImagsController', ['$scope', '$stateParams', '$location', 'Authentication', 'PubImags',
+	function($scope, $stateParams, $location, Authentication, PubImags) {
+		$scope.authentication = Authentication;
+
+        //recuperer image
+        var fileInput = document.querySelector('#file');
+        var reader =new FileReader();
+        fileInput.onchange = function() {
+            document.getElementById('namefile').value=fileInput.files[0].name;
+            reader.onload=function(){
+                document.getElementById('image').style.width="242px";
+                document.getElementById('image').style.height="200px";
+                document.getElementById('image').src=reader.result;
+            }
+            reader.readAsDataURL(fileInput.files[0]);
+        }
+
+		// Create new Pub imag
+
+		$scope.create = function() {
+			// Create new Pub imag object
+			var pubImag = new PubImags ({
+		        name:reader.result,
+                comment:this.comment
+			});
+
+			// Redirect after save
+			pubImag.$save(function(response) {
+				$location.path('pub-imags/' + response._id);
+
+				// Clear form fields
+				$scope.name = '';
+			}, function(errorResponse) {
+				$scope.error = errorResponse.data.message;
+			});
+		};
+
+		// Remove existing Pub imag
+		$scope.remove = function(pubImag) {
+			if ( pubImag ) {
+				pubImag.$remove();
+
+				for (var i in $scope.pubImags) {
+					if ($scope.pubImags [i] === pubImag) {
+						$scope.pubImags.splice(i, 1);
+					}
+				}
+			} else {
+				$scope.pubImag.$remove(function() {
+					$location.path('pub-imags');
+				});
+			}
+		};
+
+		// Update existing Pub imag
+		$scope.update = function() {
+			var pubImag = $scope.pubImag;
+
+			pubImag.$update(function() {
+				$location.path('pub-imags/' + pubImag._id);
+			}, function(errorResponse) {
+				$scope.error = errorResponse.data.message;
+			});
+		};
+
+		// Find a list of Pub imags
+		$scope.find = function() {
+			$scope.pubImags = PubImags.query();
+		};
+
+		// Find existing Pub imag
+		$scope.findOne = function() {
+			$scope.pubImag = PubImags.get({
+				pubImagId: $stateParams.pubImagId
+			});
+		};
+	}
+]);
+
+/*var xmlHttp=createXmlHttpRequestObject();
+
+function createXmlHttpRequestObject(){
+
+}
+
+function process(){
+    if(xmlHttp.readyState == 0 || xmlHttp.readyState == 4){
+        xmlHttp.open('GET','',true);
+        xmlHttp.onreadystatechange = handleServerResponse;
+        xmlHttp.send(null);
+    }else{
+        setTimeout('process()',1000);
+    }
+}
+
+function handleServerResponse(){
+    if(xmlHttp.readyState == 4){
+        if(xmlHttp.status == 200){
+                setTimeout('process()',1000);
+        }else{
+            alert('something went wrong ???');
+        }
+    }
+}
+
+
+*/
+
+'use strict';
+
+//Pub imags service used to communicate Pub imags REST endpoints
+angular.module('pub-imags').factory('PubImags', ['$resource',
+	function($resource) {
+		return $resource('pub-imags/:pubImagId', { pubImagId: '@_id'
+		}, {
+			update: {
+				method: 'PUT'
+			}
+		});
+	}
+]);
+'use strict';
+
+// Configuring the Articles module
+angular.module('pub-videos').run(['Menus',
+	function(Menus) {
+		// Set top bar menu items
+		Menus.addMenuItem('topbar', 'Pub videos', 'pub-videos', 'dropdown', '/pub-videos(/create)?');
+		Menus.addSubMenuItem('topbar', 'pub-videos', 'List Pub videos', 'pub-videos');
+		Menus.addSubMenuItem('topbar', 'pub-videos', 'New Pub video', 'pub-videos/create');
+	}
+]);
+'use strict';
+
+//Setting up route
+angular.module('pub-videos').config(['$stateProvider',
+	function($stateProvider) {
+		// Pub videos state routing
+		$stateProvider.
+		state('listPubVideos', {
+			url: '/pub-videos',
+			templateUrl: 'modules/pub-videos/views/list-pub-videos.client.view.html'
+		}).
+		state('createPubVideo', {
+			url: '/pub-videos/create',
+			templateUrl: 'modules/pub-videos/views/create-pub-video.client.view.html'
+		}).
+		state('viewPubVideo', {
+			url: '/pub-videos/:pubVideoId',
+			templateUrl: 'modules/pub-videos/views/view-pub-video.client.view.html'
+		}).
+		state('editPubVideo', {
+			url: '/pub-videos/:pubVideoId/edit',
+			templateUrl: 'modules/pub-videos/views/edit-pub-video.client.view.html'
+		});
+	}
+]);
+'use strict';
+
+// Pub videos controller
+angular.module('pub-videos').controller('PubVideosController', ['$scope', '$stateParams', '$location', 'Authentication', 'PubVideos',
+	function($scope, $stateParams, $location, Authentication, PubVideos) {
+		$scope.authentication = Authentication;
+
+		// Create new Pub video
+		$scope.create = function() {
+			// Create new Pub video object
+			var pubVideo = new PubVideos ({
+				name: this.name
+			});
+
+			// Redirect after save
+			pubVideo.$save(function(response) {
+				$location.path('pub-videos/' + response._id);
+
+				// Clear form fields
+				$scope.name = '';
+			}, function(errorResponse) {
+				$scope.error = errorResponse.data.message;
+			});
+		};
+
+		// Remove existing Pub video
+		$scope.remove = function(pubVideo) {
+			if ( pubVideo ) { 
+				pubVideo.$remove();
+
+				for (var i in $scope.pubVideos) {
+					if ($scope.pubVideos [i] === pubVideo) {
+						$scope.pubVideos.splice(i, 1);
+					}
+				}
+			} else {
+				$scope.pubVideo.$remove(function() {
+					$location.path('pub-videos');
+				});
+			}
+		};
+
+		// Update existing Pub video
+		$scope.update = function() {
+			var pubVideo = $scope.pubVideo;
+
+			pubVideo.$update(function() {
+				$location.path('pub-videos/' + pubVideo._id);
+			}, function(errorResponse) {
+				$scope.error = errorResponse.data.message;
+			});
+		};
+
+		// Find a list of Pub videos
+		$scope.find = function() {
+			$scope.pubVideos = PubVideos.query();
+		};
+
+		// Find existing Pub video
+		$scope.findOne = function() {
+			$scope.pubVideo = PubVideos.get({ 
+				pubVideoId: $stateParams.pubVideoId
+			});
+		};
+	}
+]);
+'use strict';
+
+//Pub videos service used to communicate Pub videos REST endpoints
+angular.module('pub-videos').factory('PubVideos', ['$resource',
+	function($resource) {
+		return $resource('pub-videos/:pubVideoId', { pubVideoId: '@_id'
+		}, {
+			update: {
+				method: 'PUT'
+			}
+		});
 	}
 ]);
 'use strict';

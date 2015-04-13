@@ -1,6 +1,6 @@
-<section data-ng-controller="ContenusController">
+<section data-ng-controller="PubVideosController">
     <div class="page-header">
-        <h1>New Contenu</h1>
+        <h1>New Pub video</h1>
     </div>
     <div class="col-md-12">
         <form class="form-horizontal" data-ng-submit="create()" novalidate>
@@ -10,6 +10,7 @@
                     <div class="controls">
                         <input type="text" data-ng-model="name" id="name" class="form-control" placeholder="Name" required>
                     </div>
+                    <span><p>{{name}}</p></span>
                 </div>
                 <div class="form-group">
                     <input type="submit" class="btn btn-default">
@@ -19,8 +20,5 @@
 				</div>
             </fieldset>
         </form>
-    </div>
-    <div>
-    {% include "public/modules/statuses/views/create-status.client.view.html" %}
     </div>
 </section>
