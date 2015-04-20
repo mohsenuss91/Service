@@ -5,21 +5,37 @@
  */
 var mongoose = require('mongoose'),
 	Schema = mongoose.Schema;
+var mongooseFS = require('mongoose-fs');
+
 
 /**
  * Pub imag Schema
  */
 var PubImagSchema = new Schema({
-	name: {
-		type: String,
-		default: '',
-		required: 'Please fill Pub imag name',
-		trim: true
-	},
-    comment:{
+    file:{
+        name: {
+            type: String,
+            default: '',
+            required: 'Please fill Pub video name',
+            trim: true
+        },
+        size:{
+            type: Number,
+            default: '',
+            required: 'Please fill Pub video name',
+            trim: true
+        },
+        content:{
+            type: String,
+            default: '',
+            required: 'Please fill Pub video name',
+            trim: true
+        }
+    },
+    description: {
         type: String,
         default: '',
-        required: 'Please fill Pub imag comment',
+        required: 'Please fill Pub imag description',
         trim: true
     },
 	created: {
@@ -31,5 +47,7 @@ var PubImagSchema = new Schema({
 		ref: 'User'
 	}
 });
+
+PubImagSchema.plugin(mongooseFS, {keys: ['content', 'complement'], mongoose: mongoose});
 
 mongoose.model('PubImag', PubImagSchema);

@@ -5,11 +5,43 @@ angular.module('pub-videos').controller('PubVideosController', ['$scope', '$stat
 	function($scope, $stateParams, $location, Authentication, PubVideos) {
 		$scope.authentication = Authentication;
 
-		// Create new Pub video
+        var name,size,content;
+        $scope.onFileSelect=function($files){
+            var file;
+            if($files[0] != null){
+                file=$files[0];
+                var imgType;
+                imgType =file.name.split('.');
+                imgType = imgType[imgType.length - 1].toLowerCase();
+                $scope.name=file.name;
+                size = file.size;
+                name=file.name;
+                var reader =new FileReader();
+                reader.onprogress=function(e){
+                    document.getElementById('bar1').style.width= parseInt(100.0 * e.loaded / e.total)+"%";
+                }
+                reader.onload = function () {
+                    $( "#image" ).replaceWith( "<video  id='video' src=''></video>" );
+                    document.getElementById('video').style.width = "181px";
+                    document.getElementById('video').style.height = "125px";
+                    document.getElementById('video').src = reader.result;
+                    content=reader.result;
+                    console.log(content);
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Create new Pub video
 		$scope.create = function() {
 			// Create new Pub video object
 			var pubVideo = new PubVideos ({
-				name: this.name
+                file:{
+                    name:name,
+                    size:size,
+                    content:content
+                },
+                description: this.description
 			});
 
 			// Redirect after save
@@ -17,7 +49,7 @@ angular.module('pub-videos').controller('PubVideosController', ['$scope', '$stat
 				$location.path('pub-videos/' + response._id);
 
 				// Clear form fields
-				$scope.name = '';
+                $scope.description= '';
 			}, function(errorResponse) {
 				$scope.error = errorResponse.data.message;
 			});

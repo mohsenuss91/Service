@@ -1,3 +1,4 @@
+
 <section data-ng-controller="PubImagsController">
     <div class="page-header">
         <h1>New Pub imag</h1>
@@ -8,27 +9,41 @@
                 <div class="form-group">
                     <div class="panel panel-default">
                         <ul class="nav nav-tabs">
-                            <li class="active"><a href="#tab1" data-toggle="tab" ><span class="btn btn-primary btn-stroke"><i class="fa fa-picture-o"></i></span></a></li>
+                            <li class="active">
+                                <a href="#tab1" data-toggle="tab" >
+                                    <span class="btn btn-primary btn-stroke">
+                                        <i class="fa fa-picture-o"></i>
+                                    </span></a>
+                            </li>
                         </ul>
                         <div class="panel-body">
                             <div class="tab-pane" id="tab1">
                                 <div class="inline">
                                     <div class="col-xs-6">
                                         <div class="thumbnail">
-                                            <img id='image' data-src="holder.js/100%x200" data-holder-rendered="true" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/PjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iMjQyIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDI0MiAyMDAiIHByZXNlcnZlQXNwZWN0UmF0aW89Im5vbmUiPjxkZWZzLz48cmVjdCB3aWR0aD0iMjQyIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI0VFRUVFRSIvPjxnPjx0ZXh0IHg9IjkxLjUiIHk9IjEwMCIgc3R5bGU9ImZpbGw6I0FBQUFBQTtmb250LXdlaWdodDpib2xkO2ZvbnQtZmFtaWx5OkFyaWFsLCBIZWx2ZXRpY2EsIE9wZW4gU2Fucywgc2Fucy1zZXJpZiwgbW9ub3NwYWNlO2ZvbnQtc2l6ZToxMXB0O2RvbWluYW50LWJhc2VsaW5lOmNlbnRyYWwiPjI0MngyMDA8L3RleHQ+PC9nPjwvc3ZnPg==" >
+                                            <img id='image' ng-src="/images/260x180.png"  >
                                         </div>
                                     </div>
+                                    <br/>
+                                    <br/>
                                     <div class="input-group">
-                                        <input type="text" class="form-control" id="namefile">
+                                        <input type="text" class="form-control" ng-model="name" value="{{name}}">
                                         <span class="input-group-btn">
-                                            <button class="btn btn-primary btn-file" type="button" ng-click="load()"><input type="file" id="file" ><i class="fa fa-download"></i></button>
+                                            <button class="btn btn-primary btn-file" >
+                                                <input type="file"   ng-file-select  ng-file-change="onFileSelect($files)"  accept="image/*">
+                                                <i class="fa fa-download"></i>
+                                            </button>
                                         </span>
                                     </div>
+                                </div>
+                                <br/>
+                                <div class="progress">
+                                    <div class="progress-bar" id="bar1" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"/>
                                 </div>
                         </div>
                         </div>
                         <div class="panel-footer share-buttons input-groupe">
-                            <textarea name="commentaire"  placeholder="ajouter un commentaire..." class="form-control share-text" data-ng-model="comment"></textarea>
+                            <textarea name="commentaire"  placeholder="ajouter un commentaire..." class="form-control share-text" data-ng-model="description"></textarea>
                             <span class="input-group-btn">
                                 <button type="submit" class="btn btn-primary btn-xs pull-right " href="#" id="uploadForm">Publier</button>
                             </span>

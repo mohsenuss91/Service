@@ -4,6 +4,8 @@
  * Module dependencies.
  */
 var mongoose = require('mongoose'),
+    Grid = require('gridfs-stream'),
+    fs=require('fs'),
 	errorHandler = require('./errors.server.controller'),
 	PubVideo = mongoose.model('PubVideo'),
 	_ = require('lodash');
@@ -14,7 +16,6 @@ var mongoose = require('mongoose'),
 exports.create = function(req, res) {
 	var pubVideo = new PubVideo(req.body);
 	pubVideo.user = req.user;
-
 	pubVideo.save(function(err) {
 		if (err) {
 			return res.status(400).send({

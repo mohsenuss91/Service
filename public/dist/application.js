@@ -4,7 +4,11 @@
 var ApplicationConfiguration = (function() {
 	// Init module configuration options
 	var applicationModuleName = 'mean';
-	var applicationModuleVendorDependencies = ['ngResource', 'ngAnimate', 'ui.router', 'ui.bootstrap', 'ui.utils'];
+
+
+    
+
+	var applicationModuleVendorDependencies = ['ngResource', 'ngAnimate', 'ui.router', 'ui.bootstrap', 'ui.utils','angularFileUpload'];
 
 	// Add a new vertical module
 	var registerModule = function(moduleName, dependencies) {
@@ -21,6 +25,7 @@ var ApplicationConfiguration = (function() {
 		registerModule: registerModule
 	};
 })();
+
 'use strict';
 
 //Start by defining the main module and adding the module dependencies
@@ -41,6 +46,7 @@ angular.element(document).ready(function() {
 	//Then init the app
 	angular.bootstrap(document, [ApplicationConfiguration.applicationModuleName]);
 });
+
 'use strict';
 
 // Use Application configuration module to register a new module
@@ -535,26 +541,13 @@ angular.module('pub-imags').controller('PubImagsController', ['$scope', '$stateP
 	function($scope, $stateParams, $location, Authentication, PubImags) {
 		$scope.authentication = Authentication;
 
-        //recuperer image
-        var fileInput = document.querySelector('#file');
-        var reader =new FileReader();
-        fileInput.onchange = function() {
-            document.getElementById('namefile').value=fileInput.files[0].name;
-            reader.onload=function(){
-                document.getElementById('image').style.width="242px";
-                document.getElementById('image').style.height="200px";
-                document.getElementById('image').src=reader.result;
-            }
-            reader.readAsDataURL(fileInput.files[0]);
-        }
-
 		// Create new Pub imag
-
 		$scope.create = function() {
 			// Create new Pub imag object
 			var pubImag = new PubImags ({
-		        name:reader.result,
-                comment:this.comment
+                name:this.name,
+                size: this.size,
+                description:this.description
 			});
 
 			// Redirect after save
@@ -563,6 +556,8 @@ angular.module('pub-imags').controller('PubImagsController', ['$scope', '$stateP
 
 				// Clear form fields
 				$scope.name = '';
+                $scope.size = '';
+                $scope.description= '';
 			}, function(errorResponse) {
 				$scope.error = errorResponse.data.message;
 			});
@@ -610,41 +605,14 @@ angular.module('pub-imags').controller('PubImagsController', ['$scope', '$stateP
 	}
 ]);
 
-/*var xmlHttp=createXmlHttpRequestObject();
-
-function createXmlHttpRequestObject(){
-
-}
-
-function process(){
-    if(xmlHttp.readyState == 0 || xmlHttp.readyState == 4){
-        xmlHttp.open('GET','',true);
-        xmlHttp.onreadystatechange = handleServerResponse;
-        xmlHttp.send(null);
-    }else{
-        setTimeout('process()',1000);
-    }
-}
-
-function handleServerResponse(){
-    if(xmlHttp.readyState == 4){
-        if(xmlHttp.status == 200){
-                setTimeout('process()',1000);
-        }else{
-            alert('something went wrong ???');
-        }
-    }
-}
-
-
-*/
 
 'use strict';
 
 //Pub imags service used to communicate Pub imags REST endpoints
 angular.module('pub-imags').factory('PubImags', ['$resource',
 	function($resource) {
-		return $resource('pub-imags/:pubImagId', { pubImagId: '@_id'
+		return $resource('pub-imags/:pubImagId', {
+            pubImagId: '@_id'
 		}, {
 			update: {
 				method: 'PUT'
@@ -652,6 +620,7 @@ angular.module('pub-imags').factory('PubImags', ['$resource',
 		});
 	}
 ]);
+
 'use strict';
 
 // Configuring the Articles module
@@ -695,11 +664,42 @@ angular.module('pub-videos').controller('PubVideosController', ['$scope', '$stat
 	function($scope, $stateParams, $location, Authentication, PubVideos) {
 		$scope.authentication = Authentication;
 
+        var video;
+        $scope.load=function(){
+            var allowedTypes = ['flv', 'mp4', 'mkv', 'avi']
+            var fileInput = document.querySelector('#file');
+            fileInput.onchange = function() {
+                var imgType;
+                imgType = fileInput.files[0].name.split('.');
+                imgType = imgType[imgType.length - 1].toLowerCase();
+                if(allowedTypes.indexOf(imgType) != -1) {
+                    //
+                    document.getElementById('namefile').value=fileInput.files[0].name;
+                    var reader =new FileReader();
+                    reader.onload = function () {
+                        if(reader.readyState==2){
+                            alert('done');
+                        }
+                        $('#containa_image').replaceWith('<video id="video" class="thumbnail"></video>');
+                        document.getElementById('video').style.width = "200px";
+                        document.getElementById('video').style.height = "200px";
+                        document.getElementById('video').src = reader.result;
+                        video = reader.result;
+                    }
+                    reader.readAsDataURL(fileInput.files[0]);
+                    document.getElementById('error').innerHTML ="";
+                    //
+                }else{
+                    document.getElementById('error').innerHTML ="le fichier n'est pas compatible";
+                }
+            };
+        }
 		// Create new Pub video
 		$scope.create = function() {
 			// Create new Pub video object
 			var pubVideo = new PubVideos ({
-				name: this.name
+				name: video,
+                comment:this.comment
 			});
 
 			// Redirect after save
@@ -708,6 +708,7 @@ angular.module('pub-videos').controller('PubVideosController', ['$scope', '$stat
 
 				// Clear form fields
 				$scope.name = '';
+                $scope.comment='';
 			}, function(errorResponse) {
 				$scope.error = errorResponse.data.message;
 			});
@@ -754,6 +755,7 @@ angular.module('pub-videos').controller('PubVideosController', ['$scope', '$stat
 		};
 	}
 ]);
+
 'use strict';
 
 //Pub videos service used to communicate Pub videos REST endpoints
