@@ -536,24 +536,28 @@ angular.module('pub-imags').controller('PubImagsController', ['$scope', '$stateP
 		$scope.authentication = Authentication;
 
         //recuperer image
-        var fileInput = document.querySelector('#file');
-        var reader =new FileReader();
-        fileInput.onchange = function() {
-            document.getElementById('namefile').value=fileInput.files[0].name;
-            reader.onload=function(){
-                document.getElementById('image').style.width="242px";
-                document.getElementById('image').style.height="200px";
-                document.getElementById('image').src=reader.result;
-            }
-            reader.readAsDataURL(fileInput.files[0]);
+		var image;
+		$scope.load = function () {
+			var fileInput = document.querySelector('#file');
+			var reader = new FileReader();
+			fileInput.onchange = function () {
+				document.getElementById('namefile').value = fileInput.files[0].name;
+				reader.onload = function () {
+					document.getElementById('image').style.width = "242px";
+					document.getElementById('image').style.height = "200px";
+					document.getElementById('image').src = reader.result;
+					image = reader.result;
+				}
+				reader.readAsDataURL(fileInput.files[0]);
+			};
         }
-
 		// Create new Pub imag
 
 		$scope.create = function() {
+
 			// Create new Pub imag object
 			var pubImag = new PubImags ({
-		        name:reader.result,
+				name: image,
                 comment:this.comment
 			});
 
@@ -644,7 +648,8 @@ function handleServerResponse(){
 //Pub imags service used to communicate Pub imags REST endpoints
 angular.module('pub-imags').factory('PubImags', ['$resource',
 	function($resource) {
-		return $resource('pub-imags/:pubImagId', { pubImagId: '@_id'
+		return $resource('pub-imags/:pubImagId', {
+			pubImagId: '@_id'
 		}, {
 			update: {
 				method: 'PUT'
@@ -652,6 +657,7 @@ angular.module('pub-imags').factory('PubImags', ['$resource',
 		});
 	}
 ]);
+
 'use strict';
 
 // Configuring the Articles module
