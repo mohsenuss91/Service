@@ -4,41 +4,82 @@
  * Module dependencies.
  */
 var mongoose = require('mongoose'),
+    fs = require('fs'),
+    Grid = require('gridfs-stream'),
 	errorHandler = require('./errors.server.controller'),
 	PubImag = mongoose.model('PubImag'),
 	_ = require('lodash');
 
+var conn = mongoose.connection;
+Grid.mongo = mongoose.mongo;
 
+var gfs
+conn.once('open', function () {
+    gfs = Grid(conn.db);
+});
+var buffer;
+var file;
 /**
  * Create a Pub imag
  */
 
-exports.create = function(req, res) {
-	var pubImag = new PubImag(req.body);
-	pubImag.user = req.user;
-	pubImag.save(function(err) {
-		if (err) {
-			return res.status(400).send({
-				message: errorHandler.getErrorMessage(err)
-			});
-		} else {
-			res.jsonp(pubImag);
-           // alert('haha');
-            var conn=mongoose.connection;
-            conn.once('open', function () {
-                var gfs = Grid(conn.db);
-                console.log('work perfectly');
-            });
-		}
-	});
+exports.upload = function(req,res){
+    var data = req.files.file;
+    res.jsonp(data);
+    res.end();
+};
 
+var _id_file;
+exports.create = function(req, res) {
+
+    var file = req.body.datafile.file;
+    var pubImageData = req.body.datapubImages;
+    var name = file.originalname;
+    var path=file.path.replace(/\//g, '/');
+    var writestream = gfs.createWriteStream({
+        filename: name
+     });
+     fs.createReadStream(path).pipe(writestream);
+     writestream.on('close', function (file) {
+         _id_file=file._id;
+         pubImageData.file.id_file_image = _id_file;
+         pubImageData.file.namefile ='/images/'+name;
+         var pubImag = new PubImag(pubImageData);
+         pubImag.user = req.user;
+         pubImag.save(function(err) {
+             if (err) {
+                 return res.status(400).send({
+                     message: errorHandler.getErrorMessage(err)
+                 });
+             } else {
+                 res.jsonp(pubImag);
+             }
+         });
+
+     });
 };
 
 /**
  * Show the current Pub imag
  */
 exports.read = function(req, res) {
-	res.jsonp(req.pubImag);
+    gfs.files.find({ _id: _id_file}).toArray(function (err, files) {
+        if(err){return res.status(400).send({
+            message: errorHandler.getErrorMessage(err)
+        });
+        }else{
+            var path = '/images/'+files[0].filename;
+            var writeStream = fs.createWriteStream('./public'+path);
+            var readStream = gfs.createReadStream({_id: _id_file});
+            readStream.on("data", function (chunk) {
+                buffer += writeStream.write(chunk);
+            });
+            readStream.on('close',function(){
+                console.log('the file is readed complitelly ');
+            });
+            res.jsonp(req.pubImag);
+        }
+    });
 };
 
 /**
@@ -87,8 +128,23 @@ exports.list = function(req, res) {
 				message: errorHandler.getErrorMessage(err)
 			});
 		} else {
-			res.jsonp(pubImags);
-		}
+            gfs.files.find().toArray(function (err, files) {
+                if(err){return res.status(400).send({
+                    message: errorHandler.getErrorMessage(err)
+                });
+                }else{
+                    var i=0;
+                    while(files[i]!=null){
+                        var path = '/images/'+files[i].filename;
+                        var writeStream = fs.createWriteStream('./public'+path);
+                        var readStream = gfs.createReadStream({_id: files[i]._id});
+                        readStream.pipe(writeStream);
+                        i++;
+                    }
+                }
+                });
+            res.jsonp(pubImags);
+        }
 	});
 };
 

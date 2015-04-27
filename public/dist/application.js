@@ -6,7 +6,7 @@ var ApplicationConfiguration = (function() {
 	var applicationModuleName = 'mean';
 
 
-    
+
 
 	var applicationModuleVendorDependencies = ['ngResource', 'ngAnimate', 'ui.router', 'ui.bootstrap', 'ui.utils','angularFileUpload'];
 
@@ -73,6 +73,10 @@ ApplicationConfiguration.registerModule('pub-videos');
 
 // Use applicaion configuration module to register a new module
 ApplicationConfiguration.registerModule('statuses');
+'use strict';
+
+// Use applicaion configuration module to register a new module
+ApplicationConfiguration.registerModule('tests');
 'use strict';
 
 // Use Application configuration module to register a new module
@@ -537,27 +541,52 @@ angular.module('pub-imags').config(['$stateProvider',
 'use strict';
 
 // Pub imags controller
-angular.module('pub-imags').controller('PubImagsController', ['$scope', '$stateParams', '$location', 'Authentication', 'PubImags',
-	function($scope, $stateParams, $location, Authentication, PubImags) {
+angular.module('pub-imags').controller('PubImagsController', ['$scope','$upload','$stateParams','$location', 'Authentication', 'PubImags',
+	function($scope,$upload,$stateParams,$location,Authentication, PubImags) {
 		$scope.authentication = Authentication;
 
-		// Create new Pub imag
+        var name,size,content;
+        $scope.onFileSelect=function($files){
+            var file;
+            if($files[0] != null){
+                file=$files[0];
+                var imgType;
+                imgType =file.name.split('.');
+                imgType = imgType[imgType.length - 1].toLowerCase();
+                $scope.name=file.name;
+                size = file.size;
+                name=file.name;
+                var reader =new FileReader();
+                reader.onprogress=function(e){
+                    document.getElementById('bar1').style.width= parseInt(100.0 * e.loaded / e.total)+"%";
+                }
+                reader.onload = function () {
+                    document.getElementById('image').style.width = "181px";
+                    document.getElementById('image').style.height = "125px";
+                    document.getElementById('image').src = reader.result;
+                    content=reader.result;
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Create new Pub imag
 		$scope.create = function() {
 			// Create new Pub imag object
 			var pubImag = new PubImags ({
-                name:this.name,
-                size: this.size,
-                description:this.description
+                file:{
+                    name:name,
+                    size:size,
+                    content:content
+                },
+                description: this.description
 			});
-
-			// Redirect after save
+            pubImag.content=content;
+            // Redirect after save
 			pubImag.$save(function(response) {
 				$location.path('pub-imags/' + response._id);
-
 				// Clear form fields
-				$scope.name = '';
-                $scope.size = '';
-                $scope.description= '';
+				$scope.description= '';
 			}, function(errorResponse) {
 				$scope.error = errorResponse.data.message;
 			});
@@ -598,7 +627,7 @@ angular.module('pub-imags').controller('PubImagsController', ['$scope', '$stateP
 
 		// Find existing Pub imag
 		$scope.findOne = function() {
-			$scope.pubImag = PubImags.get({
+            $scope.pubImag = PubImags.get({
 				pubImagId: $stateParams.pubImagId
 			});
 		};
@@ -664,42 +693,43 @@ angular.module('pub-videos').controller('PubVideosController', ['$scope', '$stat
 	function($scope, $stateParams, $location, Authentication, PubVideos) {
 		$scope.authentication = Authentication;
 
-        var video;
-        $scope.load=function(){
-            var allowedTypes = ['flv', 'mp4', 'mkv', 'avi']
-            var fileInput = document.querySelector('#file');
-            fileInput.onchange = function() {
+        var name,size,content;
+        $scope.onFileSelect=function($files){
+            var file;
+            if($files[0] != null){
+                file=$files[0];
                 var imgType;
-                imgType = fileInput.files[0].name.split('.');
+                imgType =file.name.split('.');
                 imgType = imgType[imgType.length - 1].toLowerCase();
-                if(allowedTypes.indexOf(imgType) != -1) {
-                    //
-                    document.getElementById('namefile').value=fileInput.files[0].name;
-                    var reader =new FileReader();
-                    reader.onload = function () {
-                        if(reader.readyState==2){
-                            alert('done');
-                        }
-                        $('#containa_image').replaceWith('<video id="video" class="thumbnail"></video>');
-                        document.getElementById('video').style.width = "200px";
-                        document.getElementById('video').style.height = "200px";
-                        document.getElementById('video').src = reader.result;
-                        video = reader.result;
-                    }
-                    reader.readAsDataURL(fileInput.files[0]);
-                    document.getElementById('error').innerHTML ="";
-                    //
-                }else{
-                    document.getElementById('error').innerHTML ="le fichier n'est pas compatible";
+                $scope.name=file.name;
+                size = file.size;
+                name=file.name;
+                var reader =new FileReader();
+                reader.onprogress=function(e){
+                    document.getElementById('bar1').style.width= parseInt(100.0 * e.loaded / e.total)+"%";
                 }
-            };
+                reader.onload = function () {
+                    $( "#image" ).replaceWith( "<video  id='video' src=''></video>" );
+                    document.getElementById('video').style.width = "181px";
+                    document.getElementById('video').style.height = "125px";
+                    document.getElementById('video').src = reader.result;
+                    content=reader.result;
+                    console.log(content);
+                }
+                reader.readAsDataURL(file);
+            }
         }
-		// Create new Pub video
+
+        // Create new Pub video
 		$scope.create = function() {
 			// Create new Pub video object
 			var pubVideo = new PubVideos ({
-				name: video,
-                comment:this.comment
+                file:{
+                    name:name,
+                    size:size,
+                    content:content
+                },
+                description: this.description
 			});
 
 			// Redirect after save
@@ -707,8 +737,7 @@ angular.module('pub-videos').controller('PubVideosController', ['$scope', '$stat
 				$location.path('pub-videos/' + response._id);
 
 				// Clear form fields
-				$scope.name = '';
-                $scope.comment='';
+                $scope.description= '';
 			}, function(errorResponse) {
 				$scope.error = errorResponse.data.message;
 			});
@@ -877,6 +906,121 @@ angular.module('statuses').controller('StatusesController', ['$scope', '$statePa
 angular.module('statuses').factory('Statuses', ['$resource',
 	function($resource) {
 		return $resource('statuses/:statusId', { statusId: '@_id'
+		}, {
+			update: {
+				method: 'PUT'
+			}
+		});
+	}
+]);
+'use strict';
+
+// Configuring the Articles module
+angular.module('tests').run(['Menus',
+	function(Menus) {
+		// Set top bar menu items
+		Menus.addMenuItem('topbar', 'Tests', 'tests', 'dropdown', '/tests(/create)?');
+		Menus.addSubMenuItem('topbar', 'tests', 'List Tests', 'tests');
+		Menus.addSubMenuItem('topbar', 'tests', 'New Test', 'tests/create');
+	}
+]);
+'use strict';
+
+//Setting up route
+angular.module('tests').config(['$stateProvider',
+	function($stateProvider) {
+		// Tests state routing
+		$stateProvider.
+		state('listTests', {
+			url: '/tests',
+			templateUrl: 'modules/tests/views/list-tests.client.view.html'
+		}).
+		state('createTest', {
+			url: '/tests/create',
+			templateUrl: 'modules/tests/views/create-test.client.view.html'
+		}).
+		state('viewTest', {
+			url: '/tests/:testId',
+			templateUrl: 'modules/tests/views/view-test.client.view.html'
+		}).
+		state('editTest', {
+			url: '/tests/:testId/edit',
+			templateUrl: 'modules/tests/views/edit-test.client.view.html'
+		});
+	}
+]);
+'use strict';
+
+// Tests controller
+angular.module('tests').controller('TestsController', ['$scope', '$stateParams', '$location', 'Authentication', 'Tests',
+	function($scope, $stateParams, $location, Authentication, Tests) {
+		$scope.authentication = Authentication;
+
+		// Create new Test
+		$scope.create = function() {
+			// Create new Test object
+			var test = new Tests ({
+				name: this.name
+			});
+
+			// Redirect after save
+			test.$save(function(response) {
+				$location.path('tests/' + response._id);
+
+				// Clear form fields
+				$scope.name = '';
+			}, function(errorResponse) {
+				$scope.error = errorResponse.data.message;
+			});
+		};
+
+		// Remove existing Test
+		$scope.remove = function(test) {
+			if ( test ) { 
+				test.$remove();
+
+				for (var i in $scope.tests) {
+					if ($scope.tests [i] === test) {
+						$scope.tests.splice(i, 1);
+					}
+				}
+			} else {
+				$scope.test.$remove(function() {
+					$location.path('tests');
+				});
+			}
+		};
+
+		// Update existing Test
+		$scope.update = function() {
+			var test = $scope.test;
+
+			test.$update(function() {
+				$location.path('tests/' + test._id);
+			}, function(errorResponse) {
+				$scope.error = errorResponse.data.message;
+			});
+		};
+
+		// Find a list of Tests
+		$scope.find = function() {
+			$scope.tests = Tests.query();
+		};
+
+		// Find existing Test
+		$scope.findOne = function() {
+			$scope.test = Tests.get({ 
+				testId: $stateParams.testId
+			});
+		};
+	}
+]);
+'use strict';
+
+//Tests service used to communicate Tests REST endpoints
+angular.module('tests').factory('Tests', ['$resource',
+	function($resource) {
+		return $resource('tests/:testId', { testId: '@_id'
 		}, {
 			update: {
 				method: 'PUT'

@@ -1,47 +1,40 @@
 'use strict';
 
 // Pub videos controller
-angular.module('pub-videos').controller('PubVideosController', ['$scope', '$stateParams', '$location', 'Authentication', 'PubVideos',
-	function($scope, $stateParams, $location, Authentication, PubVideos) {
+angular.module('pub-videos').controller('PubVideosController', ['$scope','$upload', '$stateParams', '$location', 'Authentication', 'PubVideos',
+	function($scope, $upload,$stateParams, $location, Authentication, PubVideos) {
 		$scope.authentication = Authentication;
 
-        var name,size,content;
-        $scope.onFileSelect=function($files){
-            var file;
-            if($files[0] != null){
-                file=$files[0];
-                var imgType;
-                imgType =file.name.split('.');
-                imgType = imgType[imgType.length - 1].toLowerCase();
-                $scope.name=file.name;
-                size = file.size;
-                name=file.name;
-                var reader =new FileReader();
-                reader.onprogress=function(e){
-                    document.getElementById('bar1').style.width= parseInt(100.0 * e.loaded / e.total)+"%";
-                }
-                reader.onload = function () {
+        var datafile;
+        $scope.upload = function(files) {
+            if (files && files.length) {
+                var file = files[0];
+                $upload.upload({
+                    method:'POST',
+                    url:'/pub-videos/create',
+                    file: file
+                }).progress(function(evt) {
+                    var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+                    document.getElementById('bar1').style.width= progressPercentage+"%";
+                }).success(function(data, status, headers, config) {
+                    datafile=data;
+                    console.log(data);
+                    var path=data.path.replace(/\//g, '/').replace(/public/,'');
                     $( "#image" ).replaceWith( "<video  id='video' src=''></video>" );
-                    document.getElementById('video').style.width = "181px";
-                    document.getElementById('video').style.height = "125px";
-                    document.getElementById('video').src = reader.result;
-                    content=reader.result;
-                    console.log(content);
-                }
-                reader.readAsDataURL(file);
+                    document.getElementById('video').style.width = "170px";
+                    document.getElementById('video').style.height = "139px";
+                    document.getElementById('video').src = path;
+                });
             }
-        }
+        };
 
         // Create new Pub video
 		$scope.create = function() {
 			// Create new Pub video object
 			var pubVideo = new PubVideos ({
-                file:{
-                    name:name,
-                    size:size,
-                    content:content
-                },
-                description: this.description
+                datapubVideos:{description: this.description,
+                    file:{id_file_video:'',namefilen:''}},
+                datafile:{file:datafile}
 			});
 
 			// Redirect after save

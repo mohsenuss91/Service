@@ -25,11 +25,29 @@ var fs = require('fs'),
 	consolidate = require('consolidate'),
 	path = require('path'),
     bytes=require('bytes');
+    var multer = require('multer');
 
 module.exports = function(db) {
 
 	// Initialize express app
 	var app = express();
+
+    app.use(function(req, res, next) {
+        var handler = multer({
+            dest: './public/tmp',
+            rename: function (fieldname, filename, req, res) {
+                return filename;
+            },
+            onFileUploadStart: function (file) {
+                console.log(file.originalname + ' is starting ...');
+            },
+            onFileUploadComplete: function (file, req, res) {
+                console.log(file.fieldname + ' uploaded to  ' + file.path);
+            }
+        });
+        handler(req, res, next);
+    });
+
 
 	// Globbing model files
 	config.getGlobbedFiles('./app/models/**/*.js').forEach(function(modelPath) {
@@ -82,8 +100,12 @@ module.exports = function(db) {
 	}
 
 	// Request body parsing middleware should be above methodOverride
-    app.use(bodyParser.urlencoded());
-    app.use(bodyParser.json());
+    app.use(bodyParser.urlencoded({
+        limit:'5mb'
+    }));
+    app.use(bodyParser.json({
+        limit:'5mb'
+    }));
 	app.use(methodOverride());
 
     // modification upload
