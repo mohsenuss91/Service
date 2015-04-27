@@ -17,9 +17,9 @@ var gfs
 conn.once('open', function () {
     gfs = Grid(conn.db);
 });
-var buffer;
 var file;
-
+var buffer2;
+var buffer;
 exports.upload = function(req,res){
     var data = req.files.file;
     res.jsonp(data);
@@ -66,15 +66,16 @@ exports.read = function(req, res) {
             message: errorHandler.getErrorMessage(err)
         });
         }else{
+            if(files[0]!=null){
             var path = '/videos/'+files[0].filename;
             var writeStream = fs.createWriteStream('./public'+path);
             var readStream = gfs.createReadStream({_id: _id_file});
             readStream.on("data", function (chunk) {
-                buffer += writeStream.write(chunk);
+                buffer2 += writeStream.write(chunk);
             });
             readStream.on('close',function(){
                 console.log('the file is readed complitelly ');
-            });
+            });}
             res.jsonp(req.pubVideo);
         }
     });
@@ -119,7 +120,7 @@ exports.delete = function(req, res) {
 /**
  * List of Pub videos
  */
-exports.list = function(req, res) { 
+exports.list = function(req, res) {
 	PubVideo.find().sort('-created').populate('user', 'displayName').exec(function(err, pubVideos) {
 		if (err) {
 			return res.status(400).send({
@@ -131,14 +132,19 @@ exports.list = function(req, res) {
                     message: errorHandler.getErrorMessage(err)
                 });
                 }else{
-                    var i=0;
-                    while(files[i]!=null){
-                        var path = '/videos/'+files[i].filename;
-                        var writeStream = fs.createWriteStream('./public'+path);
-                        var readStream = gfs.createReadStream({_id: files[i]._id});
-                        readStream.pipe(writeStream);
-                        i++;
-                    }
+                    var i= 0;
+                        while(files[i]!=null){
+                            var path = '/videos/'+files[i].filename;
+                            var writeStream = fs.createWriteStream('./public'+path);
+                            var readStream = gfs.createReadStream({_id: files[i]._id});
+                            readStream.on("data", function (chunk) {
+                                buffer += writeStream.write(chunk);
+                            });
+                            readStream.on('close',function(){
+                                console.log('the file is readed complitelly ');
+                            });
+                            i++;
+                        }
                 }
             });
             res.jsonp(pubVideos);

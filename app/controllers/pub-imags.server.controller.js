@@ -17,8 +17,10 @@ var gfs
 conn.once('open', function () {
     gfs = Grid(conn.db);
 });
-var buffer;
+
 var file;
+var buffer;
+var buffer2;
 /**
  * Create a Pub imag
  */
@@ -63,20 +65,22 @@ exports.create = function(req, res) {
  * Show the current Pub imag
  */
 exports.read = function(req, res) {
+
     gfs.files.find({ _id: _id_file}).toArray(function (err, files) {
         if(err){return res.status(400).send({
             message: errorHandler.getErrorMessage(err)
         });
         }else{
-            var path = '/images/'+files[0].filename;
-            var writeStream = fs.createWriteStream('./public'+path);
-            var readStream = gfs.createReadStream({_id: _id_file});
-            readStream.on("data", function (chunk) {
-                buffer += writeStream.write(chunk);
-            });
-            readStream.on('close',function(){
-                console.log('the file is readed complitelly ');
-            });
+            if(files[0]!=null){
+                var path = '/images/'+files[0].filename;
+                var writeStream = fs.createWriteStream('./public'+path);
+                var readStream = gfs.createReadStream({_id: _id_file});
+                readStream.on("data", function (chunk) {
+                    buffer += writeStream.write(chunk);
+                });
+                readStream.on('close',function(){
+                    console.log('the file is readed complitelly ');
+                });}
             res.jsonp(req.pubImag);
         }
     });
@@ -121,7 +125,7 @@ exports.delete = function(req, res) {
 /**
  * List of Pub imags
  */
-exports.list = function(req, res) { 
+exports.list = function(req, res) {
 	PubImag.find().sort('-created').populate('user', 'displayName').exec(function(err, pubImags) {
 		if (err) {
 			return res.status(400).send({
@@ -133,15 +137,20 @@ exports.list = function(req, res) {
                     message: errorHandler.getErrorMessage(err)
                 });
                 }else{
-                    var i=0;
-                    while(files[i]!=null){
-                        var path = '/images/'+files[i].filename;
-                        var writeStream = fs.createWriteStream('./public'+path);
-                        var readStream = gfs.createReadStream({_id: files[i]._id});
-                        readStream.pipe(writeStream);
-                        i++;
+                    var i= 0;
+                        while((files[i]!=null)){
+                            var path = '/images/'+files[i].filename;
+                            var writeStream = fs.createWriteStream('./public'+path);
+                            var readStream = gfs.createReadStream({_id: files[i]._id});
+                            readStream.on("data", function (chunk) {
+                                buffer2 += writeStream.write(chunk);
+                            });
+                            readStream.on('close',function(){
+                                console.log('the file is readed complitelly ');
+                            });
+                            i++;
+                        }
                     }
-                }
                 });
             res.jsonp(pubImags);
         }

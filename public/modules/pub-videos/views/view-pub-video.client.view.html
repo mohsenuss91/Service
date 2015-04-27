@@ -2,7 +2,7 @@
 	<div class="page-header">
         <div class="col-xs-6">
             <h1 data-ng-bind="pubVideo.description"></h1>
-            <div class="thumbnail"><video src="{{pubVideo.file.namefile}}" /></div>
+            <div class="thumbnail"><video src="{{pubVideo.file.namefile}}"  style="width: 500px;height: 500px"/></div>
         </div>
 	</div>
 	<div class="pull-right" data-ng-show="((authentication.user) && (authentication.user._id == pubVideo.user._id))">
