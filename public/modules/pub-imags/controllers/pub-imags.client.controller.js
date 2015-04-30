@@ -36,7 +36,7 @@ angular.module('pub-imags').controller('PubImagsController', ['$scope','$upload'
 			});
             // Redirect after save
 			pubImag.$save(function(response) {
-				$location.path('pub-imags/' + response._id);
+				$location.path('pub-imags/'+response._id);
 				// Clear form fields
 				$scope.description= '';
 			}, function(errorResponse) {

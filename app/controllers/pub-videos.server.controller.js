@@ -61,18 +61,16 @@ exports.create = function(req, res) {
  * Show the current Pub video
  */
 exports.read = function(req, res) {
-    gfs.files.find({ _id: _id_file}).toArray(function (err, files) {
+    gfs.findOne({_id : _id_file},function (err, file) {
         if(err){return res.status(400).send({
             message: errorHandler.getErrorMessage(err)
         });
         }else{
-            if(files[0]!=null){
-            var path = '/videos/'+files[0].filename;
+            if(file!=null){
+            var path = '/videos/'+file.filename;
             var writeStream = fs.createWriteStream('./public'+path);
             var readStream = gfs.createReadStream({_id: _id_file});
-            readStream.on("data", function (chunk) {
-                buffer2 += writeStream.write(chunk);
-            });
+                readStream.pipe(writeStream);
             readStream.on('close',function(){
                 console.log('the file is readed complitelly ');
             });}
@@ -127,27 +125,27 @@ exports.list = function(req, res) {
 				message: errorHandler.getErrorMessage(err)
 			});
 		} else {
-            gfs.files.find().toArray(function (err, files) {
+            var i=0;
+            while(pubVideos[i]!=null){
+                gfs.findOne({_id : pubVideos[i].file.id_file_video},function (err, file) {
                 if(err){return res.status(400).send({
                     message: errorHandler.getErrorMessage(err)
                 });
                 }else{
-                    var i= 0;
-                        while(files[i]!=null){
-                            var path = '/videos/'+files[i].filename;
-                            var writeStream = fs.createWriteStream('./public'+path);
-                            var readStream = gfs.createReadStream({_id: files[i]._id});
-                            readStream.on("data", function (chunk) {
-                                buffer += writeStream.write(chunk);
-                            });
-                            readStream.on('close',function(){
-                                console.log('the file is readed complitelly ');
-                            });
-                            i++;
-                        }
+                    if(file!=null){
+                        var path = '/videos/'+file.filename;
+                        var writeStream = fs.createWriteStream('./public'+path);
+                        var readStream = gfs.createReadStream({_id: file._id});
+                        readStream.pipe(writeStream);
+                        readStream.on('close',function(){
+                            console.log('the file is readed complitelly '+file.filename);
+                        });
+                    }
                 }
             });
-            res.jsonp(pubVideos);
+                i++;
+            }
+            res.send(pubVideos);
 		}
 	});
 };

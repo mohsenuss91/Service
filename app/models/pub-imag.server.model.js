@@ -15,7 +15,8 @@ var PubImagSchema = new Schema({
     file:{
         id_file_image:
         {
-            type: mongoose.Schema.Types.ObjectId
+            type: mongoose.Schema.Types.ObjectId,
+            ref:'fs.files'
         },
         namefile:{
             type: String,

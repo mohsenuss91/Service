@@ -66,18 +66,17 @@ exports.create = function(req, res) {
  */
 exports.read = function(req, res) {
 
-    gfs.files.find({ _id: _id_file}).toArray(function (err, files) {
+    gfs.findOne({ _id: _id_file},function (err, file) {
         if(err){return res.status(400).send({
             message: errorHandler.getErrorMessage(err)
         });
         }else{
-            if(files[0]!=null){
-                var path = '/images/'+files[0].filename;
+            console.log(file);
+            if(file!=null){
+                var path = '/images/'+file.filename;
                 var writeStream = fs.createWriteStream('./public'+path);
                 var readStream = gfs.createReadStream({_id: _id_file});
-                readStream.on("data", function (chunk) {
-                    buffer += writeStream.write(chunk);
-                });
+                readStream.pipe(writeStream);
                 readStream.on('close',function(){
                     console.log('the file is readed complitelly ');
                 });}
@@ -132,29 +131,29 @@ exports.list = function(req, res) {
 				message: errorHandler.getErrorMessage(err)
 			});
 		} else {
-            gfs.files.find().toArray(function (err, files) {
-                if(err){return res.status(400).send({
-                    message: errorHandler.getErrorMessage(err)
-                });
-                }else{
-                    var i= 0;
-                        while((files[i]!=null)){
-                            var path = '/images/'+files[i].filename;
-                            var writeStream = fs.createWriteStream('./public'+path);
-                            var readStream = gfs.createReadStream({_id: files[i]._id});
-                            readStream.on("data", function (chunk) {
-                                buffer2 += writeStream.write(chunk);
-                            });
-                            readStream.on('close',function(){
+            var i=0;
+            while(pubImags[i]!=null){
+                gfs.findOne({_id : pubImags[i].file.id_file_image},function (err, file) {
+                    if(err){return res.status(400).send({
+                        message: errorHandler.getErrorMessage(err)
+                    });
+                    }else {
+                        if(file!=null){
+                            var path = '/images/' + file.filename;
+                            var writeStream = fs.createWriteStream('./public' + path);
+                            var readStream = gfs.createReadStream({_id: file._id},{start: 0, end: 1});
+                            readStream.pipe(writeStream);
+                            readStream.on('close', function () {
                                 console.log('the file is readed complitelly ');
                             });
-                            i++;
                         }
                     }
                 });
+                i++;
+            }
             res.jsonp(pubImags);
         }
-	});
+});
 };
 
 /**
