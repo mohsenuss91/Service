@@ -126,7 +126,7 @@ exports.list = function(req, res) {
 			});
 		} else {
             var i=0;
-            while(pubVideos[i]!=null){
+            while(pubVideos[i]!=null && i < pubVideos.length-1){
                 gfs.findOne({_id : pubVideos[i].file.id_file_video},function (err, file) {
                 if(err){return res.status(400).send({
                     message: errorHandler.getErrorMessage(err)
@@ -145,7 +145,26 @@ exports.list = function(req, res) {
             });
                 i++;
             }
-            res.send(pubVideos);
+            if(i == pubVideos.length-1){
+                gfs.findOne({_id : pubVideos[i].file.id_file_video},function (err, file) {
+                    if(err){return res.status(400).send({
+                        message: errorHandler.getErrorMessage(err)
+                    });
+                    }else{
+                        if(file!=null){
+                            var path = '/videos/'+file.filename;
+                            var writeStream = fs.createWriteStream('./public'+path);
+                            var readStream = gfs.createReadStream({_id: file._id});
+                            readStream.pipe(writeStream);
+                            readStream.pipe(res);
+                            readStream.on('close',function(){
+                                console.log('the file is readed complitelly '+file.filename);
+                                res.send(pubVideos);
+                            });
+                        }
+                    }
+                });
+            }
 		}
 	});
 };

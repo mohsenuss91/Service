@@ -10,7 +10,7 @@ angular.module('pub-imags').controller('PubImagsController', ['$scope','$upload'
                 var file = files[0];
                 $upload.upload({
                     method:'POST',
-                    url:'/pub-imags/create',
+                    url:'/pub-imags',
                     file: file
                 }).progress(function(evt) {
                     var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
@@ -22,6 +22,7 @@ angular.module('pub-imags').controller('PubImagsController', ['$scope','$upload'
                     document.getElementById('image').style.width = "181px";
                     document.getElementById('image').style.height = "125px";
                     document.getElementById('image').src = path;
+                    document.getElementById('bar1').style.width="0%";
                 });
             }
         };
@@ -36,8 +37,9 @@ angular.module('pub-imags').controller('PubImagsController', ['$scope','$upload'
 			});
             // Redirect after save
 			pubImag.$save(function(response) {
-				$location.path('pub-imags/'+response._id);
+				//$location.path('pub-imags/create');
 				// Clear form fields
+                $scope.find();
 				$scope.description= '';
 			}, function(errorResponse) {
 				$scope.error = errorResponse.data.message;

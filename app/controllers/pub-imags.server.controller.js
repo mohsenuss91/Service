@@ -33,7 +33,6 @@ exports.upload = function(req,res){
 
 var _id_file;
 exports.create = function(req, res) {
-
     var file = req.body.datafile.file;
     var pubImageData = req.body.datapubImages;
     var name = file.originalname;
@@ -132,7 +131,7 @@ exports.list = function(req, res) {
 			});
 		} else {
             var i=0;
-            while(pubImags[i]!=null){
+            while(pubImags[i]!=null && i < pubImags.length-1){
                 gfs.findOne({_id : pubImags[i].file.id_file_image},function (err, file) {
                     if(err){return res.status(400).send({
                         message: errorHandler.getErrorMessage(err)
@@ -141,7 +140,7 @@ exports.list = function(req, res) {
                         if(file!=null){
                             var path = '/images/' + file.filename;
                             var writeStream = fs.createWriteStream('./public' + path);
-                            var readStream = gfs.createReadStream({_id: file._id},{start: 0, end: 1});
+                            var readStream = gfs.createReadStream({_id: file._id});
                             readStream.pipe(writeStream);
                             readStream.on('close', function () {
                                 console.log('the file is readed complitelly ');
@@ -151,7 +150,25 @@ exports.list = function(req, res) {
                 });
                 i++;
             }
-            res.jsonp(pubImags);
+            if(i == pubImags.length-1){
+                gfs.findOne({_id : pubImags[i].file.id_file_image},function (err, file) {
+                    if(err){return res.status(400).send({
+                        message: errorHandler.getErrorMessage(err)
+                    });
+                    }else {
+                        if(file!=null){
+                            var path = '/images/' + file.filename;
+                            var writeStream = fs.createWriteStream('./public' + path);
+                            var readStream = gfs.createReadStream({_id: file._id});
+                            readStream.pipe(writeStream);
+                            readStream.on('close', function () {
+                                console.log('the file is readed complitelly ');
+                                res.jsonp(pubImags);
+                            });
+                        }
+                    }
+                });
+            }
         }
 });
 };
