@@ -76,7 +76,7 @@ exports.delete = function (req, res) {
                 req.status._id,
                 {'$pull': {comments: {'_id': req.comment._id}}},
                 function (err, status) {
-                    console.log("remove request recieved from server  " + req.status._id + "  " + req.comment._id);
+                    console.log("remove request recieved from server  " + req.status._id + "  comment  " + req.comment._id);
                     status.save();
                 }
             );
