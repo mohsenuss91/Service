@@ -6,7 +6,7 @@
                         <a href="" class="pull-left"><img src="images/people/50/guy-2.jpg" class="media-object"></a>
                         <div class="media-body">
                             <a href="#" class="pull-right text-muted"><i class="icon-reply-all-fill fa fa-2x "></i></a>
-                            <a class="pull-right text-muted" data-ng-click="remove();">
+                            <a class="pull-right text-muted" data-ng-click="remove(status);">
                                 <i class="glyphicon glyphicon-trash"></i>
                             </a>
                             <a href=""><span data-ng-bind="status.user.displayName"></span></a>
@@ -18,39 +18,37 @@
                     <p data-ng-bind="status.name"></p>
                 </div>
                 <div class="view-all-comments"><a href="#"><i class="fa fa-comments-o"></i> afficher tout</a>  10 comments</div>
-            <ul class="comments">
-                <li>
+            <ul class="comments" data-ng-controller="CommentsController as CommentsCtrl" data-ng-init="CommentsCtrl.find(status)">
+                 <li data-ng-repeat="comment in commentsList" data-ng-href="#!/statuses/{{status._id}}/comments/{{comment._id}}">
                     <div class="media">
                         <a href="" class="pull-left"><img src="images/people/50/guy-4.jpg" class="media-object"></a>
                         <div class="media-body">
-                            <a href="" class="comment-author">Mary</a>
-                            <span>Thanks Bill</span>
-                            <div class="comment-date">2 days</div>
+                            <a class="pull-right text-muted" ng-click="CommentsCtrl.removeCommentStatus(status,comment)">
+                                <i class="glyphicon glyphicon-trash"></i>
+                            </a>
+                            <a href="" class="comment-author"><span data-ng-bind="comment.user.displayName"></span></a>
+                            <span data-ng-bind="comment.name"></span>
+                            <div class="comment-date"><span data-ng-bind="comment.created | date:'medium'"></span></div>
                         </div>
                     </div>
                 </li>
-                <li>
-                    <div class="media">
-                        <a href="" class="pull-left"><img src="images/people/50/guy-5.jpg" class="media-object"></a>
-                        <div class="media-body">
-                            <a href="" class="comment-author">Bill D.</a>
-                            <span>What time did it finish?</span>
-                            <div class="comment-date">14 min</div>
-                        </div>
-                    </div>
-                </li>
-                <li class="comment-form">
-                    <div class="input-group">
-                        <input type="text" class="form-control"/>
-                <span class="input-group-addon">
-                   <a href=""><i class="fa fa-photo"></i></a>
-                </span>
+
+                <li >
+                    <div >
+                        <form class="form-horizontal" data-ng-submit="CommentsCtrl.createCommentStatus(status)" novalidate>
+                            <div class="input-group">
+                                <input type="text" data-ng-model="name" class="form-control" placeholder="Rédiger un commentaire...">
+                                      <span class="input-group-btn">
+                                        <button class="btn btn-default" type="submit">Go!</button>
+                                      </span>
+                            </div><!-- /input-group -->
+                        </form>
                     </div>
                 </li>
             </ul>
         </div>
     <div class="alert alert-warning text-center" data-ng-hide="!statuses.$resolved || statuses.length">
-    	No Statuses yet, why don't you <a href="/#!/statuses/create">create one</a>?
+        No Statuses yet, why don't you <a href="/#!/statuses/create">create one</a>?
     </div>
 
 </div>

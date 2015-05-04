@@ -20,6 +20,10 @@ var StatusSchema = new Schema({
 		type: Date,
 		default: Date.now
 	},
+    comments: [{
+        type: Schema.ObjectId,
+        ref: 'Comment'
+    }],
 	user: {
 		type: Schema.ObjectId,
 		ref: 'User'
