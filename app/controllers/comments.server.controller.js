@@ -26,7 +26,7 @@ exports.create = function (req, res) {
             comment.status,
             {'$push': {comments: {'_id': comment._id}}},
             function (err, status) {
-                status.save();
+                //status.save();
             }
         );
 
@@ -74,13 +74,18 @@ exports.delete = function (req, res) {
         } else {
             Status.findByIdAndUpdate(
                 req.status._id,
-                {'$pull': {comments: {'_id': req.comment._id}}},
+                {$pull: {comments: comment._id}},
                 function (err, status) {
-                    console.log("remove request recieved from server  " + req.status._id + "  comment  " + req.comment._id);
-                    status.save();
+                    if (err) {
+                        console.log(err);
+                        return res.send(err);
+                    }
+                    else {
+                        console.log("remove request recieved from server  " + comment._id);
+                        res.jsonp(status);
+                    }
                 }
             );
-            res.jsonp(comment);
         }
     });
 };
@@ -90,7 +95,7 @@ exports.delete = function (req, res) {
  */
 exports.list = function (req, res) {
     console.log("comments server");
-    Comment.find({status: req.status}).sort('-created').populate('user', 'displayName').exec(function (err, comments) {
+    Comment.find({status: req.status}).sort('created').populate('user', 'displayName').exec(function (err, comments) {
         if (err) {
             return res.status(400).send({
                 message: errorHandler.getErrorMessage(err)

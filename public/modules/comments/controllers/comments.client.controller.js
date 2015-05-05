@@ -31,12 +31,10 @@ angular.module('comments').controller('CommentsController', ['$scope', '$http', 
 
         // Remove existing Comment
         this.removeCommentStatus = function (status, comment) {
-
-
             $http.delete("/statuses/" + status._id + "/comments/" + comment._id).success(function (response) {
-                //console.log("confirme demande de suppression delete		" + response.comment._id);
-            });
 
+                console.log("confirme demande de suppression delete		" + response._id + "   " + $scope.commentsList.length);
+            });
             this.find(status);
         };
 
