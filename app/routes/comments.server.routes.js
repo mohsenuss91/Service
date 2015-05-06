@@ -12,7 +12,7 @@ module.exports = function (app) {
 
     app.route('/statuses/:statusId/comments/:commentId')
         .get(statuses.read, comments.read)
-        .put(users.requiresLogin, comments.hasAuthorization, statuses.update, comments.update)
+        .put(users.requiresLogin, comments.hasAuthorization, comments.update)
         .delete(users.requiresLogin, comments.hasAuthorization, comments.delete);
 
     // Finish by binding the Comment middleware

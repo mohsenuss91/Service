@@ -1,3 +1,11 @@
-.glyphicon-trash :hover {
+.glyphicon-trash:hover {
     color: red;
+}
+
+.glyphicon-pencil:hover {
+    color: #73db68;
+}
+
+.glyphicon-pencil {
+    margin-right: 10px;
 }

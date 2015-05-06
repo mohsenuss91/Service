@@ -41,14 +41,13 @@ angular.module('comments').controller('CommentsController', ['$scope', '$http', 
         };
 
         // Update existing Comment
-        $scope.updateCommentStatus = function () {
-            var comment = $scope.comment;
-
-            comment.$update(function () {
-                $location.path('comments/' + comment._id);
-            }, function (errorResponse) {
-                $scope.error = errorResponse.data.message;
-            });
+        this.updateCommentStatus = function (status, comment) {
+            var newComment = comment;
+            //console.log("comment  " + comment.name);
+            $http.put('statuses/' + status._id + '/comments/' + comment._id, newComment)
+                .success(function (response) {
+                    console.log("comment  " + response.name + " updated");
+                });
         };
 
         // Find a list of Comments
