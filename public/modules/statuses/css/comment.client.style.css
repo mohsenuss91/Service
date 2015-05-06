@@ -9,3 +9,8 @@
 .glyphicon-pencil {
     margin-right: 10px;
 }
+
+.panel-body {
+    font-size: large;
+    font-weight: bold;
+}
