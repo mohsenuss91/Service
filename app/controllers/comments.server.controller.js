@@ -47,9 +47,18 @@ exports.read = function (req, res) {
 exports.update = function (req, res) {
     var comment = req.comment;
 
-    comment = _.extend(comment, req.body);
+    console.log('comments server : updating comment  ' + comment._id + '  new value ' + req.body.name);
 
-    comment.save(function (err) {
+    Comment.findByIdAndUpdate(
+        comment._id,
+        {$set: {name: req.body.name}},
+        function (err, comment) {
+            //status.save();
+        }
+    );
+    /*comment = _.extend(comment, req.body);
+
+     comment.save(function (err) {
         if (err) {
             return res.status(400).send({
                 message: errorHandler.getErrorMessage(err)
@@ -57,7 +66,7 @@ exports.update = function (req, res) {
         } else {
             res.jsonp(comment);
         }
-    });
+     });*/
 };
 
 /**

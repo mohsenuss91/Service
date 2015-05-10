@@ -12,7 +12,7 @@ angular.module('comments').controller('CommentsController', ['$scope', '$http', 
                 name: $scope.name
             });
 
-            //console.log("CommentsController is here" + status._id);
+            console.log("CommentsController is here" + status._id);
 
             // Redirect after save
             comment.$save({statusId: status._id},
@@ -32,6 +32,8 @@ angular.module('comments').controller('CommentsController', ['$scope', '$http', 
         // Remove existing Comment
         this.removeCommentStatus = function (status, comment) {
             $http.delete("/statuses/" + status._id + "/comments/" + comment._id).success(function (response) {
+                //console.log("confirme demande de suppression delete		" + response.comment._id);
+            });
 
                 console.log("confirme demande de suppression delete		" + response._id + "   " + $scope.commentsList.length);
             });
@@ -39,13 +41,12 @@ angular.module('comments').controller('CommentsController', ['$scope', '$http', 
         };
 
         // Update existing Comment
-
         this.updateCommentStatus = function (status, comment) {
             var newComment = comment;
             //console.log("comment  " + comment.name);
             $http.put('statuses/' + status._id + '/comments/' + comment._id, newComment)
                 .success(function (response) {
-                    //console.log("comment  " + response.name + " updated");
+                    console.log("comment  " + response.name + " updated");
                 });
         };
 
@@ -53,7 +54,7 @@ angular.module('comments').controller('CommentsController', ['$scope', '$http', 
         this.find = function (status) {
             $http.get('statuses/' + status._id + '/comments/')
                 .success(function (response) {
-                    //console.log("i got the data contactList  " + response.length);
+                    console.log("i got the data contactList  " + response.length);
                     $scope.commentsList = response;
                 });
         };
