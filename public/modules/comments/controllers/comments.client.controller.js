@@ -34,9 +34,7 @@ angular.module('comments').controller('CommentsController', ['$scope', '$http', 
             $http.delete("/statuses/" + status._id + "/comments/" + comment._id).success(function (response) {
                 //console.log("confirme demande de suppression delete		" + response.comment._id);
             });
-
-                console.log("confirme demande de suppression delete		" + response._id + "   " + $scope.commentsList.length);
-            });
+            //console.log("confirme demande de suppression delete		" + response._id + "   " + $scope.commentsList.length);
             this.find(status);
         };
 

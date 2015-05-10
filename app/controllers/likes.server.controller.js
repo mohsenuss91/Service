@@ -74,7 +74,7 @@ exports.delete = function (req, res) {
         } else {
             Status.findByIdAndUpdate(
                 req.status._id,
-                {'$pull': {likes: {'_id': like._id}}},
+                {'$pull': {likes: like._id}},
                 function (err, status) {
                     if (err) {
                         return res.status(400).send({

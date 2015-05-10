@@ -14,6 +14,7 @@
                         <span>on <span data-ng-bind="status.created | date:'medium'"></span></span>
                     </div>
                 </div>
+            </div>
             <div class="panel-body">
                 <p data-ng-bind="status.name"></p>
             </div>
@@ -29,6 +30,7 @@
                     </div>
                 </div>
                 <div class="view-all-comments"><a href="#"><i class="fa fa-comments-o"></i> afficher tout</a>  10 comments</div>
+            </ul>
             <ul class="comments" data-ng-controller="CommentsController as CommentsCtrl" data-ng-init="CommentsCtrl.find(status)">
                 <!--<li>
                     <div class="view-all-comments">
@@ -84,9 +86,8 @@
                 </li>
             </ul>
         </div>
-    <div class="alert alert-warning text-center" data-ng-hide="!statuses.$resolved || statuses.length">
-        No Statuses yet, why don't you <a href="/#!/statuses/create">create one</a>?
+        <div class="alert alert-warning text-center" data-ng-hide="!statuses.$resolved || statuses.length">
+            No Statuses yet, why don't you <a href="/#!/statuses/create">create one</a>?
+        </div>
     </div>
-
-</div>
 </section>
