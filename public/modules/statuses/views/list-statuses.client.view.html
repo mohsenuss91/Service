@@ -1,4 +1,4 @@
-<section data-ng-controller="StatusesController" data-ng-init="find()">
+<div data-ng-controller="StatusesController" data-ng-init="find()">
     <div class="timeline-block">
         <div data-ng-repeat="status in statuses" data-ng-href="#!/statuses/{{status._id}}" class="panel panel-default">
                 <div class="panel-heading">
@@ -52,6 +52,9 @@
     <div class="alert alert-warning text-center" data-ng-hide="!statuses.$resolved || statuses.length">
     	No Statuses yet, why don't you <a href="/#!/statuses/create">create one</a>?
     </div>
-
 </div>
-</section>
+    <div ng-controller="hello">
+        {{2+6}}
+    </div>
+</div>
+
