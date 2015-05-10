@@ -14,8 +14,19 @@
                         </div>
                     </div>
                 </div>
-                <div class="panel-body">
-                    <p data-ng-bind="status.name"></p>
+            <div class="panel-body">
+                <p data-ng-bind="status.name"></p>
+            </div>
+
+            <ul class="comments" data-ng-controller="LikesController as LikesCtrl"
+                data-ng-init="LikesCtrl.find(status)">
+                <div class="media">
+                    <div class="media-body">
+                        <a href="" class="comment-author like-body" ng-click=" LikesCtrl.createLikeStatus(status)">
+                            <span ng-hide="aime">j'aime</span></a>
+                        <a href="" class="comment-author" ng-click="LikesCtrl.removeLikeStatus(status)">
+                            <span ng-show="aime">je n'aime plus</span></a>
+                    </div>
                 </div>
                 <div class="view-all-comments"><a href="#"><i class="fa fa-comments-o"></i> afficher tout</a>  10 comments</div>
             <ul class="comments" data-ng-controller="CommentsController as CommentsCtrl" data-ng-init="CommentsCtrl.find(status)">

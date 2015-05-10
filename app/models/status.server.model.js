@@ -24,6 +24,10 @@ var StatusSchema = new Schema({
         type: Schema.ObjectId,
         ref: 'Comment'
     }],
+    likes: [{
+        type: Schema.ObjectId,
+        ref: 'Like'
+    }],
 	user: {
 		type: Schema.ObjectId,
 		ref: 'User'

@@ -12,7 +12,7 @@ angular.module('comments').controller('CommentsController', ['$scope', '$http', 
                 name: $scope.name
             });
 
-            console.log("CommentsController is here" + status._id);
+            //console.log("CommentsController is here" + status._id);
 
             // Redirect after save
             comment.$save({statusId: status._id},
@@ -39,21 +39,21 @@ angular.module('comments').controller('CommentsController', ['$scope', '$http', 
         };
 
         // Update existing Comment
-        $scope.updateCommentStatus = function () {
-            var comment = $scope.comment;
 
-            comment.$update(function () {
-                $location.path('comments/' + comment._id);
-            }, function (errorResponse) {
-                $scope.error = errorResponse.data.message;
-            });
+        this.updateCommentStatus = function (status, comment) {
+            var newComment = comment;
+            //console.log("comment  " + comment.name);
+            $http.put('statuses/' + status._id + '/comments/' + comment._id, newComment)
+                .success(function (response) {
+                    //console.log("comment  " + response.name + " updated");
+                });
         };
 
         // Find a list of Comments
         this.find = function (status) {
             $http.get('statuses/' + status._id + '/comments/')
                 .success(function (response) {
-                    console.log("i got the data contactList  " + response.length);
+                    //console.log("i got the data contactList  " + response.length);
                     $scope.commentsList = response;
                 });
         };
