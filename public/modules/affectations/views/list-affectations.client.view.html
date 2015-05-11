@@ -1,0 +1,19 @@
+<section data-ng-controller="AffectationsController" data-ng-init="find()">
+    <div class="page-header">
+        <h1>Affectations</h1>
+    </div>
+    <div class="list-group">
+        <a data-ng-repeat="affectation in affectations" data-ng-href="#!/affectations/{{affectation._id}}" class="list-group-item">
+			<small class="list-group-item-text">
+				Posted on
+				<span data-ng-bind="affectation.created | date:'medium'"></span>
+				by
+				<span data-ng-bind="affectation.user.displayName"></span>
+			</small>
+			<h4 class="list-group-item-heading" data-ng-bind="affectation.name"></h4>
+        </a>
+    </div>
+    <div class="alert alert-warning text-center" data-ng-hide="!affectations.$resolved || affectations.length">
+    	No Affectations yet, why don't you <a href="/#!/affectations/create">create one</a>?
+    </div>
+</section>

@@ -7,15 +7,19 @@ var mongoose = require('mongoose'),
 	Schema = mongoose.Schema;
 
 /**
- * Contenu Schema
+ * Emploie Schema
  */
-var ContenuSchema = new Schema({
-	name: {
+var EmploieSchema = new Schema({
+	calendrier: {
 		type: String,
 		default: '',
-		required: '',
 		trim: true
 	},
+    type:{
+        type: String,
+        default: '',
+        trim: true
+    },
 	created: {
 		type: Date,
 		default: Date.now
@@ -26,4 +30,4 @@ var ContenuSchema = new Schema({
 	}
 });
 
-mongoose.model('Contenu', ContenuSchema);
+mongoose.model('Emploie', EmploieSchema);

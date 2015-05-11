@@ -1,0 +1,19 @@
+<section data-ng-controller="OffresController" data-ng-init="find()">
+    <div class="page-header">
+        <h1>Offres</h1>
+    </div>
+    <div class="list-group">
+        <a data-ng-repeat="offre in offres" data-ng-href="#!/offres/{{offre._id}}" class="list-group-item">
+			<small class="list-group-item-text">
+				Posted on
+				<span data-ng-bind="offre.created | date:'medium'"></span>
+				by
+				<span data-ng-bind="offre.user.displayName"></span>
+			</small>
+			<h4 class="list-group-item-heading" data-ng-bind="offre.name"></h4>
+        </a>
+    </div>
+    <div class="alert alert-warning text-center" data-ng-hide="!offres.$resolved || offres.length">
+    	No Offres yet, why don't you <a href="/#!/offres/create">create one</a>?
+    </div>
+</section>
