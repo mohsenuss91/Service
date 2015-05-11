@@ -34,7 +34,7 @@ module.exports = function(db) {
 
     app.use(function(req, res, next) {
         var handler = multer({
-            dest: './public/tmp',
+            dest: './public/uploads',
             rename: function (fieldname, filename, req, res) {
                 return filename;
             },

@@ -1,4 +1,4 @@
-<section data-ng-controller="PubVideosController">
+<section data-ng-controller="PubVideosController" data-ng-init="find()">
     <div class="page-header">
         <h1>New Pub Video</h1>
     </div>
@@ -18,8 +18,8 @@
                         <fieldset>
                             <div class="inline">
                                 <div class="col-xs-6">
-                                    <div class="thumbnail">
-                                        <img id='image' src="/images/260x180.png"  >
+                                    <div class="thumbnail" id='image'>
+                                        <img  src="/images/260x180.png"  >
                                     </div>
                                 </div>
                                 <br/>
@@ -55,5 +55,16 @@
             </div>
         </div>
     </div>
+    <div class="list-group " >
+        <a data-ng-repeat="pubVideo in pubVideos" data-ng-href="#!/pub-videos/{{pubVideo._id}}" class="list-group-item col-xs-6">
+            <small class="list-group-item-text">
+                Posted on
+                <span data-ng-bind="pubVideo.created | date:'medium'"></span>
+                by
+                <span data-ng-bind="pubVideo.user.displayName"></span>
+            </small>
+            <h1 data-ng-bind="pubVideo.description"></h1>
+            <video  class="thumbnail list-group col-xs-12" src="{{pubVideo.file.namefile}}"/>
+        </a>
+    </div>
 </section>
-

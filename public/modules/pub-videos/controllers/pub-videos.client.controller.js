@@ -20,10 +20,11 @@ angular.module('pub-videos').controller('PubVideosController', ['$scope','$uploa
                     datafile=data;
                     console.log(data);
                     var path=data.path.replace(/\//g, '/').replace(/public/,'');
-                    $( "#image" ).replaceWith( "<video  id='video' src=''></video>" );
+                    $( "#image" ).replaceWith( "<video class='thumbnail' id='video' src=''></video>" );
                     document.getElementById('video').style.width = "170px";
                     document.getElementById('video').style.height = "139px";
                     document.getElementById('video').src = path;
+                    //document.getElementById('bar1').style.width="0%";
                 });
             }
         };
@@ -39,8 +40,8 @@ angular.module('pub-videos').controller('PubVideosController', ['$scope','$uploa
 
 			// Redirect after save
 			pubVideo.$save(function(response) {
-				$location.path('pub-videos/' + response._id);
-
+				//$location.path('pub-videos/' + response._id);
+                $scope.find();
 				// Clear form fields
                 $scope.description= '';
 			}, function(errorResponse) {
@@ -60,7 +61,8 @@ angular.module('pub-videos').controller('PubVideosController', ['$scope','$uploa
 				}
 			} else {
 				$scope.pubVideo.$remove(function() {
-					$location.path('pub-videos');
+					$location.path('pub-videos/create');
+                    $scope.find();
 				});
 			}
 		};

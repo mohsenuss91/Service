@@ -110,6 +110,10 @@ exports.delete = function(req, res) {
 				message: errorHandler.getErrorMessage(err)
 			});
 		} else {
+            gfs.remove({_id :pubVideo.file.id_file_video}, function (err) {
+                if (err) return handleError(err);
+                console.log('success');
+            });
 			res.jsonp(pubVideo);
 		}
 	});
@@ -156,10 +160,9 @@ exports.list = function(req, res) {
                             var writeStream = fs.createWriteStream('./public'+path);
                             var readStream = gfs.createReadStream({_id: file._id});
                             readStream.pipe(writeStream);
-                            readStream.pipe(res);
                             readStream.on('close',function(){
                                 console.log('the file is readed complitelly '+file.filename);
-                                res.send(pubVideos);
+                                res.jsonp(pubVideos);
                             });
                         }
                     }

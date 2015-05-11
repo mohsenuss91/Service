@@ -1,28 +1,29 @@
 'use strict';
 
+
 // Pub imags controller
 angular.module('pub-imags').controller('PubImagsController', ['$scope','$upload','$stateParams','$location', 'Authentication', 'PubImags',
-	function($scope,$upload,$stateParams,$location,Authentication, PubImags) {
+    function($scope,$upload,$stateParams,$location,Authentication, PubImags) {
 		$scope.authentication = Authentication;
         var datafile;
         $scope.upload = function(files) {
+
             if (files && files.length) {
                 var file = files[0];
                 $upload.upload({
                     method:'POST',
-                    url:'/pub-imags',
+                    url:'/pub-imags/create',
                     file: file
                 }).progress(function(evt) {
                     var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
                     document.getElementById('bar1').style.width= progressPercentage+"%";
                 }).success(function(data, status, headers, config) {
                     datafile=data;
-                    console.log(data);
                     var path=data.path.replace(/\//g, '/').replace(/public/,'');
                     document.getElementById('image').style.width = "181px";
                     document.getElementById('image').style.height = "125px";
                     document.getElementById('image').src = path;
-                    document.getElementById('bar1').style.width="0%";
+                    //document.getElementById('bar1').style.width="0%";
                 });
             }
         };
@@ -37,7 +38,7 @@ angular.module('pub-imags').controller('PubImagsController', ['$scope','$upload'
 			});
             // Redirect after save
 			pubImag.$save(function(response) {
-				//$location.path('pub-imags/create');
+				//$location.path('/pub-imags/'+response._id);
 				// Clear form fields
                 $scope.find();
 				$scope.description= '';
@@ -58,7 +59,7 @@ angular.module('pub-imags').controller('PubImagsController', ['$scope','$upload'
 				}
 			} else {
 				$scope.pubImag.$remove(function() {
-					$location.path('pub-imags');
+					$location.path('pub-imags/create');
 				});
 			}
 		};

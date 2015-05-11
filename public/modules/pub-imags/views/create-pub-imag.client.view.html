@@ -18,12 +18,11 @@
                         <fieldset>
                             <div class="inline">
                                 <div class="col-xs-6">
-                                    <div class="thumbnail">
+                                    <div class="thumbnail" >
                                         <img id='image' src="/images/260x180.png"  >
                                     </div>
                                 </div>
-                                <br/>
-                                <br/>
+
                                 <div class="input-group">
                                     <input type="text" class="form-control"  value="{{files[0].name}}">
                                     <span class="input-group-btn">
@@ -55,5 +54,18 @@
             </div>
         </div>
     </div>
+    <div class="list-group"  data-ng-init="find()">
+        <a  data-ng-repeat="pubImag in pubImags" data-ng-href="#!/pub-imags/{{pubImag._id}}" class="list-group-item col-xs-6">
+            <small class="list-group-item-text">
+                Posted on
+                <span data-ng-bind="pubImag.created | date:'medium'"></span>
+                by
+                <span data-ng-bind="pubImag.user.displayName"></span>
+            </small>
+            <h1 data-ng-bind="pubImag.description"></h1>
+            <div class="thumbnail"><img src="{{pubImag.file.namefile}}" /></div>
+        </a>
+    </div>
 </section>
+
 

@@ -27,9 +27,12 @@ var buffer2;
 
 exports.upload = function(req,res){
     var data = req.files.file;
-    res.jsonp(data);
+    res.send(data);
     res.end();
 };
+
+
+
 
 var _id_file;
 exports.create = function(req, res) {
@@ -40,8 +43,8 @@ exports.create = function(req, res) {
     var writestream = gfs.createWriteStream({
         filename: name
      });
-     fs.createReadStream(path).pipe(writestream);
-     writestream.on('close', function (file) {
+    fs.createReadStream(path).pipe(writestream);
+    writestream.on('close', function (file) {
          _id_file=file._id;
          pubImageData.file.id_file_image = _id_file;
          pubImageData.file.namefile ='/images/'+name;
@@ -56,21 +59,17 @@ exports.create = function(req, res) {
                  res.jsonp(pubImag);
              }
          });
-
-     });
+    });
 };
-
 /**
  * Show the current Pub imag
  */
 exports.read = function(req, res) {
-
     gfs.findOne({ _id: _id_file},function (err, file) {
         if(err){return res.status(400).send({
             message: errorHandler.getErrorMessage(err)
         });
         }else{
-            console.log(file);
             if(file!=null){
                 var path = '/images/'+file.filename;
                 var writeStream = fs.createWriteStream('./public'+path);
@@ -89,9 +88,7 @@ exports.read = function(req, res) {
  */
 exports.update = function(req, res) {
 	var pubImag = req.pubImag ;
-
 	pubImag = _.extend(pubImag , req.body);
-
 	pubImag.save(function(err) {
 		if (err) {
 			return res.status(400).send({
@@ -108,13 +105,16 @@ exports.update = function(req, res) {
  */
 exports.delete = function(req, res) {
 	var pubImag = req.pubImag ;
-
 	pubImag.remove(function(err) {
 		if (err) {
 			return res.status(400).send({
 				message: errorHandler.getErrorMessage(err)
 			});
 		} else {
+            gfs.remove({_id :pubImag.file.id_file_image}, function (err) {
+                if (err) return handleError(err);
+                console.log('success');
+            });
 			res.jsonp(pubImag);
 		}
 	});
@@ -124,6 +124,7 @@ exports.delete = function(req, res) {
  * List of Pub imags
  */
 exports.list = function(req, res) {
+
 	PubImag.find().sort('-created').populate('user', 'displayName').exec(function(err, pubImags) {
 		if (err) {
 			return res.status(400).send({
@@ -180,6 +181,11 @@ exports.pubImagByID = function(req, res, next, id) {
 	PubImag.findById(id).populate('user', 'displayName').exec(function(err, pubImag) {
 		if (err) return next(err);
 		if (! pubImag) return next(new Error('Failed to load Pub imag ' + id));
+        pubImag.retrieveBlobs(function (err, doc) {
+            if(err) {
+                return done(err);
+            }
+        });
 		req.pubImag = pubImag ;
 		next();
 	});
