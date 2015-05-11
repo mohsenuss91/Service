@@ -4,7 +4,7 @@
 angular.module('statuses').factory('Statuses', ['$resource',
 	function($resource) {
 		return $resource('statuses/:statusId',
-            { statusId: '@_id'}, {
+			{statusId: '@_id'}, {
 			update: {
 				method: 'PUT'
 			}

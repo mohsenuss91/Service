@@ -31,7 +31,8 @@
                 </div>
                 <div class="view-all-comments"><a href="#"><i class="fa fa-comments-o"></i> afficher tout</a>  10 comments</div>
             </ul>
-            <ul class="comments" data-ng-controller="CommentsController as CommentsCtrl" data-ng-init="CommentsCtrl.find(status)">
+            <ul class="comments" data-ng-controller="CommentsController as CommentsCtrl"
+                data-ng-init="CommentsCtrl.find(status)">
                 <!--<li>
                     <div class="view-all-comments">
                         <a href="#">
@@ -43,10 +44,11 @@
                 </li>-->
                 <li data-ng-repeat="comment in commentsList"
                     data-ng-href="#!/statuses/{{status._id}}/comments/{{comment._id}}">
-                     <div class="media" ng-hide="Update">
-                         <a href="" class="pull-left"><img src="images/people/50/guy-4.jpg" class="media-object"></a>
+                    <div class="media" ng-hide="Update">
+                        <a href="" class="pull-left"><img src="images/people/50/guy-4.jpg" class="media-object"></a>
                         <div class="media-body">
-                            <a class="pull-right text-muted" ng-click="CommentsCtrl.removeCommentStatus(status,comment)">
+                            <a class="pull-right text-muted"
+                               ng-click="CommentsCtrl.removeCommentStatus(status,comment)">
                                 <i class="glyphicon glyphicon-trash"></i>
                             </a>
                             <a class="pull-right text-muted" ng-click="Update=true">
@@ -54,33 +56,37 @@
                             </a>
                             <a href="" class="comment-author"><span data-ng-bind="comment.user.displayName"></span></a>
                             <span data-ng-bind="comment.name"></span>
+
                             <div class="comment-date"><span data-ng-bind="comment.created | date:'medium'"></span></div>
                         </div>
                     </div>
-                     <div ng-show="Update">
-                         <form class="form-horizontal"
-                               data-ng-submit="Update=false;CommentsCtrl.updateCommentStatus(status,comment)"
-                               novalidate>
-                             <div class="input-group">
-                                 <input type="text" data-ng-model="comment.name" class="form-control">
+                    <div ng-show="Update">
+                        <form class="form-horizontal"
+                              data-ng-submit="Update=false;CommentsCtrl.updateCommentStatus(status,comment)"
+                              novalidate>
+                            <div class="input-group">
+                                <input type="text" data-ng-model="comment.name" class="form-control">
                                       <span class="input-group-btn">
                                         <button class="btn btn-default" type="submit">Update!</button>
                                       </span>
-                             </div>
-                             <!-- /input-group -->
-                         </form>
-                     </div>
+                            </div>
+                            <!-- /input-group -->
+                        </form>
+                    </div>
                 </li>
 
-                <li >
-                    <div >
-                        <form class="form-horizontal" data-ng-submit="CommentsCtrl.createCommentStatus(status)" novalidate>
+                <li>
+                    <div>
+                        <form class="form-horizontal" data-ng-submit="CommentsCtrl.createCommentStatus(status)"
+                              novalidate>
                             <div class="input-group">
-                                <input type="text" data-ng-model="name" class="form-control" placeholder="Rédiger un commentaire...">
+                                <input type="text" data-ng-model="name" class="form-control"
+                                       placeholder="Rédiger un commentaire...">
                                       <span class="input-group-btn">
                                         <button class="btn btn-default" type="submit">Go!</button>
                                       </span>
-                            </div><!-- /input-group -->
+                            </div>
+                            <!-- /input-group -->
                         </form>
                     </div>
                 </li>

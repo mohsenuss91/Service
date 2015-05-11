@@ -73,7 +73,7 @@ exports.delete = function(req, res) {
  * List of Statuses
  */
 
-exports.list = function(req, res) {
+exports.list = function (req, res) {
 	Status.find().sort('-created').populate('user', 'displayName').exec(function(err, statuses) {
 		if (err) {
 			return res.status(400).send({

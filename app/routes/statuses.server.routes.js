@@ -13,7 +13,7 @@ module.exports = function(app) {
 
     app.route('/statuses/:statusId')
         .get(statuses.read, comments.read, likes.read)
-		.put(users.requiresLogin, statuses.hasAuthorization, statuses.update, comments.update)
+        .put(users.requiresLogin, statuses.hasAuthorization, statuses.update, comments.update)
         .delete(users.requiresLogin, statuses.hasAuthorization, statuses.delete, comments.delete, likes.delete);
 
 	// Finish by binding the Status middleware

@@ -59,13 +59,13 @@ exports.update = function (req, res) {
     /*comment = _.extend(comment, req.body);
 
      comment.save(function (err) {
-        if (err) {
-            return res.status(400).send({
-                message: errorHandler.getErrorMessage(err)
-            });
-        } else {
-            res.jsonp(comment);
-        }
+     if (err) {
+     return res.status(400).send({
+     message: errorHandler.getErrorMessage(err)
+     });
+     } else {
+     res.jsonp(comment);
+     }
      });*/
 };
 
