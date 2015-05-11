@@ -1,0 +1,20 @@
+.glyphicon-trash:hover {
+    color: red;
+}
+
+.glyphicon-pencil:hover {
+    color: #73db68;
+}
+
+.glyphicon-pencil {
+    margin-right: 10px;
+}
+
+.panel-body {
+    font-size: large;
+    font-weight: bold;
+}
+
+.like-body {
+    margin-left: 15px;
+}

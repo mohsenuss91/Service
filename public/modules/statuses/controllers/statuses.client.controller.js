@@ -1,8 +1,8 @@
 'use strict';
 
 // Statuses controller
-angular.module('statuses').controller('StatusesController', ['$scope', '$stateParams', '$location', 'Authentication', 'Statuses',
-	function($scope, $stateParams, $location, Authentication, Statuses) {
+angular.module('statuses').controller('StatusesController', ['$scope', '$http', '$stateParams', '$location', 'Authentication', 'Statuses',
+	function($scope, $http, $stateParams, $location, Authentication, Statuses) {
 		$scope.authentication = Authentication;
 
 		// Create new Status
@@ -54,6 +54,7 @@ angular.module('statuses').controller('StatusesController', ['$scope', '$statePa
 		// Find a list of Statuses
 		$scope.find = function() {
 			$scope.statuses = Statuses.query();
+            //$http.get('statuses/');
 		};
 
 		// Find existing Status
