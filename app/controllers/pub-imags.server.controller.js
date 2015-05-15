@@ -8,6 +8,7 @@ var mongoose = require('mongoose'),
 	PubImag = mongoose.model('PubImag'),
 	_ = require('lodash');
 
+
 /**
  * Create a Pub imag
  */
@@ -15,7 +16,6 @@ var mongoose = require('mongoose'),
 exports.create = function(req, res) {
 	var pubImag = new PubImag(req.body);
 	pubImag.user = req.user;
-
 	pubImag.save(function(err) {
 		if (err) {
 			return res.status(400).send({
@@ -23,9 +23,15 @@ exports.create = function(req, res) {
 			});
 		} else {
 			res.jsonp(pubImag);
-            console.log(pubImag);
+			// alert('haha');
+			var conn = mongoose.connection;
+			conn.once('open', function () {
+				var gfs = Grid(conn.db);
+				console.log('work perfectly');
+			});
 		}
 	});
+
 };
 
 /**

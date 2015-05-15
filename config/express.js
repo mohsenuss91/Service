@@ -10,6 +10,7 @@ var fs = require('fs'),
 	morgan = require('morgan'),
 	logger = require('./logger'),
 	bodyParser = require('body-parser'),
+	busboyBodyParser = require('busboy-body-parser'),
 	session = require('express-session'),
 	compression = require('compression'),
 	methodOverride = require('method-override'),
@@ -22,9 +23,11 @@ var fs = require('fs'),
 	flash = require('connect-flash'),
 	config = require('./config'),
 	consolidate = require('consolidate'),
-	path = require('path');
+	path = require('path'),
+	bytes = require('bytes');
 
 module.exports = function(db) {
+
 	// Initialize express app
 	var app = express();
 
@@ -79,11 +82,12 @@ module.exports = function(db) {
 	}
 
 	// Request body parsing middleware should be above methodOverride
-	app.use(bodyParser.urlencoded({
-		extended: true
-	}));
+	app.use(bodyParser.urlencoded());
 	app.use(bodyParser.json());
 	app.use(methodOverride());
+
+	// modification upload
+	app.use(busboyBodyParser());
 
 	// Use helmet to secure Express headers
 	app.use(helmet.xframe());

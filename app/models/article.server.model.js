@@ -10,6 +10,11 @@ var mongoose = require('mongoose'),
  * Article Schema
  */
 var ArticleSchema = new Schema({
+
+	comentaires: {
+		commentaire: {},
+		user: {}
+	},
 	created: {
 		type: Date,
 		default: Date.now

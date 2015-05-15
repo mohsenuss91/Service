@@ -1,42 +1,52 @@
 'use strict';
 
 // Pub imags controller
-angular.module('pub-imags').controller('PubImagsController', ['$scope', '$stateParams', '$location', 'Authentication', 'PubImags',
-	function($scope, $stateParams, $location, Authentication, PubImags) {
+angular.module('pub-imags').controller('PubImagsController', ['$scope', '$upload', '$stateParams', '$location', 'Authentication', 'PubImags',
+	function ($scope, $upload, $stateParams, $location, Authentication, PubImags) {
 		$scope.authentication = Authentication;
 
-        //recuperer image
-        var image;
-        $scope.load=function(){
-            var fileInput = document.querySelector('#file');
-            var reader =new FileReader();
-            fileInput.onchange = function() {
-                document.getElementById('namefile').value=fileInput.files[0].name;
-                reader.onload=function(){
-                    document.getElementById('image').style.width="242px";
-                    document.getElementById('image').style.height="200px";
-                    document.getElementById('image').src=reader.result;
-                    image=reader.result;
+		var name, size, content;
+		$scope.onFileSelect = function ($files) {
+			var file;
+			if ($files[0] != null) {
+				file = $files[0];
+				var imgType;
+				imgType = file.name.split('.');
+				imgType = imgType[imgType.length - 1].toLowerCase();
+				$scope.name = file.name;
+				size = file.size;
+				name = file.name;
+				var reader = new FileReader();
+				reader.onprogress = function (e) {
+					document.getElementById('bar1').style.width = parseInt(100.0 * e.loaded / e.total) + "%";
                 }
-                reader.readAsDataURL(fileInput.files[0]);
-            };
+				reader.onload = function () {
+					document.getElementById('image').style.width = "181px";
+					document.getElementById('image').style.height = "125px";
+					document.getElementById('image').src = reader.result;
+					content = reader.result;
+				}
+				reader.readAsDataURL(file);
+			}
         }
+
 		// Create new Pub imag
-
 		$scope.create = function() {
-
 			// Create new Pub imag object
 			var pubImag = new PubImags ({
-                name:image,
-                comment:this.comment
+				file: {
+					name: name,
+					size: size,
+					content: content
+				},
+				description: this.description
 			});
-
+			pubImag.content = content;
 			// Redirect after save
 			pubImag.$save(function(response) {
 				$location.path('pub-imags/' + response._id);
-
 				// Clear form fields
-				$scope.name = '';
+				$scope.description = '';
 			}, function(errorResponse) {
 				$scope.error = errorResponse.data.message;
 			});
@@ -84,31 +94,3 @@ angular.module('pub-imags').controller('PubImagsController', ['$scope', '$stateP
 	}
 ]);
 
-/*var xmlHttp=createXmlHttpRequestObject();
-
-function createXmlHttpRequestObject(){
-
-}
-
-function process(){
-    if(xmlHttp.readyState == 0 || xmlHttp.readyState == 4){
-        xmlHttp.open('GET','',true);
-        xmlHttp.onreadystatechange = handleServerResponse;
-        xmlHttp.send(null);
-    }else{
-        setTimeout('process()',1000);
-    }
-}
-
-function handleServerResponse(){
-    if(xmlHttp.readyState == 4){
-        if(xmlHttp.status == 200){
-                setTimeout('process()',1000);
-        }else{
-            alert('something went wrong ???');
-        }
-    }
-}
-
-
-*/
