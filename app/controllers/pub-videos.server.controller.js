@@ -24,9 +24,7 @@ var buffer2;
 var buffer;
 exports.upload = function(req,res){
     var data = req.files.file;
-    console.log(data);
     res.jsonp(data);
-    res.end();
 
 };
 /**
