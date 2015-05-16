@@ -5,7 +5,7 @@
  */
 var mongoose = require('mongoose'),
     Grid = require('gridfs-stream'),
-    fs=require('fs'),
+    fs = require('fs'),
     ffmpeg = require('fluent-ffmpeg'),
     thumbler = require('video-thumb'),
 	errorHandler = require('./errors.server.controller'),
@@ -22,7 +22,7 @@ conn.once('open', function () {
 var file;
 var buffer2;
 var buffer;
-exports.upload = function(req,res){
+exports.upload = function (req, res) {
     var data = req.files.file;
     console.log(data);
     res.jsonp(data);
@@ -38,7 +38,7 @@ exports.create = function(req, res) {
     var pubVideoData = req.body.datapubVideos;
     console.log(pubVideoData);
     var name = file.originalname;
-    var path=file.path.replace(/\//g, '/');
+    var path = file.path.replace(/\//g, '/');
     var writestream = gfs.createWriteStream({
         filename: name
     });
@@ -65,19 +65,21 @@ exports.create = function(req, res) {
  * Show the current Pub video
  */
 exports.read = function(req, res) {
-    gfs.findOne({_id : _id_file},function (err, file) {
-        if(err){return res.status(400).send({
-            message: errorHandler.getErrorMessage(err)
-        });
-        }else{
-            if(file!=null){
-            var path = '/videos/'+file.filename;
-            var writeStream = fs.createWriteStream('./public'+path);
-            var readStream = gfs.createReadStream({_id: _id_file});
+    gfs.findOne({_id: _id_file}, function (err, file) {
+        if (err) {
+            return res.status(400).send({
+                message: errorHandler.getErrorMessage(err)
+            });
+        } else {
+            if (file != null) {
+                var path = '/videos/' + file.filename;
+                var writeStream = fs.createWriteStream('./public' + path);
+                var readStream = gfs.createReadStream({_id: _id_file});
                 readStream.pipe(writeStream);
-            readStream.on('close',function(){
-                console.log('the file is readed complitelly ');
-            });}
+                readStream.on('close', function () {
+                    console.log('the file is readed complitelly ');
+                });
+            }
             res.jsonp(req.pubVideo);
         }
     });
@@ -114,7 +116,7 @@ exports.delete = function(req, res) {
 				message: errorHandler.getErrorMessage(err)
 			});
 		} else {
-            gfs.remove({_id :pubVideo.file.id_file_video}, function (err) {
+            gfs.remove({_id: pubVideo.file.id_file_video}, function (err) {
                 if (err) return handleError(err);
                 console.log('success');
             });
@@ -126,46 +128,48 @@ exports.delete = function(req, res) {
 /**
  * List of Pub videos
  */
-exports.list = function(req, res) {
+exports.list = function (req, res) {
 	PubVideo.find().sort('-created').populate('user', 'displayName').exec(function(err, pubVideos) {
 		if (err) {
 			return res.status(400).send({
 				message: errorHandler.getErrorMessage(err)
 			});
 		} else {
-            var i=0;
-            while(pubVideos[i]!=null && i < pubVideos.length-1){
-                gfs.findOne({_id : pubVideos[i].file.id_file_video},function (err, file) {
-                if(err){return res.status(400).send({
-                    message: errorHandler.getErrorMessage(err)
-                });
-                }else{
-                    if(file!=null){
-                        var path = '/videos/'+file.filename;
-                        var writeStream = fs.createWriteStream('./public'+path);
-                        var readStream = gfs.createReadStream({_id: file._id});
-                        readStream.pipe(writeStream);
-                        readStream.on('close',function(){
-                            console.log('the file is readed complitelly '+file.filename);
+            var i = 0;
+            while (pubVideos[i] != null && i < pubVideos.length - 1) {
+                gfs.findOne({_id: pubVideos[i].file.id_file_video}, function (err, file) {
+                    if (err) {
+                        return res.status(400).send({
+                            message: errorHandler.getErrorMessage(err)
                         });
-                    }
-                }
-            });
-                i++;
-            }
-            if(i == pubVideos.length-1){
-                gfs.findOne({_id : pubVideos[i].file.id_file_video},function (err, file) {
-                    if(err){return res.status(400).send({
-                        message: errorHandler.getErrorMessage(err)
-                    });
-                    }else{
-                        if(file!=null){
-                            var path = '/videos/'+file.filename;
-                            var writeStream = fs.createWriteStream('./public'+path);
+                    } else {
+                        if (file != null) {
+                            var path = '/videos/' + file.filename;
+                            var writeStream = fs.createWriteStream('./public' + path);
                             var readStream = gfs.createReadStream({_id: file._id});
                             readStream.pipe(writeStream);
-                            readStream.on('close',function(){
-                                console.log('the file is readed complitelly '+file.filename);
+                            readStream.on('close', function () {
+                                console.log('the file is readed complitelly ' + file.filename);
+                            });
+                        }
+                    }
+                });
+                i++;
+            }
+            if (i == pubVideos.length - 1) {
+                gfs.findOne({_id: pubVideos[i].file.id_file_video}, function (err, file) {
+                    if (err) {
+                        return res.status(400).send({
+                            message: errorHandler.getErrorMessage(err)
+                        });
+                    } else {
+                        if (file != null) {
+                            var path = '/videos/' + file.filename;
+                            var writeStream = fs.createWriteStream('./public' + path);
+                            var readStream = gfs.createReadStream({_id: file._id});
+                            readStream.pipe(writeStream);
+                            readStream.on('close', function () {
+                                console.log('the file is readed complitelly ' + file.filename);
                                 res.jsonp(pubVideos);
                             });
                         }

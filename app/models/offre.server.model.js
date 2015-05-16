@@ -4,18 +4,18 @@
  * Module dependencies.
  */
 var mongoose = require('mongoose'),
-	Schema = mongoose.Schema;
+    Schema = mongoose.Schema;
 
 /**
  * Offre Schema
  */
 var OffreSchema = new Schema({
-	entreprise: {
-		type: String,
-		default: '',
-		required: '',
-		trim: true
-	},
+    entreprise: {
+        type: String,
+        default: '',
+        required: '',
+        trim: true
+    },
     post: {
         type: String,
         default: '',
@@ -28,26 +28,26 @@ var OffreSchema = new Schema({
         required: '',
         trim: true
     },
-    competences:[{
+    competences: [{
         type: String,
         default: '',
         required: '',
         trim: true
     }],
-    documents:[{
+    documents: [{
         type: String,
         default: '',
         required: 'Please fill Offre name',
         trim: true
     }],
-	created: {
-		type: Date,
-		default: Date.now
-	},
-	user: {
-		type: Schema.ObjectId,
-		ref: 'User'
-	}
+    created: {
+        type: Date,
+        default: Date.now
+    },
+    user: {
+        type: Schema.ObjectId,
+        ref: 'User'
+    }
 });
 
 mongoose.model('Offre', OffreSchema);

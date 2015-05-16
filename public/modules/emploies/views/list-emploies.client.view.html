@@ -4,16 +4,16 @@
     </div>
     <div class="list-group">
         <a data-ng-repeat="emploie in emploies" data-ng-href="#!/emploies/{{emploie._id}}" class="list-group-item">
-			<small class="list-group-item-text">
-				Posted on
-				<span data-ng-bind="emploie.created | date:'medium'"></span>
-				by
-				<span data-ng-bind="emploie.user.displayName"></span>
-			</small>
-			<h4 class="list-group-item-heading" data-ng-bind="emploie.name"></h4>
+            <small class="list-group-item-text">
+                Posted on
+                <span data-ng-bind="emploie.created | date:'medium'"></span>
+                by
+                <span data-ng-bind="emploie.user.displayName"></span>
+            </small>
+            <h4 class="list-group-item-heading" data-ng-bind="emploie.name"></h4>
         </a>
     </div>
     <div class="alert alert-warning text-center" data-ng-hide="!emploies.$resolved || emploies.length">
-    	No Emploies yet, why don't you <a href="/#!/emploies/create">create one</a>?
+        No Emploies yet, why don't you <a href="/#!/emploies/create">create one</a>?
     </div>
 </section>

@@ -12,13 +12,12 @@ var mongooseFS = require('mongoose-fs');
  * Pub imag Schema
  */
 var PubImagSchema = new Schema({
-    file:{
-        id_file_image:
-        {
+    file: {
+        id_file_image: {
             type: mongoose.Schema.Types.ObjectId,
-            ref:'fs.files'
+            ref: 'fs.files'
         },
-        namefile:{
+        namefile: {
             type: String,
             default: '',
             required: 'Please fill Pub imag description',

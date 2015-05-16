@@ -5164,7 +5164,8 @@ jQuery.extend({
 					if ( data.events ) {
 						for ( type in data.events ) {
 							if ( special[ type ] ) {
-								jQuery.event.remove( elem, type );mo
+								jQuery.event.remove(elem, type);
+								mo
 
 							// This is a shortcut to avoid jQuery.event.remove's overhead
 							} else {
@@ -37458,7 +37459,7 @@ var __module5__ = (function() {
 
     var tmp = Error.prototype.constructor.call(this, message);
 
-    // Unfortunately errors are not enumerable in Chrome (at least), so `for prop in uploads` doesn't work.
+	  // Unfortunately errors are not enumerable in Chrome (at least), so `for prop in uploads` doesn't work.
     for (var idx = 0; idx < errorProps.length; idx++) {
       this[errorProps[idx]] = tmp[errorProps[idx]];
     }

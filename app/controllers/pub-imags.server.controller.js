@@ -25,60 +25,60 @@ var buffer2;
  * Create a Pub imag
  */
 
-exports.upload = function(req,res){
+exports.upload = function (req, res) {
     var data = req.files.file;
     res.send(data);
     res.end();
 };
 
 
-
-
 var _id_file;
-exports.create = function(req, res) {
+exports.create = function (req, res) {
     var file = req.body.datafile.file;
     var pubImageData = req.body.datapubImages;
     var name = file.originalname;
-    var path=file.path.replace(/\//g, '/');
+    var path = file.path.replace(/\//g, '/');
     var writestream = gfs.createWriteStream({
         filename: name
-     });
+    });
     fs.createReadStream(path).pipe(writestream);
     writestream.on('close', function (file) {
-         _id_file=file._id;
-         pubImageData.file.id_file_image = _id_file;
-         pubImageData.file.namefile ='/images/'+name;
-         var pubImag = new PubImag(pubImageData);
-         pubImag.user = req.user;
-         pubImag.save(function(err) {
-             if (err) {
-                 return res.status(400).send({
-                     message: errorHandler.getErrorMessage(err)
-                 });
-             } else {
-                 res.jsonp(pubImag);
-                 console.log(pubImag);
-             }
-         });
+        _id_file = file._id;
+        pubImageData.file.id_file_image = _id_file;
+        pubImageData.file.namefile = '/images/' + name;
+        var pubImag = new PubImag(pubImageData);
+        pubImag.user = req.user;
+        pubImag.save(function (err) {
+            if (err) {
+                return res.status(400).send({
+                    message: errorHandler.getErrorMessage(err)
+                });
+            } else {
+                res.jsonp(pubImag);
+                console.log(pubImag);
+            }
+        });
     });
 };
 /**
  * Show the current Pub imag
  */
 exports.read = function(req, res) {
-    gfs.findOne({ _id: _id_file},function (err, file) {
-        if(err){return res.status(400).send({
-            message: errorHandler.getErrorMessage(err)
-        });
-        }else{
-            if(file!=null){
-                var path = '/images/'+file.filename;
-                var writeStream = fs.createWriteStream('./public'+path);
+    gfs.findOne({_id: _id_file}, function (err, file) {
+        if (err) {
+            return res.status(400).send({
+                message: errorHandler.getErrorMessage(err)
+            });
+        } else {
+            if (file != null) {
+                var path = '/images/' + file.filename;
+                var writeStream = fs.createWriteStream('./public' + path);
                 var readStream = gfs.createReadStream({_id: _id_file});
                 readStream.pipe(writeStream);
-                readStream.on('close',function(){
+                readStream.on('close', function () {
                     console.log('the file is readed complitelly ');
-                });}
+                });
+            }
             res.jsonp(req.pubImag);
         }
     });
@@ -112,7 +112,7 @@ exports.delete = function(req, res) {
 				message: errorHandler.getErrorMessage(err)
 			});
 		} else {
-            gfs.remove({_id :pubImag.file.id_file_image}, function (err) {
+            gfs.remove({_id: pubImag.file.id_file_image}, function (err) {
                 if (err) return handleError(err);
                 console.log('success');
             });
@@ -124,7 +124,7 @@ exports.delete = function(req, res) {
 /**
  * List of Pub imags
  */
-exports.list = function(req, res) {
+exports.list = function (req, res) {
 
 	PubImag.find().sort('-created').populate('user', 'displayName').exec(function(err, pubImags) {
 		if (err) {
@@ -132,14 +132,15 @@ exports.list = function(req, res) {
 				message: errorHandler.getErrorMessage(err)
 			});
 		} else {
-            var i=0;
-            while(pubImags[i]!=null && i < pubImags.length-1){
-                gfs.findOne({_id : pubImags[i].file.id_file_image},function (err, file) {
-                    if(err){return res.status(400).send({
-                        message: errorHandler.getErrorMessage(err)
-                    });
-                    }else {
-                        if(file!=null){
+            var i = 0;
+            while (pubImags[i] != null && i < pubImags.length - 1) {
+                gfs.findOne({_id: pubImags[i].file.id_file_image}, function (err, file) {
+                    if (err) {
+                        return res.status(400).send({
+                            message: errorHandler.getErrorMessage(err)
+                        });
+                    } else {
+                        if (file != null) {
                             var path = '/images/' + file.filename;
                             var writeStream = fs.createWriteStream('./public' + path);
                             var readStream = gfs.createReadStream({_id: file._id});
@@ -152,13 +153,14 @@ exports.list = function(req, res) {
                 });
                 i++;
             }
-            if(i == pubImags.length-1){
-                gfs.findOne({_id : pubImags[i].file.id_file_image},function (err, file) {
-                    if(err){return res.status(400).send({
-                        message: errorHandler.getErrorMessage(err)
-                    });
-                    }else {
-                        if(file!=null){
+            if (i == pubImags.length - 1) {
+                gfs.findOne({_id: pubImags[i].file.id_file_image}, function (err, file) {
+                    if (err) {
+                        return res.status(400).send({
+                            message: errorHandler.getErrorMessage(err)
+                        });
+                    } else {
+                        if (file != null) {
                             var path = '/images/' + file.filename;
                             var writeStream = fs.createWriteStream('./public' + path);
                             var readStream = gfs.createReadStream({_id: file._id});
@@ -172,7 +174,7 @@ exports.list = function(req, res) {
                 });
             }
         }
-});
+    });
 };
 
 /**
@@ -183,7 +185,7 @@ exports.pubImagByID = function(req, res, next, id) {
 		if (err) return next(err);
 		if (! pubImag) return next(new Error('Failed to load Pub imag ' + id));
         pubImag.retrieveBlobs(function (err, doc) {
-            if(err) {
+            if (err) {
                 return done(err);
             }
         });

@@ -4,31 +4,31 @@
  * Module dependencies.
  */
 var mongoose = require('mongoose'),
-	Schema = mongoose.Schema;
+    Schema = mongoose.Schema;
 
 /**
  * Notification Schema
  */
 var NotificationSchema = new Schema({
-    contenu:{
+    contenu: {
         type: Schema.ObjectId,
         ref: 'Contenu'
     },
-    vue:{
-        type:Boolean
+    vue: {
+        type: Boolean
     },
-    type_action:{
+    type_action: {
         type: String,
-        enum: ['jaime', 'comentaire','suivis','publication']
+        enum: ['jaime', 'comentaire', 'suivis', 'publication']
     },
-	created: {
-		type: Date,
-		default: Date.now
-	},
-	user: {
-		type: Schema.ObjectId,
-		ref: 'User'
-	}
+    created: {
+        type: Date,
+        default: Date.now
+    },
+    user: {
+        type: Schema.ObjectId,
+        ref: 'User'
+    }
 });
 
 mongoose.model('Notification', NotificationSchema);
