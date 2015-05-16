@@ -1,0 +1,20 @@
+<section data-ng-controller="PubVideosController" data-ng-init="find()">
+    <div class="page-header">
+        <h1>Pub videos</h1>
+    </div>
+    <div class="list-group">
+        <a data-ng-repeat="pubVideo in pubVideos" data-ng-href="#!/pub-videos/{{pubVideo._id}}" class="list-group-item">
+			<small class="list-group-item-text">
+				Posted on
+				<span data-ng-bind="pubVideo.created | date:'medium'"></span>
+				by
+				<span data-ng-bind="pubVideo.user.displayName"></span>
+			</small>
+            <h1 data-ng-bind="pubVideo.description"></h1>
+            <div class="thumbnail"><video src="{{pubVideo.file.namefile}}" /></div>
+        </a>
+    </div>
+    <div class="alert alert-warning text-center" data-ng-hide="!pubVideos.$resolved || pubVideos.length">
+    	No Pub videos yet, why don't you <a href="/#!/pub-videos/create">create one</a>?
+    </div>
+</section>

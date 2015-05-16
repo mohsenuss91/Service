@@ -13,7 +13,7 @@ var ContenuSchema = new Schema({
 	name: {
 		type: String,
 		default: '',
-		required: 'Please fill Contenu name',
+		required: '',
 		trim: true
 	},
 	created: {

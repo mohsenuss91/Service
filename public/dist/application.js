@@ -4,7 +4,11 @@
 var ApplicationConfiguration = (function() {
 	// Init module configuration options
 	var applicationModuleName = 'mean';
-	var applicationModuleVendorDependencies = ['ngResource', 'ngAnimate', 'ui.router', 'ui.bootstrap', 'ui.utils'];
+
+
+
+
+	var applicationModuleVendorDependencies = ['ngResource', 'ngAnimate', 'ui.router', 'ui.bootstrap', 'ui.utils','angularFileUpload'];
 
 	// Add a new vertical module
 	var registerModule = function(moduleName, dependencies) {
@@ -21,6 +25,7 @@ var ApplicationConfiguration = (function() {
 		registerModule: registerModule
 	};
 })();
+
 'use strict';
 
 //Start by defining the main module and adding the module dependencies
@@ -41,6 +46,7 @@ angular.element(document).ready(function() {
 	//Then init the app
 	angular.bootstrap(document, [ApplicationConfiguration.applicationModuleName]);
 });
+
 'use strict';
 
 // Use Application configuration module to register a new module
@@ -58,7 +64,19 @@ ApplicationConfiguration.registerModule('core');
 'use strict';
 
 // Use applicaion configuration module to register a new module
+ApplicationConfiguration.registerModule('pub-imags');
+'use strict';
+
+// Use applicaion configuration module to register a new module
+ApplicationConfiguration.registerModule('pub-videos');
+'use strict';
+
+// Use applicaion configuration module to register a new module
 ApplicationConfiguration.registerModule('statuses');
+'use strict';
+
+// Use applicaion configuration module to register a new module
+ApplicationConfiguration.registerModule('tests');
 'use strict';
 
 // Use Application configuration module to register a new module
@@ -497,6 +515,291 @@ angular.module('core').service('Menus', [
 ]);
 'use strict';
 
+//Setting up route
+angular.module('pub-imags').config(['$stateProvider',
+	function($stateProvider) {
+		// Pub imags state routing
+		$stateProvider.
+		state('listPubImags', {
+			url: '/pub-imags',
+			templateUrl: 'modules/pub-imags/views/list-pub-imags.client.view.html'
+		}).
+		state('createPubImag', {
+			url: '/pub-imags/create',
+			templateUrl: 'modules/pub-imags/views/create-pub-imag.client.view.html'
+		}).
+		state('viewPubImag', {
+			url: '/pub-imags/:pubImagId',
+			templateUrl: 'modules/pub-imags/views/view-pub-imag.client.view.html'
+		}).
+		state('editPubImag', {
+			url: '/pub-imags/:pubImagId/edit',
+			templateUrl: 'modules/pub-imags/views/edit-pub-imag.client.view.html'
+		});
+	}
+]);
+'use strict';
+
+// Pub imags controller
+angular.module('pub-imags').controller('PubImagsController', ['$scope','$upload','$stateParams','$location', 'Authentication', 'PubImags',
+	function($scope,$upload,$stateParams,$location,Authentication, PubImags) {
+		$scope.authentication = Authentication;
+
+        var name,size,content;
+        $scope.onFileSelect=function($files){
+            var file;
+            if($files[0] != null){
+                file=$files[0];
+                var imgType;
+                imgType =file.name.split('.');
+                imgType = imgType[imgType.length - 1].toLowerCase();
+                $scope.name=file.name;
+                size = file.size;
+                name=file.name;
+                var reader =new FileReader();
+                reader.onprogress=function(e){
+                    document.getElementById('bar1').style.width= parseInt(100.0 * e.loaded / e.total)+"%";
+                }
+                reader.onload = function () {
+                    document.getElementById('image').style.width = "181px";
+                    document.getElementById('image').style.height = "125px";
+                    document.getElementById('image').src = reader.result;
+                    content=reader.result;
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Create new Pub imag
+		$scope.create = function() {
+			// Create new Pub imag object
+			var pubImag = new PubImags ({
+                file:{
+                    name:name,
+                    size:size,
+                    content:content
+                },
+                description: this.description
+			});
+            pubImag.content=content;
+            // Redirect after save
+			pubImag.$save(function(response) {
+				$location.path('pub-imags/' + response._id);
+				// Clear form fields
+				$scope.description= '';
+			}, function(errorResponse) {
+				$scope.error = errorResponse.data.message;
+			});
+		};
+
+		// Remove existing Pub imag
+		$scope.remove = function(pubImag) {
+			if ( pubImag ) {
+				pubImag.$remove();
+
+				for (var i in $scope.pubImags) {
+					if ($scope.pubImags [i] === pubImag) {
+						$scope.pubImags.splice(i, 1);
+					}
+				}
+			} else {
+				$scope.pubImag.$remove(function() {
+					$location.path('pub-imags');
+				});
+			}
+		};
+
+		// Update existing Pub imag
+		$scope.update = function() {
+			var pubImag = $scope.pubImag;
+
+			pubImag.$update(function() {
+				$location.path('pub-imags/' + pubImag._id);
+			}, function(errorResponse) {
+				$scope.error = errorResponse.data.message;
+			});
+		};
+
+		// Find a list of Pub imags
+		$scope.find = function() {
+			$scope.pubImags = PubImags.query();
+		};
+
+		// Find existing Pub imag
+		$scope.findOne = function() {
+            $scope.pubImag = PubImags.get({
+				pubImagId: $stateParams.pubImagId
+			});
+		};
+	}
+]);
+
+
+'use strict';
+
+//Pub imags service used to communicate Pub imags REST endpoints
+angular.module('pub-imags').factory('PubImags', ['$resource',
+	function($resource) {
+		return $resource('pub-imags/:pubImagId', {
+            pubImagId: '@_id'
+		}, {
+			update: {
+				method: 'PUT'
+			}
+		});
+	}
+]);
+
+'use strict';
+
+// Configuring the Articles module
+angular.module('pub-videos').run(['Menus',
+	function(Menus) {
+		// Set top bar menu items
+		Menus.addMenuItem('topbar', 'Pub videos', 'pub-videos', 'dropdown', '/pub-videos(/create)?');
+		Menus.addSubMenuItem('topbar', 'pub-videos', 'List Pub videos', 'pub-videos');
+		Menus.addSubMenuItem('topbar', 'pub-videos', 'New Pub video', 'pub-videos/create');
+	}
+]);
+'use strict';
+
+//Setting up route
+angular.module('pub-videos').config(['$stateProvider',
+	function($stateProvider) {
+		// Pub videos state routing
+		$stateProvider.
+		state('listPubVideos', {
+			url: '/pub-videos',
+			templateUrl: 'modules/pub-videos/views/list-pub-videos.client.view.html'
+		}).
+		state('createPubVideo', {
+			url: '/pub-videos/create',
+			templateUrl: 'modules/pub-videos/views/create-pub-video.client.view.html'
+		}).
+		state('viewPubVideo', {
+			url: '/pub-videos/:pubVideoId',
+			templateUrl: 'modules/pub-videos/views/view-pub-video.client.view.html'
+		}).
+		state('editPubVideo', {
+			url: '/pub-videos/:pubVideoId/edit',
+			templateUrl: 'modules/pub-videos/views/edit-pub-video.client.view.html'
+		});
+	}
+]);
+'use strict';
+
+// Pub videos controller
+angular.module('pub-videos').controller('PubVideosController', ['$scope', '$stateParams', '$location', 'Authentication', 'PubVideos',
+	function($scope, $stateParams, $location, Authentication, PubVideos) {
+		$scope.authentication = Authentication;
+
+        var name,size,content;
+        $scope.onFileSelect=function($files){
+            var file;
+            if($files[0] != null){
+                file=$files[0];
+                var imgType;
+                imgType =file.name.split('.');
+                imgType = imgType[imgType.length - 1].toLowerCase();
+                $scope.name=file.name;
+                size = file.size;
+                name=file.name;
+                var reader =new FileReader();
+                reader.onprogress=function(e){
+                    document.getElementById('bar1').style.width= parseInt(100.0 * e.loaded / e.total)+"%";
+                }
+                reader.onload = function () {
+                    $( "#image" ).replaceWith( "<video  id='video' src=''></video>" );
+                    document.getElementById('video').style.width = "181px";
+                    document.getElementById('video').style.height = "125px";
+                    document.getElementById('video').src = reader.result;
+                    content=reader.result;
+                    console.log(content);
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Create new Pub video
+		$scope.create = function() {
+			// Create new Pub video object
+			var pubVideo = new PubVideos ({
+                file:{
+                    name:name,
+                    size:size,
+                    content:content
+                },
+                description: this.description
+			});
+
+			// Redirect after save
+			pubVideo.$save(function(response) {
+				$location.path('pub-videos/' + response._id);
+
+				// Clear form fields
+                $scope.description= '';
+			}, function(errorResponse) {
+				$scope.error = errorResponse.data.message;
+			});
+		};
+
+		// Remove existing Pub video
+		$scope.remove = function(pubVideo) {
+			if ( pubVideo ) { 
+				pubVideo.$remove();
+
+				for (var i in $scope.pubVideos) {
+					if ($scope.pubVideos [i] === pubVideo) {
+						$scope.pubVideos.splice(i, 1);
+					}
+				}
+			} else {
+				$scope.pubVideo.$remove(function() {
+					$location.path('pub-videos');
+				});
+			}
+		};
+
+		// Update existing Pub video
+		$scope.update = function() {
+			var pubVideo = $scope.pubVideo;
+
+			pubVideo.$update(function() {
+				$location.path('pub-videos/' + pubVideo._id);
+			}, function(errorResponse) {
+				$scope.error = errorResponse.data.message;
+			});
+		};
+
+		// Find a list of Pub videos
+		$scope.find = function() {
+			$scope.pubVideos = PubVideos.query();
+		};
+
+		// Find existing Pub video
+		$scope.findOne = function() {
+			$scope.pubVideo = PubVideos.get({ 
+				pubVideoId: $stateParams.pubVideoId
+			});
+		};
+	}
+]);
+
+'use strict';
+
+//Pub videos service used to communicate Pub videos REST endpoints
+angular.module('pub-videos').factory('PubVideos', ['$resource',
+	function($resource) {
+		return $resource('pub-videos/:pubVideoId', { pubVideoId: '@_id'
+		}, {
+			update: {
+				method: 'PUT'
+			}
+		});
+	}
+]);
+'use strict';
+
 // Configuring the Articles module
 angular.module('statuses').run(['Menus',
 	function(Menus) {
@@ -603,6 +906,121 @@ angular.module('statuses').controller('StatusesController', ['$scope', '$statePa
 angular.module('statuses').factory('Statuses', ['$resource',
 	function($resource) {
 		return $resource('statuses/:statusId', { statusId: '@_id'
+		}, {
+			update: {
+				method: 'PUT'
+			}
+		});
+	}
+]);
+'use strict';
+
+// Configuring the Articles module
+angular.module('tests').run(['Menus',
+	function(Menus) {
+		// Set top bar menu items
+		Menus.addMenuItem('topbar', 'Tests', 'tests', 'dropdown', '/tests(/create)?');
+		Menus.addSubMenuItem('topbar', 'tests', 'List Tests', 'tests');
+		Menus.addSubMenuItem('topbar', 'tests', 'New Test', 'tests/create');
+	}
+]);
+'use strict';
+
+//Setting up route
+angular.module('tests').config(['$stateProvider',
+	function($stateProvider) {
+		// Tests state routing
+		$stateProvider.
+		state('listTests', {
+			url: '/tests',
+			templateUrl: 'modules/tests/views/list-tests.client.view.html'
+		}).
+		state('createTest', {
+			url: '/tests/create',
+			templateUrl: 'modules/tests/views/create-test.client.view.html'
+		}).
+		state('viewTest', {
+			url: '/tests/:testId',
+			templateUrl: 'modules/tests/views/view-test.client.view.html'
+		}).
+		state('editTest', {
+			url: '/tests/:testId/edit',
+			templateUrl: 'modules/tests/views/edit-test.client.view.html'
+		});
+	}
+]);
+'use strict';
+
+// Tests controller
+angular.module('tests').controller('TestsController', ['$scope', '$stateParams', '$location', 'Authentication', 'Tests',
+	function($scope, $stateParams, $location, Authentication, Tests) {
+		$scope.authentication = Authentication;
+
+		// Create new Test
+		$scope.create = function() {
+			// Create new Test object
+			var test = new Tests ({
+				name: this.name
+			});
+
+			// Redirect after save
+			test.$save(function(response) {
+				$location.path('tests/' + response._id);
+
+				// Clear form fields
+				$scope.name = '';
+			}, function(errorResponse) {
+				$scope.error = errorResponse.data.message;
+			});
+		};
+
+		// Remove existing Test
+		$scope.remove = function(test) {
+			if ( test ) { 
+				test.$remove();
+
+				for (var i in $scope.tests) {
+					if ($scope.tests [i] === test) {
+						$scope.tests.splice(i, 1);
+					}
+				}
+			} else {
+				$scope.test.$remove(function() {
+					$location.path('tests');
+				});
+			}
+		};
+
+		// Update existing Test
+		$scope.update = function() {
+			var test = $scope.test;
+
+			test.$update(function() {
+				$location.path('tests/' + test._id);
+			}, function(errorResponse) {
+				$scope.error = errorResponse.data.message;
+			});
+		};
+
+		// Find a list of Tests
+		$scope.find = function() {
+			$scope.tests = Tests.query();
+		};
+
+		// Find existing Test
+		$scope.findOne = function() {
+			$scope.test = Tests.get({ 
+				testId: $stateParams.testId
+			});
+		};
+	}
+]);
+'use strict';
+
+//Tests service used to communicate Tests REST endpoints
+angular.module('tests').factory('Tests', ['$resource',
+	function($resource) {
+		return $resource('tests/:testId', { testId: '@_id'
 		}, {
 			update: {
 				method: 'PUT'
