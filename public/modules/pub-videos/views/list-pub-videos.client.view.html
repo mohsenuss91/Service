@@ -10,8 +10,8 @@
 				by
 				<span data-ng-bind="pubVideo.user.displayName"></span>
 			</small>
-            <h1 data-ng-bind="pubImag.description"></h1>
-            <!--<div class="thumbnail"><video src="{{pubImag.file.content}}" /></div>-->
+            <h1 data-ng-bind="pubVideo.description"></h1>
+            <div class="thumbnail"><video src="{{pubVideo.file.namefile}}" /></div>
         </a>
     </div>
     <div class="alert alert-warning text-center" data-ng-hide="!pubVideos.$resolved || pubVideos.length">

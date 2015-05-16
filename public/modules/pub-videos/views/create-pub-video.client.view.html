@@ -1,59 +1,70 @@
-<section data-ng-controller="PubVideosController">
+<section data-ng-controller="PubVideosController" data-ng-init="find()">
     <div class="page-header">
-        <h1>New Pub video</h1>
+        <h1>New Pub Video</h1>
     </div>
-    <div class="col-xs-6">
-        <form class="form-horizontal" data-ng-submit="create()" novalidate>
-            <fieldset>
-                <div class="form-group">
-                    <div class="panel panel-default">
-                        <ul class="nav nav-tabs">
-                            <li class="active"><a href="#tab1" data-toggle="tab"><span
-                                    class="btn btn-primary btn-stroke"><i class="fa fa-camera"></i></span></a></li>
-                        </ul>
-                        <div class="panel-body">
-                            <div class="tab-pane" id="tab1">
-                                <div class="inline">
-                                    <div class="col-xs-6">
-                                        <div class="thumbnail" id="containa_image">
-                                            <img id='image' src="/images/260x180.png">
-                                        </div>
-                                    </div>
-                                    <br/>
-                                    <br/>
-
-                                    <div class="input-group">
-                                        <input type="text" class="form-control" value="{{name}}">
-                                        <span class="input-group-btn">
-                                            <button class="btn btn-primary btn-file">
-                                                <input type="file" ng-file-select ng-file-change="onFileSelect($files)"
-                                                       accept="video/*">
-                                                <i class="fa fa-download"></i>
-                                            </button>
-                                        </span>
+    <div class="col-xs-6" >
+        <div class="panel panel-default">
+            <ul class="nav nav-tabs">
+                <li class="active">
+                    <a href="#tab1" data-toggle="tab" >
+                        <span class="btn btn-primary btn-stroke">
+                            <i class="fa fa-camera"></i>
+                        </span></a>
+                </li>
+            </ul>
+            <div class="panel-body">
+                <div class="tab-pane" id="tab1">
+                    <form class="form-horizontal " ng-submit="upload(files)" novalidate >
+                        <fieldset>
+                            <div class="inline">
+                                <div class="col-xs-6">
+                                    <div class="thumbnail" id='image'>
+                                        <img  src="/images/260x180.png"  >
                                     </div>
                                 </div>
                                 <br/>
-
-                                <div class="progress">
-                                    <div class="progress-bar" id="bar1" role="progressbar" aria-valuenow="60"
-                                         aria-valuemin="0" aria-valuemax="100" style="width: 0%;"/>
+                                <br/>
+                                <div class="input-group">
+                                    <input type="text" class="form-control"  value="{{files[0].name}}">
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-primary btn-file" >
+                                            <input type="file"   ng-file-select  data-ng-model="files"  accept="video/*">
+                                            <i class="fa fa-download"></i>
+                                        </button>
+                                    </span>
                                 </div>
                             </div>
-                        </div>
-                        <div class="panel-footer share-buttons input-groupe">
-                            <textarea name="commentaire" placeholder="ajouter un commentaire..."
-                                      class="form-control share-text" data-ng-model="description"></textarea>
+                            <br/>
+                            <div class="progress">
+                                <div class="progress-bar" id="bar1" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"/>
+                            </div>
                             <span class="input-group-btn">
-                                <button type="submit" class="btn btn-primary btn-xs pull-right " href="#"
-                                        id="uploadForm">Publier
-                                </button>
+                                <button type="submit" class="btn btn-primary btn-xs pull-right " href="#" >upload</button>
                             </span>
-                        </div>
-                    </div>
+                        </fieldset>
+                    </form>
                 </div>
-            </fieldset>
-        </form>
+            </div>
+            <div class="panel-footer share-buttons input-groupe">
+                <form class="form-horizontal panel-footer share-buttons input-groupe"   ng-submit="create()" novalidate>
+                    <textarea name="commentaire"  placeholder="ajouter un commentaire..." class="form-control share-text" data-ng-model="description"></textarea>
+                        <span class="input-group-btn">
+                            <button type="submit" class="btn btn-primary btn-xs pull-right " href="#" >Publier</button>
+                        </span>
+                </form>
+            </div>
+        </div>
     </div>
-
+    <div class="list-group " >
+        <a data-ng-repeat="pubVideo in pubVideos" data-ng-href="#!/pub-videos/{{pubVideo._id}}" class="list-group-item col-xs-6">
+            <small class="list-group-item-text">
+                Posted on
+                <span data-ng-bind="pubVideo.created | date:'medium'"></span>
+                by
+                <span data-ng-bind="pubVideo.user.displayName"></span>
+            </small>
+            <h1 data-ng-bind="pubVideo.description"></h1>
+            <video  class="thumbnail list-group col-xs-12" src="{{pubVideo.file.namefile}}"/>
+        </a>
+    </div>
 </section>
