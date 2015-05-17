@@ -34,7 +34,7 @@ angular.module('pub-imags').controller('PubImagsController', ['$scope', '$upload
 			var pubImag = new PubImags ({
 				datapubImages: {
 					description: this.description,
-					file: {id_file_image: '', namefilen: ''}
+					file: {id_file_image: '', namefile: ''}
 				},
 				datafile: {file: datafile}
 			});

@@ -184,11 +184,6 @@ exports.pubImagByID = function(req, res, next, id) {
 	PubImag.findById(id).populate('user', 'displayName').exec(function(err, pubImag) {
 		if (err) return next(err);
 		if (! pubImag) return next(new Error('Failed to load Pub imag ' + id));
-        pubImag.retrieveBlobs(function (err, doc) {
-            if (err) {
-                return done(err);
-            }
-        });
 		req.pubImag = pubImag ;
 		next();
 	});
