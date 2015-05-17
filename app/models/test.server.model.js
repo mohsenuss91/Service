@@ -4,7 +4,6 @@
  * Module dependencies.
  */
 var mongoose = require('mongoose'),
-    mongooseFS = require('mongoose-fs'),
     Schema = mongoose.Schema;
 
 /**
@@ -23,5 +22,4 @@ var TestSchema = new Schema({
     }
 });
 
-TestSchema.plugin(mongooseFS, {keys: ['content', 'complement'], mongoose: mongoose});
 mongoose.model('Test', TestSchema);

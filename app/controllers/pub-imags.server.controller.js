@@ -45,7 +45,7 @@ exports.create = function (req, res) {
     writestream.on('close', function (file) {
         _id_file = file._id;
         pubImageData.file.id_file_image = _id_file;
-        pubImageData.file.namefile = '/images/' + name;
+        pubImageData.file.namefile = '/uploads/' + name;
         var pubImag = new PubImag(pubImageData);
         pubImag.user = req.user;
         pubImag.save(function (err) {
@@ -71,7 +71,7 @@ exports.read = function(req, res) {
             });
         } else {
             if (file != null) {
-                var path = '/images/' + file.filename;
+                var path = '/uploads/' + file.filename;
                 var writeStream = fs.createWriteStream('./public' + path);
                 var readStream = gfs.createReadStream({_id: _id_file});
                 readStream.pipe(writeStream);
@@ -141,7 +141,7 @@ exports.list = function (req, res) {
                         });
                     } else {
                         if (file != null) {
-                            var path = '/images/' + file.filename;
+                            var path = '/uploads/' + file.filename;
                             var writeStream = fs.createWriteStream('./public' + path);
                             var readStream = gfs.createReadStream({_id: file._id});
                             readStream.pipe(writeStream);
@@ -161,7 +161,7 @@ exports.list = function (req, res) {
                         });
                     } else {
                         if (file != null) {
-                            var path = '/images/' + file.filename;
+                            var path = '/uploads/' + file.filename;
                             var writeStream = fs.createWriteStream('./public' + path);
                             var readStream = gfs.createReadStream({_id: file._id});
                             readStream.pipe(writeStream);

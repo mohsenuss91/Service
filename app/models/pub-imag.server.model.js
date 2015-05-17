@@ -5,7 +5,6 @@
  */
 var mongoose = require('mongoose'),
 	Schema = mongoose.Schema;
-var mongooseFS = require('mongoose-fs');
 
 
 /**
@@ -41,7 +40,5 @@ var PubImagSchema = new Schema({
 		ref: 'User'
 	}
 });
-
-PubImagSchema.plugin(mongooseFS, {keys: ['content', 'complement'], mongoose: mongoose});
 
 mongoose.model('PubImag', PubImagSchema);

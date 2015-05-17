@@ -6,8 +6,6 @@
 var mongoose = require('mongoose'),
     Grid = require('gridfs-stream'),
     fs = require('fs'),
-    ffmpeg = require('fluent-ffmpeg'),
-    thumbler = require('video-thumb'),
 	errorHandler = require('./errors.server.controller'),
 	PubVideo = mongoose.model('PubVideo'),
 	_ = require('lodash');
@@ -46,7 +44,7 @@ exports.create = function(req, res) {
     writestream.on('close', function (file) {
         _id_file = file._id;
         pubVideoData.file.id_file_video = _id_file;
-        pubVideoData.file.namefile = '/videos/' + name;
+        pubVideoData.file.namefile = '/uploads/' + name;
         var pubVideo = new PubVideo(pubVideoData);
         pubVideo.user = req.user;
         pubVideo.save(function (err) {
@@ -72,7 +70,7 @@ exports.read = function(req, res) {
             });
         } else {
             if (file != null) {
-                var path = '/videos/' + file.filename;
+                var path = '/uploads/' + file.filename;
                 var writeStream = fs.createWriteStream('./public' + path);
                 var readStream = gfs.createReadStream({_id: _id_file});
                 readStream.pipe(writeStream);
@@ -144,7 +142,7 @@ exports.list = function (req, res) {
                         });
                     } else {
                         if (file != null) {
-                            var path = '/videos/' + file.filename;
+                            var path = '/uploads/' + file.filename;
                             var writeStream = fs.createWriteStream('./public' + path);
                             var readStream = gfs.createReadStream({_id: file._id});
                             readStream.pipe(writeStream);
@@ -164,7 +162,7 @@ exports.list = function (req, res) {
                         });
                     } else {
                         if (file != null) {
-                            var path = '/videos/' + file.filename;
+                            var path = '/uploads/' + file.filename;
                             var writeStream = fs.createWriteStream('./public' + path);
                             var readStream = gfs.createReadStream({_id: file._id});
                             readStream.pipe(writeStream);
