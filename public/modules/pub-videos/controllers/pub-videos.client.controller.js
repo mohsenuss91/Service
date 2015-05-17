@@ -35,7 +35,7 @@ angular.module('pub-videos').controller('PubVideosController', ['$scope', '$uplo
 			var pubVideo = new PubVideos ({
 				datapubVideos: {
 					description: this.description,
-					file: {id_file_video: '', namefilen: ''}
+					file: {id_file_video: '', namefile: ''}
 				},
 				datafile: {file: datafile}
 			});
