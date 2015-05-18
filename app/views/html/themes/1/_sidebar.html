@@ -4,19 +4,22 @@
         <ul>
             <li class="category">Navigation</li>
             <li class="{% if (page.slug == '') %} active {% endif %}">
-                <a href="/#!/pub-imags"><i class="icon-ship-wheel"></i> Mur</a>
+                <a href="/#!/statuses"><i class="icon-ship-wheel"></i> Status</a>
             </li>
             <li class="{% if (page.slug == 'profile') %} active {% endif %}">
-                <a href="/#!/profile"><i class="icon-user-1"></i> Profile</a>
+                <a href="/#!/pub-imags"><i class="icon-user-1"></i> Images</a>
             </li>
             <li class="{% if (page.slug == 'users') %} active{% endif %}">
-                <a href="/#!/users"><i class="fa fa-group"></i> Utilisateurs</a>
+                <a href="/#!/pub-videos"><i class="fa fa-group"></i> Videos</a>
             </li>
             <li class="{% if (page.slug == 'messages') %} active{% endif %}">
-                <a href="messages.html"><i class="icon-comment-fill-1"></i> Messages</a>
+                <a href="/#!/offres"><i class="icon-comment-fill-1"></i> Offres</a>
+            </li>
+            <li class="{% if (page.slug == 'messages') %} active{% endif %}">
+                <a href="/#!/evenements"><i class="icon-comment-fill-1"></i> Evenements</a>
             </li>
             <li class="{% if (page.slug == 'login') %} active{% endif %}">
-                <a href="login.html"><i class="icon-lock-fill"></i> S'identifier</a>
+                <a href="/#!/signIn"><i class="icon-lock-fill"></i> S'identifier</a>
             </li>
             <li class="category border top">Fils d'actualités</li>
             <li class="reset">

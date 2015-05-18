@@ -17,7 +17,7 @@ var ContenuSchema = new Schema({
         },
         default: ['status']
     },
-    texte: {
+    name: {
         type: String,
         default: '',
         trim: true

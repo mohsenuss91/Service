@@ -28,3 +28,12 @@
     background-color: #27ada0;
     color: #ffffff
 }
+
+.nom-user {
+    color: #ffffff;
+    font-weight: bold;
+}
+
+.nom-user:hover {
+    color: #ffffff;
+}

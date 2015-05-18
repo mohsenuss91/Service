@@ -27,3 +27,12 @@
     font-size: 18px;
     color: #0dc7e5;
 }
+
+.nom-user {
+    color: #ffffff;
+    font-weight: bold;
+}
+
+.nom-user:hover {
+    color: #ffffff;
+}
