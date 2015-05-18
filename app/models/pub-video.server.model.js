@@ -5,7 +5,6 @@
  */
 var mongoose = require('mongoose'),
 	Schema = mongoose.Schema;
-var mongooseFS = require('mongoose-fs');
 
 /**
  * Pub video Schema
@@ -39,6 +38,5 @@ var PubVideoSchema = new Schema({
 	}
 });
 
-PubVideoSchema.plugin(mongooseFS, {keys: ['content', 'complement'], mongoose: mongoose});
 
 mongoose.model('PubVideo', PubVideoSchema);
