@@ -4,18 +4,18 @@
  * Module dependencies.
  */
 var mongoose = require('mongoose'),
-    Schema = mongoose.Schema;
+	Schema = mongoose.Schema;
 
 /**
  * Evenement Schema
  */
 var EvenementSchema = new Schema({
     titre: {
-        type: String,
-        default: '',
-        required: '',
-        trim: true
-    },
+		type: String,
+		default: '',
+		required: '',
+		trim: true
+	},
     description: {
         type: String,
         default: '',
@@ -34,14 +34,14 @@ var EvenementSchema = new Schema({
         required: '',
         trim: true
     },
-    created: {
-        type: Date,
-        default: Date.now
-    },
-    user: {
-        type: Schema.ObjectId,
-        ref: 'User'
-    }
+	created: {
+		type: Date,
+		default: Date.now
+	},
+	user: {
+		type: Schema.ObjectId,
+		ref: 'User'
+	}
 });
 
 mongoose.model('Evenement', EvenementSchema);

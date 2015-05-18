@@ -1,25 +1,52 @@
-<section data-ng-controller="EvenementsController" data-ng-init="findOne()">
+<section data-ng-controller="EvenementsUpdateController as EvenementsUpdateCtrl">
     <div class="page-header">
         <h1>Edit Evenement</h1>
     </div>
     <div class="col-md-12">
-        <form class="form-horizontal" data-ng-submit="update()" novalidate>
+        <form class="form-horizontal" name="CreateEventForm" novalidate>
             <fieldset>
-                <div class="form-group">
-                    <label class="control-label" for="name">Name</label>
 
+                <div class="form-group">
+                    <div data-ng-show="error" class="text-center text-danger">
+                        <div class="alert alert-danger" role="alert">
+                            <strong data-ng-bind="error"></strong>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
                     <div class="controls">
-                        <input type="text" data-ng-model="evenement.name" id="name" class="form-control"
-                               placeholder="Name" required>
+                        <input type="text" data-ng-model="evenement.titre" id="titre" class="form-control" placeholder="Titre" required>
                     </div>
                 </div>
                 <div class="form-group">
-                    <input type="submit" value="Update" class="btn btn-default">
+                    <div class="controls">
+                        <textarea cols="3" data-ng-model="evenement.description" id="description" class="form-control" placeholder="Description" required></textarea>
+                    </div>
                 </div>
-                <div data-ng-show="error" class="text-danger">
-                    <strong data-ng-bind="error"></strong>
+                <div class="form-group">
+                    <div class="controls">
+                        <input type="text" data-ng-model="evenement.lieu" id="lieu" class="form-control" placeholder="Lieu" required>
+                    </div>
                 </div>
+
+                <div class="col-md-3">
+                    <p class="input-group">
+                        <input type="date" class="form-control" datepicker-popup ng-model="evenement.date" is-open="opened" min-date="minDate" max-date="'2015-06-22'" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
+
+                    </p>
+                    <timepicker ng-model="mytime" hour-step="hstep" minute-step="mstep" show-meridian="ismeridian"></timepicker>
+                </div>
+
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                </span>
+
             </fieldset>
         </form>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-success btn-lg" ng-click="EvenementsUpdateCtrl.update(evenement); ok()" ng-disabled="CreateEventForm.$invalid">Mettre à jour</button>
+        <button class="btn btn-warning btn-lg" ng-click="cancel()">Cancel</button>
     </div>
 </section>
