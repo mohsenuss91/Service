@@ -4,7 +4,9 @@
 var ApplicationConfiguration = (function() {
 	// Init module configuration options
 	var applicationModuleName = 'mean';
-	var applicationModuleVendorDependencies = ['ngResource', 'ngAnimate', 'ui.router', 'ui.bootstrap', 'ui.utils'];
+
+
+    var applicationModuleVendorDependencies = ['ngResource', 'ngAnimate', 'ui.router', 'ui.bootstrap', 'ui.utils', 'angularFileUpload'];
 
 	// Add a new vertical module
 	var registerModule = function(moduleName, dependencies) {
@@ -21,6 +23,7 @@ var ApplicationConfiguration = (function() {
 		registerModule: registerModule
 	};
 })();
+
 'use strict';
 
 //Start by defining the main module and adding the module dependencies
@@ -41,11 +44,24 @@ angular.element(document).ready(function() {
 	//Then init the app
 	angular.bootstrap(document, [ApplicationConfiguration.applicationModuleName]);
 });
+
+'use strict';
+
+// Use applicaion configuration module to register a new module
+ApplicationConfiguration.registerModule('affectations');
 'use strict';
 
 // Use Application configuration module to register a new module
 ApplicationConfiguration.registerModule('articles');
 
+'use strict';
+
+// Use applicaion configuration module to register a new module
+ApplicationConfiguration.registerModule('categories');
+'use strict';
+
+// Use applicaion configuration module to register a new module
+ApplicationConfiguration.registerModule('comments');
 'use strict';
 
 // Use applicaion configuration module to register a new module
@@ -58,6 +74,39 @@ ApplicationConfiguration.registerModule('core');
 'use strict';
 
 // Use applicaion configuration module to register a new module
+ApplicationConfiguration.registerModule('cours');
+'use strict';
+
+// Use applicaion configuration module to register a new module
+ApplicationConfiguration.registerModule('emploies');
+'use strict';
+
+// Use applicaion configuration module to register a new module
+ApplicationConfiguration.registerModule('evenements');
+'use strict';
+
+// Use applicaion configuration module to register a new module
+ApplicationConfiguration.registerModule('likes');
+'use strict';
+
+// Use applicaion configuration module to register a new module
+ApplicationConfiguration.registerModule('moderations');
+'use strict';
+
+// Use applicaion configuration module to register a new module
+ApplicationConfiguration.registerModule('notifications');
+'use strict';
+
+// Use applicaion configuration module to register a new module
+ApplicationConfiguration.registerModule('offres');
+'use strict';
+
+// Use application configuration module to register a new module
+ApplicationConfiguration.registerModule('pub-contenus');
+
+'use strict';
+
+// Use applicaion configuration module to register a new module
 ApplicationConfiguration.registerModule('pub-imags');
 'use strict';
 
@@ -66,11 +115,144 @@ ApplicationConfiguration.registerModule('pub-videos');
 'use strict';
 
 // Use applicaion configuration module to register a new module
+ApplicationConfiguration.registerModule('signalements');
+'use strict';
+
+// Use applicaion configuration module to register a new module
 ApplicationConfiguration.registerModule('statuses');
+'use strict';
+
+// Use applicaion configuration module to register a new module
+ApplicationConfiguration.registerModule('tests');
+'use strict';
+
+// Use application configuration module to register a new module
+ApplicationConfiguration.registerModule('upload');
+
 'use strict';
 
 // Use Application configuration module to register a new module
 ApplicationConfiguration.registerModule('users');
+'use strict';
+
+// Configuring the Articles module
+angular.module('affectations').run(['Menus',
+    function (Menus) {
+        // Set top bar menu items
+        //Menus.addMenuItem('y', 'Affectations', 'affectations', 'dropdown', '/affectations(/create)?');
+        //Menus.addSubMenuItem('y', 'affectations', 'List Affectations', 'affectations');
+        //Menus.addSubMenuItem('y', 'affectations', 'New Affectation', 'affectations/create');
+    }
+]);
+
+'use strict';
+
+//Setting up route
+angular.module('affectations').config(['$stateProvider',
+    function ($stateProvider) {
+        // Affectations state routing
+        $stateProvider.
+            state('listAffectations', {
+                url: '/affectations',
+                templateUrl: 'modules/affectations/views/list-affectations.client.view.html'
+            }).
+            state('createAffectation', {
+                url: '/affectations/create',
+                templateUrl: 'modules/affectations/views/create-affectation.client.view.html'
+            }).
+            state('viewAffectation', {
+                url: '/affectations/:affectationId',
+                templateUrl: 'modules/affectations/views/view-affectation.client.view.html'
+            }).
+            state('editAffectation', {
+                url: '/affectations/:affectationId/edit',
+                templateUrl: 'modules/affectations/views/edit-affectation.client.view.html'
+            });
+    }
+]);
+
+'use strict';
+
+// Affectations controller
+angular.module('affectations').controller('AffectationsController', ['$scope', '$stateParams', '$location', 'Authentication', 'Affectations',
+    function ($scope, $stateParams, $location, Authentication, Affectations) {
+        $scope.authentication = Authentication;
+
+        // Create new Affectation
+        $scope.create = function () {
+            // Create new Affectation object
+            var affectation = new Affectations({
+                name: this.name
+            });
+
+            // Redirect after save
+            affectation.$save(function (response) {
+                $location.path('affectations/' + response._id);
+
+                // Clear form fields
+                $scope.name = '';
+            }, function (errorResponse) {
+                $scope.error = errorResponse.data.message;
+            });
+        };
+
+        // Remove existing Affectation
+        $scope.remove = function (affectation) {
+            if (affectation) {
+                affectation.$remove();
+
+                for (var i in $scope.affectations) {
+                    if ($scope.affectations [i] === affectation) {
+                        $scope.affectations.splice(i, 1);
+                    }
+                }
+            } else {
+                $scope.affectation.$remove(function () {
+                    $location.path('affectations');
+                });
+            }
+        };
+
+        // Update existing Affectation
+        $scope.update = function () {
+            var affectation = $scope.affectation;
+
+            affectation.$update(function () {
+                $location.path('affectations/' + affectation._id);
+            }, function (errorResponse) {
+                $scope.error = errorResponse.data.message;
+            });
+        };
+
+        // Find a list of Affectations
+        $scope.find = function () {
+            $scope.affectations = Affectations.query();
+        };
+
+        // Find existing Affectation
+        $scope.findOne = function () {
+            $scope.affectation = Affectations.get({
+                affectationId: $stateParams.affectationId
+            });
+        };
+    }
+]);
+
+'use strict';
+
+//Affectations service used to communicate Affectations REST endpoints
+angular.module('affectations').factory('Affectations', ['$resource',
+    function ($resource) {
+        return $resource('affectations/:affectationId', {
+            affectationId: '@_id'
+        }, {
+            update: {
+                method: 'PUT'
+            }
+        });
+    }
+]);
+
 'use strict';
 
 // Configuring the Articles module
@@ -179,6 +361,248 @@ angular.module('articles').factory('Articles', ['$resource',
 		});
 	}
 ]);
+'use strict';
+
+// Configuring the Articles module
+angular.module('categories').run(['Menus',
+    function (Menus) {
+        // Set top bar menu items
+        /*Menus.addMenuItem('y', 'Categories', 'categories', 'dropdown', '/categories(/create)?');
+         Menus.addSubMenuItem('y', 'categories', 'List Categories', 'categories');
+         Menus.addSubMenuItem('y', 'categories', 'New Categorie', 'categories/create');*/
+    }
+]);
+
+'use strict';
+
+//Setting up route
+angular.module('categories').config(['$stateProvider',
+    function ($stateProvider) {
+        // Categories state routing
+        $stateProvider.
+            state('listCategories', {
+                url: '/categories',
+                templateUrl: 'modules/categories/views/list-categories.client.view.html'
+            }).
+            state('createCategorie', {
+                url: '/categories/create',
+                templateUrl: 'modules/categories/views/create-categorie.client.view.html'
+            }).
+            state('viewCategorie', {
+                url: '/categories/:categorieId',
+                templateUrl: 'modules/categories/views/view-categorie.client.view.html'
+            }).
+            state('editCategorie', {
+                url: '/categories/:categorieId/edit',
+                templateUrl: 'modules/categories/views/edit-categorie.client.view.html'
+            });
+    }
+]);
+
+'use strict';
+
+// Categories controller
+angular.module('categories').controller('CategoriesController', ['$scope', '$stateParams', '$location', 'Authentication', 'Categories',
+    function ($scope, $stateParams, $location, Authentication, Categories) {
+        $scope.authentication = Authentication;
+
+        // Create new Categorie
+        $scope.create = function () {
+            // Create new Categorie object
+            var categorie = new Categories({
+                name: this.name
+            });
+
+            // Redirect after save
+            categorie.$save(function (response) {
+                $location.path('categories/' + response._id);
+
+                // Clear form fields
+                $scope.name = '';
+            }, function (errorResponse) {
+                $scope.error = errorResponse.data.message;
+            });
+        };
+
+        // Remove existing Categorie
+        $scope.remove = function (categorie) {
+            if (categorie) {
+                categorie.$remove();
+
+                for (var i in $scope.categories) {
+                    if ($scope.categories [i] === categorie) {
+                        $scope.categories.splice(i, 1);
+                    }
+                }
+            } else {
+                $scope.categorie.$remove(function () {
+                    $location.path('categories');
+                });
+            }
+        };
+
+        // Update existing Categorie
+        $scope.update = function () {
+            var categorie = $scope.categorie;
+
+            categorie.$update(function () {
+                $location.path('categories/' + categorie._id);
+            }, function (errorResponse) {
+                $scope.error = errorResponse.data.message;
+            });
+        };
+
+        // Find a list of Categories
+        $scope.find = function () {
+            $scope.categories = Categories.query();
+        };
+
+        // Find existing Categorie
+        $scope.findOne = function () {
+            $scope.categorie = Categories.get({
+                categorieId: $stateParams.categorieId
+            });
+        };
+    }
+]);
+
+'use strict';
+
+//Categories service used to communicate Categories REST endpoints
+angular.module('categories').factory('Categories', ['$resource',
+    function ($resource) {
+        return $resource('categories/:categorieId', {
+            categorieId: '@_id'
+        }, {
+            update: {
+                method: 'PUT'
+            }
+        });
+    }
+]);
+
+'use strict';
+
+// Configuring the Articles module
+angular.module('comments').run(['Menus',
+    function (Menus) {
+        // Set top bar menu items
+        Menus.addMenuItem('topbar', 'Comments', 'comments', 'dropdown', '/comments(/create)?');
+        Menus.addSubMenuItem('topbar', 'comments', 'List Comments', 'comments');
+        Menus.addSubMenuItem('topbar', 'comments', 'New Comment', 'comments/create');
+    }
+]);
+
+'use strict';
+
+//Setting up route
+angular.module('comments').config(['$stateProvider',
+    function ($stateProvider) {
+        // Comments state routing
+        $stateProvider.
+            state('listComments', {
+                url: '/comments',
+                templateUrl: 'modules/comments/views/list-comments.client.view.html'
+            }).
+            state('createComment', {
+                url: '/comments/create',
+                templateUrl: 'modules/comments/views/create-comment.client.view.html'
+            }).
+            state('viewComment', {
+                url: '/comments/:commentId',
+                templateUrl: 'modules/comments/views/view-comment.client.view.html'
+            }).
+            state('editComment', {
+                url: '/comments/:commentId/edit',
+                templateUrl: 'modules/comments/views/edit-comment.client.view.html'
+            });
+    }
+]);
+
+'use strict';
+
+// Comments controller
+angular.module('comments').controller('CommentsController', ['$scope', '$http', '$stateParams', '$location', 'Authentication', 'Comments',
+    function ($scope, $http, $stateParams, $location, Authentication, Comments) {
+        $scope.authentication = Authentication;
+
+        // Create new Comment
+        this.createCommentStatus = function (status) {
+            // Create new Comment object
+            var comment = new Comments({
+                name: $scope.name
+            });
+
+            console.log("CommentsController is here" + status._id);
+
+            // Redirect after save
+            comment.$save({statusId: status._id},
+                function (response) {
+                    //$location.path('statuses/' + status._id);
+
+                    // Clear form fields
+                    $scope.name = '';
+
+                }, function (errorResponse) {
+                    $scope.error = errorResponse.data.message;
+                });
+
+            this.find(status);
+        };
+
+        // Remove existing Comment
+        this.removeCommentStatus = function (status, comment) {
+            $http.delete("/statuses/" + status._id + "/comments/" + comment._id).success(function (response) {
+                //console.log("confirme demande de suppression delete		" + response.comment._id);
+            });
+            //console.log("confirme demande de suppression delete		" + response._id + "   " + $scope.commentsList.length);
+            this.find(status);
+        };
+
+        // Update existing Comment
+        this.updateCommentStatus = function (status, comment) {
+            var newComment = comment;
+            //console.log("comment  " + comment.name);
+            $http.put('statuses/' + status._id + '/comments/' + comment._id, newComment)
+                .success(function (response) {
+                    console.log("comment  " + response.name + " updated");
+                });
+        };
+
+        // Find a list of Comments
+        this.find = function (status) {
+            $http.get('statuses/' + status._id + '/comments/')
+                .success(function (response) {
+                    console.log("i got the data contactList  " + response.length);
+                    $scope.commentsList = response;
+                });
+        };
+
+        // Find existing Comment
+        $scope.findOne = function () {
+            $scope.comment = Comments.get({
+                commentId: $stateParams.commentId
+            });
+        };
+    }
+]);
+
+'use strict';
+
+//Comments service used to communicate Comments REST endpoints
+angular.module('comments').factory('Comments', ['$resource',
+    function ($resource) {
+        return $resource('statuses/:statusId/comments/:commentId', {
+                statusId: '@statusId', commentId: '@_id'
+            },
+            {
+                update: {
+                    method: 'PUT'
+                }
+            });
+    }
+]);
+
 'use strict';
 
 // Configuring the Articles module
@@ -505,6 +929,1246 @@ angular.module('core').service('Menus', [
 ]);
 'use strict';
 
+// Configuring the Articles module
+angular.module('cours').run(['Menus',
+    function (Menus) {
+        // Set top bar menu items
+        /*Menus.addMenuItem('y', 'Cours', 'cours', 'dropdown', '/cours(/create)?');
+         Menus.addSubMenuItem('y', 'cours', 'List Cours', 'cours');
+         Menus.addSubMenuItem('y', 'cours', 'New Cour', 'cours/create');
+         */
+    }
+]);
+
+'use strict';
+
+//Setting up route
+angular.module('cours').config(['$stateProvider',
+    function ($stateProvider) {
+        // Cours state routing
+        $stateProvider.
+            state('listCours', {
+                url: '/cours',
+                templateUrl: 'modules/cours/views/list-cours.client.view.html'
+            }).
+            state('createCour', {
+                url: '/cours/create',
+                templateUrl: 'modules/cours/views/create-cour.client.view.html'
+            }).
+            state('viewCour', {
+                url: '/cours/:courId',
+                templateUrl: 'modules/cours/views/view-cour.client.view.html'
+            }).
+            state('editCour', {
+                url: '/cours/:courId/edit',
+                templateUrl: 'modules/cours/views/edit-cour.client.view.html'
+            });
+    }
+]);
+
+'use strict';
+
+// Cours controller
+angular.module('cours').controller('CoursController', ['$scope', '$stateParams', '$location', 'Authentication', 'Cours',
+    function ($scope, $stateParams, $location, Authentication, Cours) {
+        $scope.authentication = Authentication;
+
+        // Create new Cour
+        $scope.create = function () {
+            // Create new Cour object
+            var cour = new Cours({
+                name: this.name
+            });
+
+            // Redirect after save
+            cour.$save(function (response) {
+                $location.path('cours/' + response._id);
+
+                // Clear form fields
+                $scope.name = '';
+            }, function (errorResponse) {
+                $scope.error = errorResponse.data.message;
+            });
+        };
+
+        // Remove existing Cour
+        $scope.remove = function (cour) {
+            if (cour) {
+                cour.$remove();
+
+                for (var i in $scope.cours) {
+                    if ($scope.cours [i] === cour) {
+                        $scope.cours.splice(i, 1);
+                    }
+                }
+            } else {
+                $scope.cour.$remove(function () {
+                    $location.path('cours');
+                });
+            }
+        };
+
+        // Update existing Cour
+        $scope.update = function () {
+            var cour = $scope.cour;
+
+            cour.$update(function () {
+                $location.path('cours/' + cour._id);
+            }, function (errorResponse) {
+                $scope.error = errorResponse.data.message;
+            });
+        };
+
+        // Find a list of Cours
+        $scope.find = function () {
+            $scope.cours = Cours.query();
+        };
+
+        // Find existing Cour
+        $scope.findOne = function () {
+            $scope.cour = Cours.get({
+                courId: $stateParams.courId
+            });
+        };
+    }
+]);
+
+'use strict';
+
+//Cours service used to communicate Cours REST endpoints
+angular.module('cours').factory('Cours', ['$resource',
+    function ($resource) {
+        return $resource('cours/:courId', {
+            courId: '@_id'
+        }, {
+            update: {
+                method: 'PUT'
+            }
+        });
+    }
+]);
+
+'use strict';
+
+// Configuring the Articles module
+angular.module('emploies').run(['Menus',
+    function (Menus) {
+        // Set top bar menu items
+        /*Menus.addMenuItem('y', 'Emploies', 'emploies', 'dropdown', '/emploies(/create)?');
+         Menus.addSubMenuItem('y', 'emploies', 'List Emploies', 'emploies');
+         Menus.addSubMenuItem('y', 'emploies', 'New Emploie', 'emploies/create');
+         */
+    }
+]);
+
+'use strict';
+
+//Setting up route
+angular.module('emploies').config(['$stateProvider',
+    function ($stateProvider) {
+        // Emploies state routing
+        $stateProvider.
+            state('listEmploies', {
+                url: '/emploies',
+                templateUrl: 'modules/emploies/views/list-emploies.client.view.html'
+            }).
+            state('createEmploie', {
+                url: '/emploies/create',
+                templateUrl: 'modules/emploies/views/create-emploie.client.view.html'
+            }).
+            state('viewEmploie', {
+                url: '/emploies/:emploieId',
+                templateUrl: 'modules/emploies/views/view-emploie.client.view.html'
+            }).
+            state('editEmploie', {
+                url: '/emploies/:emploieId/edit',
+                templateUrl: 'modules/emploies/views/edit-emploie.client.view.html'
+            });
+    }
+]);
+
+'use strict';
+
+// Emploies controller
+angular.module('emploies').controller('EmploiesController', ['$scope', '$stateParams', '$location', 'Authentication', 'Emploies',
+    function ($scope, $stateParams, $location, Authentication, Emploies) {
+        $scope.authentication = Authentication;
+
+        // Create new Emploie
+        $scope.create = function () {
+            // Create new Emploie object
+            var emploie = new Emploies({
+                name: this.name
+            });
+
+            // Redirect after save
+            emploie.$save(function (response) {
+                $location.path('emploies/' + response._id);
+
+                // Clear form fields
+                $scope.name = '';
+            }, function (errorResponse) {
+                $scope.error = errorResponse.data.message;
+            });
+        };
+
+        // Remove existing Emploie
+        $scope.remove = function (emploie) {
+            if (emploie) {
+                emploie.$remove();
+
+                for (var i in $scope.emploies) {
+                    if ($scope.emploies [i] === emploie) {
+                        $scope.emploies.splice(i, 1);
+                    }
+                }
+            } else {
+                $scope.emploie.$remove(function () {
+                    $location.path('emploies');
+                });
+            }
+        };
+
+        // Update existing Emploie
+        $scope.update = function () {
+            var emploie = $scope.emploie;
+
+            emploie.$update(function () {
+                $location.path('emploies/' + emploie._id);
+            }, function (errorResponse) {
+                $scope.error = errorResponse.data.message;
+            });
+        };
+
+        // Find a list of Emploies
+        $scope.find = function () {
+            $scope.emploies = Emploies.query();
+        };
+
+        // Find existing Emploie
+        $scope.findOne = function () {
+            $scope.emploie = Emploies.get({
+                emploieId: $stateParams.emploieId
+            });
+        };
+    }
+]);
+
+'use strict';
+
+//Emploies service used to communicate Emploies REST endpoints
+angular.module('emploies').factory('Emploies', ['$resource',
+    function ($resource) {
+        return $resource('emploies/:emploieId', {
+            emploieId: '@_id'
+        }, {
+            update: {
+                method: 'PUT'
+            }
+        });
+    }
+]);
+
+'use strict';
+
+// Configuring the Articles module
+angular.module('evenements').run(['Menus',
+    function (Menus) {
+        // Set top bar menu items
+        /*Menus.addMenuItem('y', 'Evenements', 'evenements', 'dropdown', '/evenements(/create)?');
+         Menus.addSubMenuItem('y', 'evenements', 'List Evenements', 'evenements');
+         Menus.addSubMenuItem('y', 'evenements', 'New Evenement', 'evenements/create');
+         */
+    }
+]);
+
+'use strict';
+
+//Setting up route
+angular.module('evenements').config(['$stateProvider',
+    function ($stateProvider) {
+        // Evenements state routing
+        $stateProvider.
+            state('listEvenements', {
+                url: '/evenements',
+                templateUrl: 'modules/evenements/views/list-evenements.client.view.html'
+            }).
+            state('createEvenement', {
+                url: '/evenements/create',
+                templateUrl: 'modules/evenements/views/create-evenement.client.view.html'
+            }).
+            state('viewEvenement', {
+                url: '/evenements/:evenementId',
+                templateUrl: 'modules/evenements/views/view-evenement.client.view.html'
+            }).
+            state('editEvenement', {
+                url: '/evenements/:evenementId/edit',
+                templateUrl: 'modules/evenements/views/edit-evenement.client.view.html'
+            });
+    }
+]);
+'use strict';
+
+// Evenements controller
+angular.module('evenements').controller('EvenementsController', ['$scope', '$http', '$stateParams', '$location', 'Authentication', 'Evenements', '$modal', '$log', '$http',
+    function ($scope, $http, $stateParams, $location, Authentication, Evenements, $modal, $log) {
+        $scope.authentication = Authentication;
+
+        this.modalCreate = function (size) {
+
+            var modalInstance = $modal.open({
+                animation: $scope.animationsEnabled,
+                templateUrl: 'modules/evenements/views/create-evenement.client.view.html',
+                controller: ["$scope", "$modalInstance", function ($scope, $modalInstance) {
+                    $scope.ok = function () {
+                        //console.log("yow yow from EvenementsController.ok()");
+                        modalInstance.close();
+                    };
+                    $scope.cancel = function () {
+                        $modalInstance.dismiss('cancel');
+                    };
+                }],
+
+                size: size,
+                resolve: {
+                    evenement: function () {
+                        return $scope.evenement;
+                    }
+                }
+            });
+        };
+
+        // Open a modal window to update a single event record
+        this.modalUpdate = function (size, selectedEvent) {
+            console.log("yow yow from modalUpdate");
+            /*$scope.mytime = new Date();
+             $scope.mytime.setHours( selectedEvent.date.getHours());
+             $scope.mytime.setMinutes(selectedEvent.date.getMinutes());*/
+            var modalInstance = $modal.open({
+                templateUrl: 'modules/evenements/views/edit-evenement.client.view.html',
+                controller: ["$scope", "$modalInstance", "evenement", function ($scope, $modalInstance, evenement) {
+                    $scope.evenement = evenement;
+
+                    $scope.ok = function () {
+                        modalInstance.close($scope.evenement);
+                    };
+                    $scope.cancel = function () {
+                        $modalInstance.dismiss('cancel');
+                    };
+                }],
+                size: size,
+                resolve: {
+                    evenement: function () {
+                        return selectedEvent;
+                    }
+                }
+            });
+
+            modalInstance.result.then(function (selectedItem) {
+                $scope.selected = selectedItem;
+            }, function () {
+                $log.info('Modal dismissed at: ' + new Date());
+            });
+        };
+
+
+        // Find a list of Evenements
+        this.find = function () {
+            $http.get('evenements/')
+                .success(function (response) {
+                    console.log("i got the data contactList  " + response.length);
+                    $scope.evenementsList = response;
+                    //$scope.nbreComments = $scope.commentsList.length;
+                });
+            //$scope.evenements = Evenements.query();
+            //console.log(" lenght of evenements list "+Evenements.query().length);
+        };
+
+        // Remove existing Evenement
+        this.remove = function (evenement) {
+            if (evenement) {
+                evenement.$remove();
+
+                for (var i in $scope.evenements) {
+                    if ($scope.evenements [i] === evenement) {
+                        $scope.evenements.splice(i, 1);
+                    }
+                }
+            } else {
+                $scope.evenement.$remove(function () {
+                    $location.path('evenements');
+                });
+            }
+        };
+
+        // Find existing Evenement
+        $scope.findOne = function () {
+            $scope.evenement = Evenements.get({
+                evenementId: $stateParams.evenementId
+            });
+        };
+    }]);
+angular.module('evenements').controller('EvenementsCreateController', ['$scope', 'Evenements',
+    function ($scope, Evenements) {
+
+        // Create new Evenement
+        this.create = function () {
+            $scope.dt.setHours($scope.mytime.getHours(), $scope.mytime.getMinutes(), 0, 0)
+            //console.log("yow yow dt "+$scope.dt);
+
+            // Create new Evenement object
+            var evenement = new Evenements({
+                titre: $scope.newEventTitle,
+                description: $scope.newEventDescription,
+                date: $scope.dt,
+                lieu: $scope.newEventPlace
+            });
+
+
+            // Redirect after save
+            evenement.$save(function (response) {
+                //console.log("yow yow event has been created ");
+            }, function (errorResponse) {
+                $scope.error = errorResponse.data.message;
+            });
+        };
+
+        ///////////////////////////////////////////////
+        $scope.today = function () {
+            $scope.dt = new Date();
+        };
+        $scope.today();
+
+        $scope.clear = function () {
+            $scope.dt = null;
+        };
+
+        // Disable weekend selection
+        $scope.disabled = function (date, mode) {
+            return ( mode === 'day' && ( date.getDay() === 5 ) );
+        };
+
+        $scope.toggleMin = function () {
+            $scope.minDate = $scope.minDate ? null : new Date();
+        };
+        $scope.toggleMin();
+
+        $scope.open = function ($event) {
+            $event.preventDefault();
+            $event.stopPropagation();
+
+            $scope.opened = true;
+        };
+
+        $scope.dateOptions = {
+            formatYear: 'yy',
+            startingDay: 1
+        };
+
+        $scope.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
+        $scope.format = $scope.formats[0];
+
+        var tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        var afterTomorrow = new Date();
+        afterTomorrow.setDate(tomorrow.getDate() + 2);
+        $scope.events =
+            [
+                {
+                    date: tomorrow,
+                    status: 'full'
+                },
+                {
+                    date: afterTomorrow,
+                    status: 'partially'
+                }
+            ];
+
+        $scope.getDayClass = function (date, mode) {
+            if (mode === 'day') {
+                var dayToCheck = new Date(date).setHours($scope.mytime.getHours(), $scope.mytime.getMinutes(), 0, 0);
+
+                for (var i = 0; i < $scope.events.length; i++) {
+                    var currentDay = new Date($scope.events[i].date).setHours($scope.mytime.getHours(), $scope.mytime.getMinutes(), 0, 0);
+
+                    if (dayToCheck === currentDay) {
+                        return $scope.events[i].status;
+                    }
+                }
+            }
+            return '';
+        };
+        ///////////////////////////////////////////////////////////////
+
+        $scope.mytime = new Date();
+
+        $scope.hstep = 1;
+        $scope.mstep = 15;
+
+        $scope.options = {
+            hstep: [1, 2, 3],
+            mstep: [1, 5, 10, 15, 25, 30]
+        };
+
+        $scope.ismeridian = true;
+        $scope.toggleMode = function () {
+            $scope.ismeridian = !$scope.ismeridian;
+        };
+
+        $scope.update = function () {
+            var d = new Date();
+            d.setHours(14);
+            d.setMinutes(0);
+            $scope.mytime = d;
+        };
+
+        $scope.clear = function () {
+            $scope.mytime = null;
+        };
+    }
+
+
+]);
+
+angular.module('evenements').controller('EvenementsUpdateController', ['$scope', 'Evenements',
+    function ($scope, Evenements) {
+
+        // Update existing Evenement
+        this.update = function (updatedEvent) {
+            var evenement = updatedEvent;
+            evenement.date.getsetHours(updatedEvent.mytime.getHours(), updatedEvent.mytime.getMinutes(), 0, 0);
+
+            /*
+             console.log("updating of evenement "+evenement._id+" date "+evenement.date);
+             $http.put('evenements/' + evenement._id, newComment)
+             .success(function (response) {
+             console.log("date  " + response.date + " updated");
+             });
+             /*evenement.$update(function() {
+             //$location.path('evenements/' + evenement._id);
+             }, function(errorResponse) {
+             $scope.error = errorResponse.data.message;
+             });*/
+        };
+
+        ///////////////////////////////////////////////
+        $scope.today = function () {
+            $scope.dt = new Date();
+        };
+        $scope.today();
+
+        $scope.clear = function () {
+            $scope.dt = null;
+        };
+
+        // Disable weekend selection
+        $scope.disabled = function (date, mode) {
+            return ( mode === 'day' && ( date.getDay() === 5 ) );
+        };
+
+        $scope.toggleMin = function () {
+            $scope.minDate = $scope.minDate ? null : new Date();
+        };
+        $scope.toggleMin();
+
+        $scope.open = function ($event) {
+            $event.preventDefault();
+            $event.stopPropagation();
+
+            $scope.opened = true;
+        };
+
+        $scope.dateOptions = {
+            formatYear: 'yy',
+            startingDay: 1
+        };
+
+        $scope.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
+        $scope.format = $scope.formats[0];
+
+        var tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        var afterTomorrow = new Date();
+        afterTomorrow.setDate(tomorrow.getDate() + 2);
+        $scope.events =
+            [
+                {
+                    date: tomorrow,
+                    status: 'full'
+                },
+                {
+                    date: afterTomorrow,
+                    status: 'partially'
+                }
+            ];
+
+        $scope.getDayClass = function (date, mode) {
+            if (mode === 'day') {
+                var dayToCheck = new Date(date).setHours($scope.mytime.getHours(), $scope.mytime.getMinutes(), 0, 0);
+
+                for (var i = 0; i < $scope.events.length; i++) {
+                    var currentDay = new Date($scope.events[i].date).setHours($scope.mytime.getHours(), $scope.mytime.getMinutes(), 0, 0);
+
+                    if (dayToCheck === currentDay) {
+                        return $scope.events[i].status;
+                    }
+                }
+            }
+            return '';
+        };
+        ///////////////////////////////////////////////////////////////
+
+        $scope.mytime = new Date();
+
+        $scope.hstep = 1;
+        $scope.mstep = 15;
+
+        $scope.options = {
+            hstep: [1, 2, 3],
+            mstep: [1, 5, 10, 15, 25, 30]
+        };
+
+        $scope.ismeridian = true;
+        $scope.toggleMode = function () {
+            $scope.ismeridian = !$scope.ismeridian;
+        };
+
+        $scope.update = function () {
+            var d = new Date();
+            d.setHours(14);
+            d.setMinutes(0);
+            $scope.mytime = d;
+        };
+
+        $scope.clear = function () {
+            $scope.mytime = null;
+        };
+    }
+]);
+
+'use strict';
+
+//Evenements service used to communicate Evenements REST endpoints
+angular.module('evenements')
+    .factory('Evenements', ['$resource', function ($resource) {
+        return $resource('evenements/:evenementId', {
+            evenementId: '@_id'
+        }, {
+            update: {
+                method: 'PUT'
+            }
+        });
+    }]);
+
+'use strict';
+
+// Configuring the Articles module
+angular.module('likes').run(['Menus',
+    function (Menus) {
+        // Set top bar menu items
+        Menus.addMenuItem('topbar', 'Likes', 'likes', 'dropdown', '/likes(/create)?');
+        Menus.addSubMenuItem('topbar', 'likes', 'List Likes', 'likes');
+        Menus.addSubMenuItem('topbar', 'likes', 'New Like', 'likes/create');
+    }
+]);
+
+'use strict';
+
+//Setting up route
+angular.module('likes').config(['$stateProvider',
+    function ($stateProvider) {
+        // Likes state routing
+        $stateProvider.
+            state('listLikes', {
+                url: '/likes',
+                templateUrl: 'modules/likes/views/list-likes.client.view.html'
+            }).
+            state('createLike', {
+                url: '/likes/create',
+                templateUrl: 'modules/likes/views/create-like.client.view.html'
+            }).
+            state('viewLike', {
+                url: '/likes/:likeId',
+                templateUrl: 'modules/likes/views/view-like.client.view.html'
+            }).
+            state('editLike', {
+                url: '/likes/:likeId/edit',
+                templateUrl: 'modules/likes/views/edit-like.client.view.html'
+            });
+    }
+]);
+
+'use strict';
+
+// Likes controller
+angular.module('likes').controller('LikesController', ['$scope', '$http', '$stateParams', '$location', 'Authentication', 'Likes',
+    function ($scope, $http, $stateParams, $location, Authentication, Likes) {
+        $scope.authentication = Authentication;
+
+        // Create new Like
+        this.createLikeStatus = function (status) {
+            // Create new Like object
+            var like = new Likes({
+                status: status._id
+            });
+
+            //console.log("LikesController is here" + status._id);
+            // Redirect after save
+            like.$save({statusId: status._id},
+                function (response) {
+                    $scope.aime = true;
+                }, function (errorResponse) {
+                    $scope.error = errorResponse.data.message;
+                }
+            );
+        };
+
+        // Remove existing Like
+        this.removeLikeStatus = function (status) {
+            //console.log("like delete		" + status._id);
+            $http.delete("statuses/" + status._id + "/likes/").success(function (response) {
+                $scope.aime = false;
+                //console.log("confirme demande de suppression delete		" + response.comment._id);
+            });
+        };
+
+        // Update existing Like
+        $scope.update = function () {
+            var like = $scope.like;
+
+            like.$update(function () {
+                $location.path('likes/' + like._id);
+            }, function (errorResponse) {
+                $scope.error = errorResponse.data.message;
+            });
+        };
+
+        // Find a list of Likes
+        this.find = function (status) {
+            $http.get('statuses/' + status._id + '/likes/')
+                .success(function (response) {
+                    //console.log("i got the data likesList  " + response.length);
+                    $scope.likesList = response;
+                    var like;
+                    //console.log(" nember of likes for status ");
+                    var i;
+                    for (i = 0; i < $scope.likesList.length; i++) {
+                        //if($scope.authentication.user._id == like.user)
+                        if ($scope.authentication.user._id == $scope.likesList[i].user._id) {
+                            console.log(" found of likes for status " + $scope.likesList[i].user._id);
+                            $scope.aime = true;
+                        }
+
+                    }
+                    ;
+                });
+            //$scope.likes = Likes.query();
+        };
+
+        // Find existing Like
+        $scope.findOne = function () {
+            $scope.like = Likes.get({
+                likeId: $stateParams.likeId
+            });
+        };
+    }
+]);
+
+'use strict';
+
+//Likes service used to communicate Likes REST endpoints
+angular.module('likes').factory('Likes', ['$resource',
+    function ($resource) {
+        return $resource('statuses/:statusId/likes/:likeId', {
+                statusId: '@statusId', likeId: '@_id'
+            },
+            {
+                update: {
+                    method: 'PUT'
+                }
+            });
+    }
+]);
+
+'use strict';
+
+// Configuring the Articles module
+angular.module('moderations').run(['Menus',
+    function (Menus) {
+        // Set top bar menu items
+        /*Menus.addMenuItem('y', 'Moderations', 'moderations', 'dropdown', '/moderations(/create)?');
+         Menus.addSubMenuItem('y', 'moderations', 'List Moderations', 'moderations');
+         Menus.addSubMenuItem('y', 'moderations', 'New Moderation', 'moderations/create');
+         */
+    }
+]);
+
+'use strict';
+
+//Setting up route
+angular.module('moderations').config(['$stateProvider',
+    function ($stateProvider) {
+        // Moderations state routing
+        $stateProvider.
+            state('listModerations', {
+                url: '/moderations',
+                templateUrl: 'modules/moderations/views/list-moderations.client.view.html'
+            }).
+            state('createModeration', {
+                url: '/moderations/create',
+                templateUrl: 'modules/moderations/views/create-moderation.client.view.html'
+            }).
+            state('viewModeration', {
+                url: '/moderations/:moderationId',
+                templateUrl: 'modules/moderations/views/view-moderation.client.view.html'
+            }).
+            state('editModeration', {
+                url: '/moderations/:moderationId/edit',
+                templateUrl: 'modules/moderations/views/edit-moderation.client.view.html'
+            });
+    }
+]);
+
+'use strict';
+
+// Moderations controller
+angular.module('moderations').controller('ModerationsController', ['$scope', '$stateParams', '$location', 'Authentication', 'Moderations',
+    function ($scope, $stateParams, $location, Authentication, Moderations) {
+        $scope.authentication = Authentication;
+
+        // Create new Moderation
+        $scope.create = function () {
+            // Create new Moderation object
+            var moderation = new Moderations({
+                name: this.name
+            });
+
+            // Redirect after save
+            moderation.$save(function (response) {
+                $location.path('moderations/' + response._id);
+
+                // Clear form fields
+                $scope.name = '';
+            }, function (errorResponse) {
+                $scope.error = errorResponse.data.message;
+            });
+        };
+
+        // Remove existing Moderation
+        $scope.remove = function (moderation) {
+            if (moderation) {
+                moderation.$remove();
+
+                for (var i in $scope.moderations) {
+                    if ($scope.moderations [i] === moderation) {
+                        $scope.moderations.splice(i, 1);
+                    }
+                }
+            } else {
+                $scope.moderation.$remove(function () {
+                    $location.path('moderations');
+                });
+            }
+        };
+
+        // Update existing Moderation
+        $scope.update = function () {
+            var moderation = $scope.moderation;
+
+            moderation.$update(function () {
+                $location.path('moderations/' + moderation._id);
+            }, function (errorResponse) {
+                $scope.error = errorResponse.data.message;
+            });
+        };
+
+        // Find a list of Moderations
+        $scope.find = function () {
+            $scope.moderations = Moderations.query();
+        };
+
+        // Find existing Moderation
+        $scope.findOne = function () {
+            $scope.moderation = Moderations.get({
+                moderationId: $stateParams.moderationId
+            });
+        };
+    }
+]);
+
+'use strict';
+
+//Moderations service used to communicate Moderations REST endpoints
+angular.module('moderations').factory('Moderations', ['$resource',
+    function ($resource) {
+        return $resource('moderations/:moderationId', {
+            moderationId: '@_id'
+        }, {
+            update: {
+                method: 'PUT'
+            }
+        });
+    }
+]);
+
+'use strict';
+
+// Configuring the Articles module
+angular.module('notifications').run(['Menus',
+    function (Menus) {
+        // Set top bar menu items
+        /*Menus.addMenuItem('y', 'Notifications', 'notifications', 'dropdown', '/notifications(/create)?');
+         Menus.addSubMenuItem('y', 'notifications', 'List Notifications', 'notifications');
+         Menus.addSubMenuItem('y', 'notifications', 'New Notification', 'notifications/create');
+         */
+    }
+]);
+
+'use strict';
+
+//Setting up route
+angular.module('notifications').config(['$stateProvider',
+    function ($stateProvider) {
+        // Notifications state routing
+        $stateProvider.
+            state('listNotifications', {
+                url: '/notifications',
+                templateUrl: 'modules/notifications/views/list-notifications.client.view.html'
+            }).
+            state('createNotification', {
+                url: '/notifications/create',
+                templateUrl: 'modules/notifications/views/create-notification.client.view.html'
+            }).
+            state('viewNotification', {
+                url: '/notifications/:notificationId',
+                templateUrl: 'modules/notifications/views/view-notification.client.view.html'
+            }).
+            state('editNotification', {
+                url: '/notifications/:notificationId/edit',
+                templateUrl: 'modules/notifications/views/edit-notification.client.view.html'
+            });
+    }
+]);
+
+'use strict';
+
+// Notifications controller
+angular.module('notifications').controller('NotificationsController', ['$scope', '$stateParams', '$location', 'Authentication', 'Notifications',
+    function ($scope, $stateParams, $location, Authentication, Notifications) {
+        $scope.authentication = Authentication;
+
+        // Create new Notification
+        $scope.create = function () {
+            // Create new Notification object
+            var notification = new Notifications({
+                name: this.name
+            });
+
+            // Redirect after save
+            notification.$save(function (response) {
+                $location.path('notifications/' + response._id);
+
+                // Clear form fields
+                $scope.name = '';
+            }, function (errorResponse) {
+                $scope.error = errorResponse.data.message;
+            });
+        };
+
+        // Remove existing Notification
+        $scope.remove = function (notification) {
+            if (notification) {
+                notification.$remove();
+
+                for (var i in $scope.notifications) {
+                    if ($scope.notifications [i] === notification) {
+                        $scope.notifications.splice(i, 1);
+                    }
+                }
+            } else {
+                $scope.notification.$remove(function () {
+                    $location.path('notifications');
+                });
+            }
+        };
+
+        // Update existing Notification
+        $scope.update = function () {
+            var notification = $scope.notification;
+
+            notification.$update(function () {
+                $location.path('notifications/' + notification._id);
+            }, function (errorResponse) {
+                $scope.error = errorResponse.data.message;
+            });
+        };
+
+        // Find a list of Notifications
+        $scope.find = function () {
+            $scope.notifications = Notifications.query();
+        };
+
+        // Find existing Notification
+        $scope.findOne = function () {
+            $scope.notification = Notifications.get({
+                notificationId: $stateParams.notificationId
+            });
+        };
+    }
+]);
+
+'use strict';
+
+//Notifications service used to communicate Notifications REST endpoints
+angular.module('notifications').factory('Notifications', ['$resource',
+    function ($resource) {
+        return $resource('notifications/:notificationId', {
+            notificationId: '@_id'
+        }, {
+            update: {
+                method: 'PUT'
+            }
+        });
+    }
+]);
+
+'use strict';
+
+// Configuring the Articles module
+angular.module('offres').run(['Menus',
+    function (Menus) {
+        // Set top bar menu items
+        /*Menus.addMenuItem('y', 'Offres', 'offres', 'dropdown', '/offres(/create)?');
+         Menus.addSubMenuItem('y', 'offres', 'List Offres', 'offres');
+         Menus.addSubMenuItem('y', 'offres', 'New Offre', 'offres/create');
+         */
+    }
+]);
+
+'use strict';
+
+//Setting up route
+angular.module('offres').config(['$stateProvider',
+    function ($stateProvider) {
+        // Offres state routing
+        $stateProvider.
+            state('listOffres', {
+                url: '/offres',
+                templateUrl: 'modules/offres/views/list-offres.client.view.html'
+            }).
+            state('createOffre', {
+                url: '/offres/create',
+                templateUrl: 'modules/offres/views/create-offre.client.view.html'
+            }).
+            state('viewOffre', {
+                url: '/offres/:offreId',
+                templateUrl: 'modules/offres/views/view-offre.client.view.html'
+            }).
+            state('editOffre', {
+                url: '/offres/:offreId/edit',
+                templateUrl: 'modules/offres/views/edit-offre.client.view.html'
+            });
+    }
+]);
+'use strict';
+
+// Offres controller
+angular.module('offres').controller('OffresController', ['$scope', '$http', '$stateParams', '$location', 'Authentication', 'Offres', '$modal', '$log', '$http',
+    function ($scope, $http, $stateParams, $location, Authentication, Offres, $modal, $log) {
+        $scope.authentication = Authentication;
+
+        this.modalCreate = function (size) {
+            var modalInstance = $modal.open({
+                animation: $scope.animationsEnabled,
+                templateUrl: 'modules/offres/views/create-offre.client.view.html',
+                controller: ["$scope", "$modalInstance", "parentScope", function ($scope, $modalInstance, parentScope) {
+                    $scope.create = function () {
+                        // Create new Evenement object
+                        console.log(entreprise);
+                        var offre = new Offres({
+                            entreprise: $scope.entreprise,
+                            post: $scope.poste,
+                            competences: $scope.listCompetence,
+                            documents: $scope.listDocument
+                        });
+
+                        // Redirect after save
+                        offre.$save(function (response) {
+                            //console.log("yow yow event has been created ");
+                            parentScope.find();
+                        }, function (errorResponse) {
+                            $scope.error = errorResponse.data.message;
+                        });
+                    };
+
+                    $scope.ok = function () {
+                        $scope.create();
+                        modalInstance.close();
+                    };
+                    $scope.cancel = function () {
+                        $modalInstance.dismiss('cancel');
+                    };
+                }],
+                size: size,
+                resolve: {
+                    offre: function () {
+                        return $scope.offre;
+                    },
+                    parentScope: function () {
+                        return $scope;
+                    }
+                }
+            });
+        };
+
+        // Open a modal window to update a single event record
+        this.modalUpdate = function (size, selectedOffre) {
+            console.log("yow yow from modalUpdate");
+            /*$scope.mytime = new Date();
+             $scope.mytime.setHours( selectedEvent.date.getHours());
+             $scope.mytime.setMinutes(selectedEvent.date.getMinutes());*/
+            var modalInstance = $modal.open({
+                templateUrl: 'modules/offres/views/edit-offre.client.view.html',
+                controller: ["$scope", "$modalInstance", "offre", function ($scope, $modalInstance, offre) {
+                    $scope.offre = offre;
+
+                    $scope.ok = function () {
+                        modalInstance.close($scope.offre);
+                    };
+                    $scope.cancel = function () {
+                        $modalInstance.dismiss('cancel');
+                    };
+                }],
+                size: size,
+                resolve: {
+                    offre: function () {
+                        return selectedOffre;
+                    }
+                }
+            });
+
+            modalInstance.result.then(function (selectedItem) {
+                $scope.selected = selectedItem;
+            }, function () {
+                $log.info('Modal dismissed at: ' + new Date());
+            });
+        };
+
+
+        // Find a list of Evenements
+        $scope.find = this.find = function () {
+            $http.get('offres/')
+                .success(function (response) {
+                    console.log("i got the data offresList  " + response.length);
+                    $scope.offresList = response;
+                    //$scope.nbreComments = $scope.commentsList.length;
+                });
+            //$scope.evenements = Evenements.query();
+            //console.log(" lenght of evenements list "+Evenements.query().length);
+        };
+
+        // Remove existing Evenement
+        this.remove = function (offre) {
+            if (offre) {
+                offre.$remove();
+
+                for (var i in $scope.offres) {
+                    if ($scope.offres [i] === offre) {
+                        $scope.offres.splice(i, 1);
+                    }
+                }
+            } else {
+                $scope.offres.$remove(function () {
+                    //$location.path('offres');
+                });
+            }
+        };
+
+        // Find existing Evenement
+        $scope.findOne = function () {
+            $scope.offre = Evenements.get({
+                offreId: $stateParams.offreId
+            });
+        };
+    }]);
+
+angular.module('offres').controller('OffresCreateController', ['$scope', 'Offres',
+    function ($scope, Offres) {
+
+        // Create new Evenement
+        this.create = function () {
+            // Create new Evenement object
+            var offre = new Offres({
+                entreprise: $scope.entreprise,
+                post: $scope.poste,
+                competences: $scope.listCompetence,
+                documents: $scope.listDocument
+            });
+
+
+            // Redirect after save
+            offre.$save(function (response) {
+                //console.log("yow yow event has been created ");
+            }, function (errorResponse) {
+                $scope.error = errorResponse.data.message;
+            });
+        };
+    }
+]);
+
+
+angular.module('offres').controller('OffresUpdateController', ['$scope', 'Offres', '$http',
+    function ($scope, Offres, $http) {
+
+        // Update existing Evenement
+        this.update = function (updatedOffre) {
+            var offre = updatedOffre;
+
+
+            console.log("updating of evenement " + offre.competences);
+            $http.put('offres/' + offre._id, offre)
+                .success(function (response) {
+
+                });
+            /*evenement.$update(function() {
+             //$location.path('evenements/' + evenement._id);
+             }, function(errorResponse) {
+             $scope.error = errorResponse.data.message;
+             });*/
+        };
+    }
+]);
+
+'use strict';
+
+//Offres service used to communicate Offres REST endpoints
+angular.module('offres').factory('Offres', ['$resource',
+    function ($resource) {
+        return $resource('offres/:offreId', {
+            offreId: '@_id'
+        }, {
+            update: {
+                method: 'PUT'
+            }
+        });
+    }
+]);
+'use strict';
+
+//Setting up route
+angular.module('pub-contenus').config(['$stateProvider',
+    function ($stateProvider) {
+        // Pub contenus state routing
+        $stateProvider.
+            state('pub-contenu', {
+                url: '/pub-contenu',
+                templateUrl: 'modules/pub-contenus/views/pub-contenu.client.view.html'
+            });
+    }
+]);
+
+'use strict';
+
 //Setting up route
 angular.module('pub-imags').config(['$stateProvider',
 	function($stateProvider) {
@@ -530,43 +2194,50 @@ angular.module('pub-imags').config(['$stateProvider',
 ]);
 'use strict';
 
+
 // Pub imags controller
-angular.module('pub-imags').controller('PubImagsController', ['$scope', '$stateParams', '$location', 'Authentication', 'PubImags',
-	function($scope, $stateParams, $location, Authentication, PubImags) {
+angular.module('pub-imags').controller('PubImagsController', ['$scope', '$upload', '$stateParams', '$location', 'Authentication', 'PubImags',
+    function ($scope, $upload, $stateParams, $location, Authentication, PubImags) {
 		$scope.authentication = Authentication;
+        var datafile;
+        $scope.upload = function (files) {
 
-        //recuperer image
-		var image;
-		$scope.load = function () {
-			var fileInput = document.querySelector('#file');
-			var reader = new FileReader();
-			fileInput.onchange = function () {
-				document.getElementById('namefile').value = fileInput.files[0].name;
-				reader.onload = function () {
-					document.getElementById('image').style.width = "242px";
-					document.getElementById('image').style.height = "200px";
-					document.getElementById('image').src = reader.result;
-					image = reader.result;
-				}
-				reader.readAsDataURL(fileInput.files[0]);
-			};
-        }
-		// Create new Pub imag
+            if (files && files.length) {
+                var file = files[0];
+                $upload.upload({
+                    method: 'POST',
+                    url: '/pub-imags/create',
+                    file: file
+                }).progress(function (evt) {
+                    var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+                    document.getElementById('bar1').style.width = progressPercentage + "%";
+                }).success(function (data, status, headers, config) {
+                    datafile = data;
+                    var path = data.path.replace(/\//g, '/').replace(/public/, '');
+                    document.getElementById('image').style.width = "181px";
+                    document.getElementById('image').style.height = "125px";
+                    document.getElementById('image').src = path;
+                    //document.getElementById('bar1').style.width="0%";
+                });
+            }
+        };
 
+        // Create new Pub imag
 		$scope.create = function() {
-
 			// Create new Pub imag object
 			var pubImag = new PubImags ({
-				name: image,
-                comment:this.comment
+                datapubImages: {
+                    description: this.description,
+                    file: {id_file_image: '', namefile: ''}
+                },
+                datafile: {file: datafile}
 			});
-
 			// Redirect after save
 			pubImag.$save(function(response) {
-				$location.path('pub-imags/' + response._id);
-
+                //$location.path('/pub-imags/'+response._id);
 				// Clear form fields
-				$scope.name = '';
+                $scope.find();
+                $scope.description = '';
 			}, function(errorResponse) {
 				$scope.error = errorResponse.data.message;
 			});
@@ -584,7 +2255,7 @@ angular.module('pub-imags').controller('PubImagsController', ['$scope', '$stateP
 				}
 			} else {
 				$scope.pubImag.$remove(function() {
-					$location.path('pub-imags');
+                    $location.path('pub-imags/create');
 				});
 			}
 		};
@@ -614,34 +2285,6 @@ angular.module('pub-imags').controller('PubImagsController', ['$scope', '$stateP
 	}
 ]);
 
-/*var xmlHttp=createXmlHttpRequestObject();
-
-function createXmlHttpRequestObject(){
-
-}
-
-function process(){
-    if(xmlHttp.readyState == 0 || xmlHttp.readyState == 4){
-        xmlHttp.open('GET','',true);
-        xmlHttp.onreadystatechange = handleServerResponse;
-        xmlHttp.send(null);
-    }else{
-        setTimeout('process()',1000);
-    }
-}
-
-function handleServerResponse(){
-    if(xmlHttp.readyState == 4){
-        if(xmlHttp.status == 200){
-                setTimeout('process()',1000);
-        }else{
-            alert('something went wrong ???');
-        }
-    }
-}
-
-
-*/
 
 'use strict';
 
@@ -649,7 +2292,7 @@ function handleServerResponse(){
 angular.module('pub-imags').factory('PubImags', ['$resource',
 	function($resource) {
 		return $resource('pub-imags/:pubImagId', {
-			pubImagId: '@_id'
+            pubImagId: '@_id'
 		}, {
 			update: {
 				method: 'PUT'
@@ -697,23 +2340,51 @@ angular.module('pub-videos').config(['$stateProvider',
 'use strict';
 
 // Pub videos controller
-angular.module('pub-videos').controller('PubVideosController', ['$scope', '$stateParams', '$location', 'Authentication', 'PubVideos',
-	function($scope, $stateParams, $location, Authentication, PubVideos) {
+angular.module('pub-videos').controller('PubVideosController', ['$scope', '$upload', '$stateParams', '$location', 'Authentication', 'PubVideos',
+    function ($scope, $upload, $stateParams, $location, Authentication, PubVideos) {
 		$scope.authentication = Authentication;
+
+        var datafile;
+        $scope.upload = function (files) {
+            if (files && files.length) {
+                var file = files[0];
+                $upload.upload({
+                    method: 'POST',
+                    url: '/pub-videos/create',
+                    file: file
+                }).progress(function (evt) {
+                    var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+                    document.getElementById('bar1').style.width = progressPercentage + "%";
+                }).success(function (data, status, headers, config) {
+                    datafile = data;
+                    var path = data.path.replace(/\//g, '/').replace(/public/, '');
+
+                    $("#image").replaceWith("<video class='thumbnail' id='video' src=''></video>");
+                    document.getElementById('video').style.width = "170px";
+                    document.getElementById('video').style.height = "139px";
+                    document.getElementById('video').src = path;
+                    //document.getElementById('bar1').style.width="0%";
+                });
+            }
+        };
 
 		// Create new Pub video
 		$scope.create = function() {
 			// Create new Pub video object
 			var pubVideo = new PubVideos ({
-				name: this.name
+                datapubVideos: {
+                    description: this.description,
+                    file: {id_file_video: '', namefile: ''}
+                },
+                datafile: {file: datafile}
 			});
 
 			// Redirect after save
 			pubVideo.$save(function(response) {
-				$location.path('pub-videos/' + response._id);
-
+                //$location.path('pub-videos/' + response._id);
+                $scope.find();
 				// Clear form fields
-				$scope.name = '';
+                $scope.description = '';
 			}, function(errorResponse) {
 				$scope.error = errorResponse.data.message;
 			});
@@ -731,7 +2402,8 @@ angular.module('pub-videos').controller('PubVideosController', ['$scope', '$stat
 				}
 			} else {
 				$scope.pubVideo.$remove(function() {
-					$location.path('pub-videos');
+                    $location.path('pub-videos/create');
+                    $scope.find();
 				});
 			}
 		};
@@ -760,6 +2432,7 @@ angular.module('pub-videos').controller('PubVideosController', ['$scope', '$stat
 		};
 	}
 ]);
+
 'use strict';
 
 //Pub videos service used to communicate Pub videos REST endpoints
@@ -773,6 +2446,127 @@ angular.module('pub-videos').factory('PubVideos', ['$resource',
 		});
 	}
 ]);
+'use strict';
+
+// Configuring the Articles module
+angular.module('signalements').run(['Menus',
+    function (Menus) {
+        // Set top bar menu items
+        /*Menus.addMenuItem('y', 'Signalements', 'signalements', 'dropdown', '/signalements(/create)?');
+         Menus.addSubMenuItem('y', 'signalements', 'List Signalements', 'signalements');
+         Menus.addSubMenuItem('y', 'signalements', 'New Signalement', 'signalements/create');
+         */
+    }
+]);
+
+'use strict';
+
+//Setting up route
+angular.module('signalements').config(['$stateProvider',
+    function ($stateProvider) {
+        // Signalements state routing
+        $stateProvider.
+            state('listSignalements', {
+                url: '/signalements',
+                templateUrl: 'modules/signalements/views/list-signalements.client.view.html'
+            }).
+            state('createSignalement', {
+                url: '/signalements/create',
+                templateUrl: 'modules/signalements/views/create-signalement.client.view.html'
+            }).
+            state('viewSignalement', {
+                url: '/signalements/:signalementId',
+                templateUrl: 'modules/signalements/views/view-signalement.client.view.html'
+            }).
+            state('editSignalement', {
+                url: '/signalements/:signalementId/edit',
+                templateUrl: 'modules/signalements/views/edit-signalement.client.view.html'
+            });
+    }
+]);
+
+'use strict';
+
+// Signalements controller
+angular.module('signalements').controller('SignalementsController', ['$scope', '$stateParams', '$location', 'Authentication', 'Signalements',
+    function ($scope, $stateParams, $location, Authentication, Signalements) {
+        $scope.authentication = Authentication;
+
+        // Create new Signalement
+        $scope.create = function () {
+            // Create new Signalement object
+            var signalement = new Signalements({
+                name: this.name
+            });
+
+            // Redirect after save
+            signalement.$save(function (response) {
+                $location.path('signalements/' + response._id);
+
+                // Clear form fields
+                $scope.name = '';
+            }, function (errorResponse) {
+                $scope.error = errorResponse.data.message;
+            });
+        };
+
+        // Remove existing Signalement
+        $scope.remove = function (signalement) {
+            if (signalement) {
+                signalement.$remove();
+
+                for (var i in $scope.signalements) {
+                    if ($scope.signalements [i] === signalement) {
+                        $scope.signalements.splice(i, 1);
+                    }
+                }
+            } else {
+                $scope.signalement.$remove(function () {
+                    $location.path('signalements');
+                });
+            }
+        };
+
+        // Update existing Signalement
+        $scope.update = function () {
+            var signalement = $scope.signalement;
+
+            signalement.$update(function () {
+                $location.path('signalements/' + signalement._id);
+            }, function (errorResponse) {
+                $scope.error = errorResponse.data.message;
+            });
+        };
+
+        // Find a list of Signalements
+        $scope.find = function () {
+            $scope.signalements = Signalements.query();
+        };
+
+        // Find existing Signalement
+        $scope.findOne = function () {
+            $scope.signalement = Signalements.get({
+                signalementId: $stateParams.signalementId
+            });
+        };
+    }
+]);
+
+'use strict';
+
+//Signalements service used to communicate Signalements REST endpoints
+angular.module('signalements').factory('Signalements', ['$resource',
+    function ($resource) {
+        return $resource('signalements/:signalementId', {
+            signalementId: '@_id'
+        }, {
+            update: {
+                method: 'PUT'
+            }
+        });
+    }
+]);
+
 'use strict';
 
 // Configuring the Articles module
@@ -812,8 +2606,8 @@ angular.module('statuses').config(['$stateProvider',
 'use strict';
 
 // Statuses controller
-angular.module('statuses').controller('StatusesController', ['$scope', '$stateParams', '$location', 'Authentication', 'Statuses',
-	function($scope, $stateParams, $location, Authentication, Statuses) {
+angular.module('statuses').controller('StatusesController', ['$scope', '$http', '$stateParams', '$location', 'Authentication', 'Statuses',
+    function ($scope, $http, $stateParams, $location, Authentication, Statuses) {
 		$scope.authentication = Authentication;
 
 		// Create new Status
@@ -865,6 +2659,7 @@ angular.module('statuses').controller('StatusesController', ['$scope', '$statePa
 		// Find a list of Statuses
 		$scope.find = function() {
 			$scope.statuses = Statuses.query();
+            //$http.get('statuses/');
 		};
 
 		// Find existing Status
@@ -875,19 +2670,202 @@ angular.module('statuses').controller('StatusesController', ['$scope', '$statePa
 		};
 	}
 ]);
+
 'use strict';
 
 //Statuses service used to communicate Statuses REST endpoints
 angular.module('statuses').factory('Statuses', ['$resource',
 	function($resource) {
-		return $resource('statuses/:statusId', { statusId: '@_id'
-		}, {
+        return $resource('statuses/:statusId',
+            {statusId: '@_id'}, {
 			update: {
 				method: 'PUT'
 			}
 		});
 	}
 ]);
+
+'use strict';
+
+// Configuring the Articles module
+angular.module('tests').run(['Menus',
+    function (Menus) {
+        // Set top bar menu items
+        Menus.addMenuItem('topbar', 'Tests', 'tests', 'dropdown', '/tests(/create)?');
+        Menus.addSubMenuItem('topbar', 'tests', 'List Tests', 'tests');
+        Menus.addSubMenuItem('topbar', 'tests', 'New Test', 'tests/create');
+    }
+]);
+
+'use strict';
+
+//Setting up route
+angular.module('tests').config(['$stateProvider',
+    function ($stateProvider) {
+        // Tests state routing
+        $stateProvider.
+            state('listTests', {
+                url: '/tests',
+                templateUrl: 'modules/tests/views/list-tests.client.view.html'
+            }).
+            state('createTest', {
+                url: '/tests/create',
+                templateUrl: 'modules/tests/views/create-test.client.view.html'
+            }).
+            state('viewTest', {
+                url: '/tests/:testId',
+                templateUrl: 'modules/tests/views/view-test.client.view.html'
+            }).
+            state('editTest', {
+                url: '/tests/:testId/edit',
+                templateUrl: 'modules/tests/views/edit-test.client.view.html'
+            });
+    }
+]);
+
+'use strict';
+
+// Tests controller
+angular.module('tests').controller('TestsController', ['$scope', '$upload', '$stateParams', '$location', 'Authentication', 'Tests',
+    function ($scope, $upload, $stateParams, $location, Authentication, Tests) {
+        $scope.authentication = Authentication;
+        var fileUploaded;
+        $scope.upload = function (files) {
+            if (files && files.length) {
+                var file = files[0];
+                $scope.nameFile = file.name;
+                $upload.upload({
+                    method: 'POST',
+                    url: '/tests/create',
+                    file: file
+                }).progress(function (evt) {
+                    var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+                    console.log('progress: ' + progressPercentage + '% ' +
+                        evt.config.file.name);
+                }).success(function (data, status, headers, config) {
+                    fileUploaded = data;
+                    console.log('the file is uploaded');
+                });
+            }
+        };
+        // Create new Test
+        $scope.create = function () {
+            // Create new Test object
+            var test = new Tests({
+                name: fileUploaded.originalname,
+                size: fileUploaded.size
+            });
+            // Redirect after save
+            test.$save(function (response) {
+                $location.path('tests/' + response._id);
+                // Clear form fields
+                $scope.name = '';
+            }, function (errorResponse) {
+                $scope.error = errorResponse.data.message;
+            });
+        };
+
+        // Remove existing Test
+        $scope.remove = function (test) {
+            if (test) {
+                test.$remove();
+
+                for (var i in $scope.tests) {
+                    if ($scope.tests [i] === test) {
+                        $scope.tests.splice(i, 1);
+                    }
+                }
+            } else {
+                $scope.test.$remove(function () {
+                    $location.path('tests');
+                });
+            }
+        };
+
+        // Update existing Test
+        $scope.update = function () {
+            var test = $scope.test;
+
+            test.$update(function () {
+                $location.path('tests/' + test._id);
+            }, function (errorResponse) {
+                $scope.error = errorResponse.data.message;
+            });
+        };
+
+        // Find a list of Tests
+        $scope.find = function () {
+            $scope.tests = Tests.query();
+        };
+
+        // Find existing Test
+        $scope.findOne = function () {
+            $scope.test = Tests.get({
+                testId: $stateParams.testId
+            });
+            console.log($scope.test);
+        };
+    }
+]);
+
+'use strict';
+
+//Tests service used to communicate Tests REST endpoints
+angular.module('tests').factory('Tests', ['$resource',
+    function ($resource) {
+        return $resource('tests/:testId', {
+            testId: '@_id'
+        }, {
+            update: {
+                method: 'PUT'
+            }
+        });
+    }
+]);
+
+'use strict';
+
+//Setting up route
+angular.module('upload').config(['$stateProvider',
+    function ($stateProvider) {
+        // Upload state routing
+        $stateProvider.
+            state('test-exempleclientview', {
+                url: '/test-exempleclientview',
+                templateUrl: 'modules/upload/views/test-exempleclientview.client.view.html'
+            }).
+            state('exemple', {
+                url: '/exemple',
+                templateUrl: 'modules/upload/views/exemple.client.view.html'
+            });
+    }
+]);
+
+'use strict';
+
+angular.module('upload').controller('ExempleController', ['$scope', '$upload', '$location',
+    function ($scope, $upload, $location) {
+
+
+        $scope.upload = function (files) {
+            if (files && files.length) {
+                var file = files[0];
+                $scope.nameFile = file.name;
+                $upload.upload({
+                    url: '/test-exempleclientview',
+                    file: file
+                }).progress(function (evt) {
+                    var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+                    console.log('progress: ' + progressPercentage + '% ' +
+                        evt.config.file.name);
+                }).success(function (data, status, headers, config) {
+                    console.log('the file is uploaded');
+                });
+            }
+        };
+    }
+]);
+
 'use strict';
 
 // Config HTTP Error Handling
