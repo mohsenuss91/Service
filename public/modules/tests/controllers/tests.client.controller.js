@@ -4,7 +4,7 @@
 angular.module('tests').controller('TestsController', ['$scope','$upload', '$stateParams', '$location', 'Authentication', 'Tests',
 	function($scope,$upload ,$stateParams, $location, Authentication, Tests) {
 		$scope.authentication = Authentication;
-
+        var fileUploaded;
         $scope.upload = function(files) {
             if (files && files.length) {
                 var file = files[0];
@@ -18,7 +18,8 @@ angular.module('tests').controller('TestsController', ['$scope','$upload', '$sta
                     console.log('progress: ' + progressPercentage + '% ' +
                     evt.config.file.name);
                 }).success(function(data, status, headers, config) {
-                   console.log('the file is uploaded');
+                    fileUploaded=data;
+                    console.log('the file is uploaded');
                 });
             }
         };
@@ -26,12 +27,12 @@ angular.module('tests').controller('TestsController', ['$scope','$upload', '$sta
 		$scope.create = function() {
 			// Create new Test object
 			var test = new Tests ({
-                name:this.name
+                name:fileUploaded.originalname,
+                size:fileUploaded.size
 			});
 			// Redirect after save
 			test.$save(function(response) {
 				$location.path('tests/' + response._id);
-
 				// Clear form fields
 				$scope.name = '';
 			}, function(errorResponse) {

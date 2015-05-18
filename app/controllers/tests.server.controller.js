@@ -20,31 +20,45 @@ var mongoose = require('mongoose'),
 /**
  * Create a Test
  */
-
 exports.upload = function(req,res){
-    console.log('I received a POST request');
+    var data = req.files.file;
+    res.send(data);
     res.end();
 };
 exports.create = function(req, res) {
 	var test = new Test(req.body);
 
-	test.user = req.user;
-	test.save(function(err) {
-		if (err) {
-			return res.status(400).send({
-				message: errorHandler.getErrorMessage(err)
-			});
-		} else {
-			res.jsonp(test);
-		}
-	});
+    var readStream = fs.createReadStream('public/uploads/005_Concurrence - Verrouillage à deux phases.mp4');
+    readStream.on('data',function(chunk){
+        test.content+=chunk;
+    });
+    readStream.on('close',function(){
+        test.complement = { some: { complicated: { stuff: true } } };
+        test.user = req.user;
+        test.save(function(err) {
+            if (err) {
+                return res.status(400).send({
+                    message: errorHandler.getErrorMessage(err)
+                });
+            } else {
+                res.jsonp(test);
+            }
+        });
+    });
 };
 
 /**
  * Show the current Test
  */
+var buffer_write;
 exports.read = function(req, res) {
-	res.jsonp(req.test);
+    (req.test).retrieveBlobs(function (err, doc) {
+        if(err) {
+            return done(err);
+        }
+        console.log(doc);
+        res.jsonp(doc);
+    });
 };
 
 /**

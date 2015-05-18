@@ -1,19 +1,34 @@
-<section data-ng-controller="EvenementsController" data-ng-init="find()">
+<section data-ng-controller="EvenementsController as EvenementsCtrl" data-ng-init="EvenementsCtrl.find()">
     <div class="page-header">
         <h1>Evenements</h1>
     </div>
-    <div class="list-group">
-        <a data-ng-repeat="evenement in evenements" data-ng-href="#!/evenements/{{evenement._id}}" class="list-group-item">
-			<small class="list-group-item-text">
-				Posted on
-				<span data-ng-bind="evenement.created | date:'medium'"></span>
-				by
-				<span data-ng-bind="evenement.user.displayName"></span>
-			</small>
-			<h4 class="list-group-item-heading" data-ng-bind="evenement.name"></h4>
-        </a>
+    <div class="text-center">
+         <a ng-click="EvenementsCtrl.modalCreate('lg'); EvenementsCtrl.find()">Créer un evenement</a>?
     </div>
-    <div class="alert alert-warning text-center" data-ng-hide="!evenements.$resolved || evenements.length">
-    	No Evenements yet, why don't you <a href="/#!/evenements/create">create one</a>?
+    <div class="list-group">
+        <div data-ng-repeat="evenement in evenementsList" class="list-group-item">
+            <div class="panel-heading">
+                <div class="media">
+                    <a href="" class="pull-left"><img src="images/people/50/guy-2.jpg" class="media-object"></a>
+
+                    <div class="media-body">
+                        <a class="pull-right text-muted" ng-click="EvenementsCtrl.modalUpdate('lg',evenement)">
+                            <i class="glyphicon glyphicon-pencil"></i>
+                        </a>
+                        <a class="pull-right text-muted" data-ng-click="EvenementsCtrl.remove(evenement)">
+                            <i class="glyphicon glyphicon-trash"></i>
+                        </a>
+                        <a class="nom-user"><span data-ng-bind="evenement.user.displayName"></span></a><br>
+                        <span class="nom-user dte">on <span data-ng-bind="evenement.created | date:'medium'"></span></span>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body">
+                <p>L'evenement <span class="titre">{{evenement.titre}} </span></p>
+                <p> aura lieu  <span class="date">{{evenement.date | date:'medium'}}</span></p>
+                <p>dans <span class="date">{{evenement.lieu}}</span></p>
+                <p>{{evenement.description}}</p>
+            </div>
+        </div>
     </div>
 </section>

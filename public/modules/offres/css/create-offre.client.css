@@ -1,0 +1,30 @@
+.creerEvenements{
+    background-color: #ffffff;
+}
+
+.glyphicon-trash:hover {
+    color: red;
+}
+
+.glyphicon-pencil:hover {
+    color: #73db68;
+}
+
+.glyphicon-trash {
+    margin-right: 10px;
+}
+
+.panel-body-offre{
+
+}
+
+.titre{
+    font-size: 22px;
+    font-weight: bold;
+    color: #02d4e5;
+}
+
+.panel-heading{
+    background-color: #27ada0;
+    color: #ffffff
+}

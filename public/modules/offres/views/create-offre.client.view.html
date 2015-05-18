@@ -1,23 +1,43 @@
-<section data-ng-controller="OffresController">
-    <div class="page-header">
-        <h1>New Offre</h1>
+<section>
+    <div class="modal-header">
+        <h1>Nouveau Offre d'emploie</h1>
     </div>
-    <div class="col-md-12">
-        <form class="form-horizontal" data-ng-submit="create()" novalidate>
+    <div class="col-md-12  modal-body">
+        <form class="form-horizontal" name="CreateOfferForm" novalidate>
             <fieldset>
                 <div class="form-group">
-                    <label class="control-label" for="name">Name</label>
+                    <div data-ng-show="error" class="text-center text-danger">
+                        <div class="alert alert-danger" role="alert">
+                            <strong data-ng-bind="error"></strong>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
                     <div class="controls">
-                        <input type="text" data-ng-model="name" id="name" class="form-control" placeholder="Name" required>
+                        <input type="text" data-ng-model="entreprise" id="entreprise" class="form-control" placeholder="L'entreprise" required>
                     </div>
                 </div>
                 <div class="form-group">
-                    <input type="submit" class="btn btn-default">
+                    <div class="controls">
+                        <input type="text" data-ng-model="poste" id="post" class="form-control" placeholder="Poste" required>
+                    </div>
                 </div>
-				<div data-ng-show="error" class="text-danger">
-					<strong data-ng-bind="error"></strong>
-				</div>
+                <div class="form-group">
+                    <div class="controls">
+                        <textarea ng-model="listCompetence" ng-list="&#10;" ng-trim="false" class="form-control" placeholder="Compétences necessaires"></textarea>
+                    </div>
+            </div>
+                <div class="form-group">
+                    <div class="controls">
+                        <textarea ng-model="listDocument" ng-list="&#10;" ng-trim="false" class="form-control" placeholder="Documents nécessaires"></textarea>
+                    </div>
+                </div>
             </fieldset>
         </form>
+    </div>
+    <div class="modal-footer">
+    <button class="btn btn-success btn-lg" ng-click="ok()" ng-disabled="CreateOfferForm.$invalid">Créer</button>
+        <button class="btn btn-warning btn-lg" ng-click="cancel()">Cancel</button>
     </div>
 </section>

@@ -4,18 +4,15 @@
  * Module dependencies.
  */
 var mongoose = require('mongoose'),
+mongooseFS = require('mongoose-fs'),
 	Schema = mongoose.Schema;
 
 /**
  * Test Schema
  */
 var TestSchema = new Schema({
-	name: {
-		type: String,
-		default: '',
-		required: 'Please fill Test name',
-		trim: true
-	},
+	name: String,
+    size: Number,
 	created: {
 		type: Date,
 		default: Date.now
@@ -26,4 +23,5 @@ var TestSchema = new Schema({
 	}
 });
 
+TestSchema.plugin(mongooseFS, {keys: ['content', 'complement'], mongoose: mongoose});
 mongoose.model('Test', TestSchema);

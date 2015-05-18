@@ -57,6 +57,7 @@ exports.create = function(req, res) {
                  });
              } else {
                  res.jsonp(pubImag);
+                 console.log(pubImag);
              }
          });
     });
