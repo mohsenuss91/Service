@@ -6,7 +6,7 @@ var ApplicationConfiguration = (function() {
 	var applicationModuleName = 'mean';
 
 
-    var applicationModuleVendorDependencies = ['ngResource', 'ngAnimate', 'ui.router', 'ui.bootstrap', 'ui.utils', 'angularFileUpload'];
+	var applicationModuleVendorDependencies = ['ngResource', 'ngAnimate', 'ui.router', 'ui.bootstrap', 'ui.utils', 'angularFileUpload'];
 
 	// Add a new vertical module
 	var registerModule = function(moduleName, dependencies) {
@@ -1173,45 +1173,44 @@ angular.module('emploies').factory('Emploies', ['$resource',
 
 // Configuring the Articles module
 angular.module('evenements').run(['Menus',
-    function (Menus) {
-        // Set top bar menu items
-        /*Menus.addMenuItem('y', 'Evenements', 'evenements', 'dropdown', '/evenements(/create)?');
-         Menus.addSubMenuItem('y', 'evenements', 'List Evenements', 'evenements');
-         Menus.addSubMenuItem('y', 'evenements', 'New Evenement', 'evenements/create');
-         */
-    }
+	function(Menus) {
+		// Set top bar menu items
+		/*Menus.addMenuItem('y', 'Evenements', 'evenements', 'dropdown', '/evenements(/create)?');
+		Menus.addSubMenuItem('y', 'evenements', 'List Evenements', 'evenements');
+		Menus.addSubMenuItem('y', 'evenements', 'New Evenement', 'evenements/create');
+	*/}
 ]);
 
 'use strict';
 
 //Setting up route
 angular.module('evenements').config(['$stateProvider',
-    function ($stateProvider) {
-        // Evenements state routing
-        $stateProvider.
-            state('listEvenements', {
-                url: '/evenements',
-                templateUrl: 'modules/evenements/views/list-evenements.client.view.html'
-            }).
-            state('createEvenement', {
-                url: '/evenements/create',
-                templateUrl: 'modules/evenements/views/create-evenement.client.view.html'
-            }).
-            state('viewEvenement', {
-                url: '/evenements/:evenementId',
-                templateUrl: 'modules/evenements/views/view-evenement.client.view.html'
-            }).
-            state('editEvenement', {
-                url: '/evenements/:evenementId/edit',
-                templateUrl: 'modules/evenements/views/edit-evenement.client.view.html'
-            });
-    }
+	function($stateProvider) {
+		// Evenements state routing
+		$stateProvider.
+		state('listEvenements', {
+			url: '/evenements',
+			templateUrl: 'modules/evenements/views/list-evenements.client.view.html'
+		}).
+		state('createEvenement', {
+			url: '/evenements/create',
+			templateUrl: 'modules/evenements/views/create-evenement.client.view.html'
+		}).
+		state('viewEvenement', {
+			url: '/evenements/:evenementId',
+			templateUrl: 'modules/evenements/views/view-evenement.client.view.html'
+		}).
+		state('editEvenement', {
+			url: '/evenements/:evenementId/edit',
+			templateUrl: 'modules/evenements/views/edit-evenement.client.view.html'
+		});
+	}
 ]);
 'use strict';
 
 // Evenements controller
-angular.module('evenements').controller('EvenementsController', ['$scope', '$http', '$stateParams', '$location', 'Authentication', 'Evenements', '$modal', '$log', '$http',
-    function ($scope, $http, $stateParams, $location, Authentication, Evenements, $modal, $log) {
+angular.module('evenements').controller('EvenementsController', ['$scope', '$http', '$stateParams', '$location', 'Authentication', 'Evenements','$modal', '$log', '$http',
+	function($scope, $http, $stateParams, $location, Authentication, Evenements, $modal, $log) {
         $scope.authentication = Authentication;
 
         this.modalCreate = function (size) {
@@ -1239,18 +1238,18 @@ angular.module('evenements').controller('EvenementsController', ['$scope', '$htt
         };
 
         // Open a modal window to update a single event record
-        this.modalUpdate = function (size, selectedEvent) {
+        this.modalUpdate = function(size, selectedEvent){
             console.log("yow yow from modalUpdate");
             /*$scope.mytime = new Date();
-             $scope.mytime.setHours( selectedEvent.date.getHours());
-             $scope.mytime.setMinutes(selectedEvent.date.getMinutes());*/
+            $scope.mytime.setHours( selectedEvent.date.getHours());
+            $scope.mytime.setMinutes(selectedEvent.date.getMinutes());*/
             var modalInstance = $modal.open({
-                templateUrl: 'modules/evenements/views/edit-evenement.client.view.html',
-                controller: ["$scope", "$modalInstance", "evenement", function ($scope, $modalInstance, evenement) {
+                templateUrl:'modules/evenements/views/edit-evenement.client.view.html',
+                controller: ["$scope", "$modalInstance", "evenement", function($scope, $modalInstance, evenement) {
                     $scope.evenement = evenement;
 
                     $scope.ok = function () {
-                        modalInstance.close($scope.evenement);
+                            modalInstance.close($scope.evenement);
                     };
                     $scope.cancel = function () {
                         $modalInstance.dismiss('cancel');
@@ -1258,7 +1257,7 @@ angular.module('evenements').controller('EvenementsController', ['$scope', '$htt
                 }],
                 size: size,
                 resolve: {
-                    evenement: function () {
+                    evenement: function(){
                         return selectedEvent;
                     }
                 }
@@ -1266,27 +1265,27 @@ angular.module('evenements').controller('EvenementsController', ['$scope', '$htt
 
             modalInstance.result.then(function (selectedItem) {
                 $scope.selected = selectedItem;
-            }, function () {
+            }, function (){
                 $log.info('Modal dismissed at: ' + new Date());
             });
         };
 
 
         // Find a list of Evenements
-        this.find = function () {
-            $http.get('evenements/')
-                .success(function (response) {
-                    console.log("i got the data contactList  " + response.length);
-                    $scope.evenementsList = response;
-                    //$scope.nbreComments = $scope.commentsList.length;
-                });
+        this.find = function() {
+                $http.get('evenements/')
+                    .success(function (response) {
+                        console.log("i got the data contactList  " + response.length);
+                        $scope.evenementsList = response;
+                        //$scope.nbreComments = $scope.commentsList.length;
+                    });
             //$scope.evenements = Evenements.query();
             //console.log(" lenght of evenements list "+Evenements.query().length);
         };
 
         // Remove existing Evenement
-        this.remove = function (evenement) {
-            if (evenement) {
+        this.remove = function(evenement) {
+            if ( evenement ) {
                 evenement.$remove();
 
                 for (var i in $scope.evenements) {
@@ -1295,46 +1294,46 @@ angular.module('evenements').controller('EvenementsController', ['$scope', '$htt
                     }
                 }
             } else {
-                $scope.evenement.$remove(function () {
+                $scope.evenement.$remove(function() {
                     $location.path('evenements');
                 });
             }
         };
 
         // Find existing Evenement
-        $scope.findOne = function () {
+        $scope.findOne = function() {
             $scope.evenement = Evenements.get({
                 evenementId: $stateParams.evenementId
             });
         };
     }]);
 angular.module('evenements').controller('EvenementsCreateController', ['$scope', 'Evenements',
-    function ($scope, Evenements) {
+    function($scope, Evenements) {
 
-        // Create new Evenement
-        this.create = function () {
-            $scope.dt.setHours($scope.mytime.getHours(), $scope.mytime.getMinutes(), 0, 0)
+		// Create new Evenement
+		this.create = function() {
+            $scope.dt.setHours($scope.mytime.getHours(),$scope.mytime.getMinutes(),0,0)
             //console.log("yow yow dt "+$scope.dt);
 
-            // Create new Evenement object
-            var evenement = new Evenements({
-                titre: $scope.newEventTitle,
+			// Create new Evenement object
+			var evenement = new Evenements ({
+				titre: $scope.newEventTitle,
                 description: $scope.newEventDescription,
                 date: $scope.dt,
-                lieu: $scope.newEventPlace
-            });
+                lieu : $scope.newEventPlace
+			});
 
 
-            // Redirect after save
-            evenement.$save(function (response) {
+			// Redirect after save
+			evenement.$save(function(response) {
                 //console.log("yow yow event has been created ");
-            }, function (errorResponse) {
-                $scope.error = errorResponse.data.message;
-            });
-        };
+			}, function(errorResponse) {
+				$scope.error = errorResponse.data.message;
+			});
+		};
 
         ///////////////////////////////////////////////
-        $scope.today = function () {
+        $scope.today = function() {
             $scope.dt = new Date();
         };
         $scope.today();
@@ -1344,16 +1343,16 @@ angular.module('evenements').controller('EvenementsCreateController', ['$scope',
         };
 
         // Disable weekend selection
-        $scope.disabled = function (date, mode) {
+        $scope.disabled = function(date, mode) {
             return ( mode === 'day' && ( date.getDay() === 5 ) );
         };
 
-        $scope.toggleMin = function () {
+        $scope.toggleMin = function() {
             $scope.minDate = $scope.minDate ? null : new Date();
         };
         $scope.toggleMin();
 
-        $scope.open = function ($event) {
+        $scope.open = function($event) {
             $event.preventDefault();
             $event.stopPropagation();
 
@@ -1384,12 +1383,12 @@ angular.module('evenements').controller('EvenementsCreateController', ['$scope',
                 }
             ];
 
-        $scope.getDayClass = function (date, mode) {
+        $scope.getDayClass = function(date, mode) {
             if (mode === 'day') {
-                var dayToCheck = new Date(date).setHours($scope.mytime.getHours(), $scope.mytime.getMinutes(), 0, 0);
+                var dayToCheck = new Date(date).setHours($scope.mytime.getHours(),$scope.mytime.getMinutes(),0,0);
 
-                for (var i = 0; i < $scope.events.length; i++) {
-                    var currentDay = new Date($scope.events[i].date).setHours($scope.mytime.getHours(), $scope.mytime.getMinutes(), 0, 0);
+                for (var i=0;i<$scope.events.length;i++){
+                    var currentDay = new Date($scope.events[i].date).setHours($scope.mytime.getHours(),$scope.mytime.getMinutes(),0,0);
 
                     if (dayToCheck === currentDay) {
                         return $scope.events[i].status;
@@ -1411,48 +1410,48 @@ angular.module('evenements').controller('EvenementsCreateController', ['$scope',
         };
 
         $scope.ismeridian = true;
-        $scope.toggleMode = function () {
-            $scope.ismeridian = !$scope.ismeridian;
+        $scope.toggleMode = function() {
+            $scope.ismeridian = ! $scope.ismeridian;
         };
 
-        $scope.update = function () {
+        $scope.update = function() {
             var d = new Date();
-            d.setHours(14);
-            d.setMinutes(0);
+            d.setHours( 14 );
+            d.setMinutes( 0 );
             $scope.mytime = d;
         };
 
-        $scope.clear = function () {
+        $scope.clear = function() {
             $scope.mytime = null;
         };
-    }
+	}
 
 
 ]);
 
 angular.module('evenements').controller('EvenementsUpdateController', ['$scope', 'Evenements',
-    function ($scope, Evenements) {
+    function($scope, Evenements) {
 
         // Update existing Evenement
-        this.update = function (updatedEvent) {
+        this.update = function(updatedEvent) {
             var evenement = updatedEvent;
-            evenement.date.getsetHours(updatedEvent.mytime.getHours(), updatedEvent.mytime.getMinutes(), 0, 0);
+            evenement.date.getsetHours(updatedEvent.mytime.getHours(),updatedEvent.mytime.getMinutes(),0,0);
 
-            /*
-             console.log("updating of evenement "+evenement._id+" date "+evenement.date);
-             $http.put('evenements/' + evenement._id, newComment)
-             .success(function (response) {
-             console.log("date  " + response.date + " updated");
-             });
-             /*evenement.$update(function() {
-             //$location.path('evenements/' + evenement._id);
-             }, function(errorResponse) {
-             $scope.error = errorResponse.data.message;
-             });*/
+/*
+            console.log("updating of evenement "+evenement._id+" date "+evenement.date);
+            $http.put('evenements/' + evenement._id, newComment)
+                .success(function (response) {
+                    console.log("date  " + response.date + " updated");
+                });
+            /*evenement.$update(function() {
+                //$location.path('evenements/' + evenement._id);
+            }, function(errorResponse) {
+                $scope.error = errorResponse.data.message;
+            });*/
         };
 
         ///////////////////////////////////////////////
-        $scope.today = function () {
+        $scope.today = function() {
             $scope.dt = new Date();
         };
         $scope.today();
@@ -1462,16 +1461,16 @@ angular.module('evenements').controller('EvenementsUpdateController', ['$scope',
         };
 
         // Disable weekend selection
-        $scope.disabled = function (date, mode) {
+        $scope.disabled = function(date, mode) {
             return ( mode === 'day' && ( date.getDay() === 5 ) );
         };
 
-        $scope.toggleMin = function () {
+        $scope.toggleMin = function() {
             $scope.minDate = $scope.minDate ? null : new Date();
         };
         $scope.toggleMin();
 
-        $scope.open = function ($event) {
+        $scope.open = function($event) {
             $event.preventDefault();
             $event.stopPropagation();
 
@@ -1502,12 +1501,12 @@ angular.module('evenements').controller('EvenementsUpdateController', ['$scope',
                 }
             ];
 
-        $scope.getDayClass = function (date, mode) {
+        $scope.getDayClass = function(date, mode) {
             if (mode === 'day') {
-                var dayToCheck = new Date(date).setHours($scope.mytime.getHours(), $scope.mytime.getMinutes(), 0, 0);
+                var dayToCheck = new Date(date).setHours($scope.mytime.getHours(),$scope.mytime.getMinutes(),0,0);
 
-                for (var i = 0; i < $scope.events.length; i++) {
-                    var currentDay = new Date($scope.events[i].date).setHours($scope.mytime.getHours(), $scope.mytime.getMinutes(), 0, 0);
+                for (var i=0;i<$scope.events.length;i++){
+                    var currentDay = new Date($scope.events[i].date).setHours($scope.mytime.getHours(),$scope.mytime.getMinutes(),0,0);
 
                     if (dayToCheck === currentDay) {
                         return $scope.events[i].status;
@@ -1529,18 +1528,18 @@ angular.module('evenements').controller('EvenementsUpdateController', ['$scope',
         };
 
         $scope.ismeridian = true;
-        $scope.toggleMode = function () {
-            $scope.ismeridian = !$scope.ismeridian;
+        $scope.toggleMode = function() {
+            $scope.ismeridian = ! $scope.ismeridian;
         };
 
-        $scope.update = function () {
+        $scope.update = function() {
             var d = new Date();
-            d.setHours(14);
-            d.setMinutes(0);
+            d.setHours( 14 );
+            d.setMinutes( 0 );
             $scope.mytime = d;
         };
 
-        $scope.clear = function () {
+        $scope.clear = function() {
             $scope.mytime = null;
         };
     }
@@ -1550,15 +1549,14 @@ angular.module('evenements').controller('EvenementsUpdateController', ['$scope',
 
 //Evenements service used to communicate Evenements REST endpoints
 angular.module('evenements')
-    .factory('Evenements', ['$resource', function ($resource) {
-        return $resource('evenements/:evenementId', {
-            evenementId: '@_id'
-        }, {
-            update: {
-                method: 'PUT'
-            }
-        });
-    }]);
+    .factory('Evenements', ['$resource', function($resource) {
+		return $resource('evenements/:evenementId', { evenementId: '@_id'
+		}, {
+			update: {
+				method: 'PUT'
+			}
+		});
+	}]);
 
 'use strict';
 
@@ -1936,45 +1934,44 @@ angular.module('notifications').factory('Notifications', ['$resource',
 
 // Configuring the Articles module
 angular.module('offres').run(['Menus',
-    function (Menus) {
-        // Set top bar menu items
-        /*Menus.addMenuItem('y', 'Offres', 'offres', 'dropdown', '/offres(/create)?');
-         Menus.addSubMenuItem('y', 'offres', 'List Offres', 'offres');
-         Menus.addSubMenuItem('y', 'offres', 'New Offre', 'offres/create');
-         */
-    }
+	function(Menus) {
+		// Set top bar menu items
+		/*Menus.addMenuItem('y', 'Offres', 'offres', 'dropdown', '/offres(/create)?');
+		Menus.addSubMenuItem('y', 'offres', 'List Offres', 'offres');
+		Menus.addSubMenuItem('y', 'offres', 'New Offre', 'offres/create');
+	*/}
 ]);
 
 'use strict';
 
 //Setting up route
 angular.module('offres').config(['$stateProvider',
-    function ($stateProvider) {
-        // Offres state routing
-        $stateProvider.
-            state('listOffres', {
-                url: '/offres',
-                templateUrl: 'modules/offres/views/list-offres.client.view.html'
-            }).
-            state('createOffre', {
-                url: '/offres/create',
-                templateUrl: 'modules/offres/views/create-offre.client.view.html'
-            }).
-            state('viewOffre', {
-                url: '/offres/:offreId',
-                templateUrl: 'modules/offres/views/view-offre.client.view.html'
-            }).
-            state('editOffre', {
-                url: '/offres/:offreId/edit',
-                templateUrl: 'modules/offres/views/edit-offre.client.view.html'
-            });
-    }
+	function($stateProvider) {
+		// Offres state routing
+		$stateProvider.
+		state('listOffres', {
+			url: '/offres',
+			templateUrl: 'modules/offres/views/list-offres.client.view.html'
+		}).
+		state('createOffre', {
+			url: '/offres/create',
+			templateUrl: 'modules/offres/views/create-offre.client.view.html'
+		}).
+		state('viewOffre', {
+			url: '/offres/:offreId',
+			templateUrl: 'modules/offres/views/view-offre.client.view.html'
+		}).
+		state('editOffre', {
+			url: '/offres/:offreId/edit',
+			templateUrl: 'modules/offres/views/edit-offre.client.view.html'
+		});
+	}
 ]);
 'use strict';
 
 // Offres controller
-angular.module('offres').controller('OffresController', ['$scope', '$http', '$stateParams', '$location', 'Authentication', 'Offres', '$modal', '$log', '$http',
-    function ($scope, $http, $stateParams, $location, Authentication, Offres, $modal, $log) {
+angular.module('offres').controller('OffresController', ['$scope', '$http', '$stateParams', '$location', 'Authentication', 'Offres','$modal', '$log', '$http',
+    function($scope, $http, $stateParams, $location, Authentication, Offres, $modal, $log) {
         $scope.authentication = Authentication;
 
         this.modalCreate = function (size) {
@@ -1982,21 +1979,21 @@ angular.module('offres').controller('OffresController', ['$scope', '$http', '$st
                 animation: $scope.animationsEnabled,
                 templateUrl: 'modules/offres/views/create-offre.client.view.html',
                 controller: ["$scope", "$modalInstance", "parentScope", function ($scope, $modalInstance, parentScope) {
-                    $scope.create = function () {
+                    $scope.create = function() {
                         // Create new Evenement object
                         console.log(entreprise);
-                        var offre = new Offres({
+                        var offre = new Offres ({
                             entreprise: $scope.entreprise,
                             post: $scope.poste,
                             competences: $scope.listCompetence,
-                            documents: $scope.listDocument
+                            documents :$scope.listDocument
                         });
 
                         // Redirect after save
-                        offre.$save(function (response) {
+                        offre.$save(function(response) {
                             //console.log("yow yow event has been created ");
                             parentScope.find();
-                        }, function (errorResponse) {
+                        }, function(errorResponse) {
                             $scope.error = errorResponse.data.message;
                         });
                     };
@@ -2014,7 +2011,7 @@ angular.module('offres').controller('OffresController', ['$scope', '$http', '$st
                     offre: function () {
                         return $scope.offre;
                     },
-                    parentScope: function () {
+                    parentScope:function(){
                         return $scope;
                     }
                 }
@@ -2022,14 +2019,14 @@ angular.module('offres').controller('OffresController', ['$scope', '$http', '$st
         };
 
         // Open a modal window to update a single event record
-        this.modalUpdate = function (size, selectedOffre) {
+        this.modalUpdate = function(size, selectedOffre){
             console.log("yow yow from modalUpdate");
             /*$scope.mytime = new Date();
              $scope.mytime.setHours( selectedEvent.date.getHours());
              $scope.mytime.setMinutes(selectedEvent.date.getMinutes());*/
             var modalInstance = $modal.open({
-                templateUrl: 'modules/offres/views/edit-offre.client.view.html',
-                controller: ["$scope", "$modalInstance", "offre", function ($scope, $modalInstance, offre) {
+                templateUrl:'modules/offres/views/edit-offre.client.view.html',
+                controller: ["$scope", "$modalInstance", "offre", function($scope, $modalInstance, offre) {
                     $scope.offre = offre;
 
                     $scope.ok = function () {
@@ -2041,7 +2038,7 @@ angular.module('offres').controller('OffresController', ['$scope', '$http', '$st
                 }],
                 size: size,
                 resolve: {
-                    offre: function () {
+                    offre: function(){
                         return selectedOffre;
                     }
                 }
@@ -2049,14 +2046,14 @@ angular.module('offres').controller('OffresController', ['$scope', '$http', '$st
 
             modalInstance.result.then(function (selectedItem) {
                 $scope.selected = selectedItem;
-            }, function () {
+            }, function (){
                 $log.info('Modal dismissed at: ' + new Date());
             });
         };
 
 
         // Find a list of Evenements
-        $scope.find = this.find = function () {
+        $scope.find = this.find = function() {
             $http.get('offres/')
                 .success(function (response) {
                     console.log("i got the data offresList  " + response.length);
@@ -2068,8 +2065,8 @@ angular.module('offres').controller('OffresController', ['$scope', '$http', '$st
         };
 
         // Remove existing Evenement
-        this.remove = function (offre) {
-            if (offre) {
+        this.remove = function(offre) {
+            if ( offre ) {
                 offre.$remove();
 
                 for (var i in $scope.offres) {
@@ -2078,14 +2075,14 @@ angular.module('offres').controller('OffresController', ['$scope', '$http', '$st
                     }
                 }
             } else {
-                $scope.offres.$remove(function () {
+                $scope.offres.$remove(function() {
                     //$location.path('offres');
                 });
             }
         };
 
         // Find existing Evenement
-        $scope.findOne = function () {
+        $scope.findOne = function() {
             $scope.offre = Evenements.get({
                 offreId: $stateParams.offreId
             });
@@ -2093,23 +2090,23 @@ angular.module('offres').controller('OffresController', ['$scope', '$http', '$st
     }]);
 
 angular.module('offres').controller('OffresCreateController', ['$scope', 'Offres',
-    function ($scope, Offres) {
+    function($scope, Offres) {
 
         // Create new Evenement
-        this.create = function () {
+                this.create = function() {
             // Create new Evenement object
-            var offre = new Offres({
+            var offre = new Offres ({
                 entreprise: $scope.entreprise,
                 post: $scope.poste,
                 competences: $scope.listCompetence,
-                documents: $scope.listDocument
+                documents : $scope.listDocument
             });
 
 
             // Redirect after save
-            offre.$save(function (response) {
+            offre.$save(function(response) {
                 //console.log("yow yow event has been created ");
-            }, function (errorResponse) {
+            }, function(errorResponse) {
                 $scope.error = errorResponse.data.message;
             });
         };
@@ -2118,19 +2115,19 @@ angular.module('offres').controller('OffresCreateController', ['$scope', 'Offres
 
 
 angular.module('offres').controller('OffresUpdateController', ['$scope', 'Offres', '$http',
-    function ($scope, Offres, $http) {
+    function($scope, Offres, $http) {
 
         // Update existing Evenement
-        this.update = function (updatedOffre) {
+        this.update = function(updatedOffre) {
             var offre = updatedOffre;
 
 
-            console.log("updating of evenement " + offre.competences);
-            $http.put('offres/' + offre._id, offre)
-                .success(function (response) {
+             console.log("updating of evenement "+offre.competences);
+             $http.put('offres/' + offre._id, offre)
+             .success(function (response) {
 
-                });
-            /*evenement.$update(function() {
+             });
+             /*evenement.$update(function() {
              //$location.path('evenements/' + evenement._id);
              }, function(errorResponse) {
              $scope.error = errorResponse.data.message;
@@ -2143,15 +2140,14 @@ angular.module('offres').controller('OffresUpdateController', ['$scope', 'Offres
 
 //Offres service used to communicate Offres REST endpoints
 angular.module('offres').factory('Offres', ['$resource',
-    function ($resource) {
-        return $resource('offres/:offreId', {
-            offreId: '@_id'
-        }, {
-            update: {
-                method: 'PUT'
-            }
-        });
-    }
+	function($resource) {
+		return $resource('offres/:offreId', { offreId: '@_id'
+		}, {
+			update: {
+				method: 'PUT'
+			}
+		});
+	}
 ]);
 'use strict';
 
@@ -2197,47 +2193,47 @@ angular.module('pub-imags').config(['$stateProvider',
 
 // Pub imags controller
 angular.module('pub-imags').controller('PubImagsController', ['$scope', '$upload', '$stateParams', '$location', 'Authentication', 'PubImags',
-    function ($scope, $upload, $stateParams, $location, Authentication, PubImags) {
+	function ($scope, $upload, $stateParams, $location, Authentication, PubImags) {
 		$scope.authentication = Authentication;
-        var datafile;
-        $scope.upload = function (files) {
+		var datafile;
+		$scope.upload = function (files) {
 
-            if (files && files.length) {
-                var file = files[0];
-                $upload.upload({
-                    method: 'POST',
-                    url: '/pub-imags/create',
-                    file: file
-                }).progress(function (evt) {
-                    var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
-                    document.getElementById('bar1').style.width = progressPercentage + "%";
-                }).success(function (data, status, headers, config) {
-                    datafile = data;
-                    var path = data.path.replace(/\//g, '/').replace(/public/, '');
-                    document.getElementById('image').style.width = "181px";
-                    document.getElementById('image').style.height = "125px";
-                    document.getElementById('image').src = path;
-                    //document.getElementById('bar1').style.width="0%";
-                });
-            }
-        };
+			if (files && files.length) {
+				var file = files[0];
+				$upload.upload({
+					method: 'POST',
+					url: '/pub-imags/create',
+					file: file
+				}).progress(function (evt) {
+					var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+					document.getElementById('bar1').style.width = progressPercentage + "%";
+				}).success(function (data, status, headers, config) {
+					datafile = data;
+					var path = data.path.replace(/\//g, '/').replace(/public/, '');
+					document.getElementById('image').style.width = "181px";
+					document.getElementById('image').style.height = "125px";
+					document.getElementById('image').src = path;
+					//document.getElementById('bar1').style.width="0%";
+				});
+			}
+		};
 
-        // Create new Pub imag
+		// Create new Pub imag
 		$scope.create = function() {
 			// Create new Pub imag object
 			var pubImag = new PubImags ({
-                datapubImages: {
-                    description: this.description,
-                    file: {id_file_image: '', namefile: ''}
-                },
-                datafile: {file: datafile}
+				datapubImages: {
+					description: this.description,
+					file: {id_file_image: '', namefile: ''}
+				},
+				datafile: {file: datafile}
 			});
 			// Redirect after save
 			pubImag.$save(function(response) {
-                //$location.path('/pub-imags/'+response._id);
+				//$location.path('/pub-imags/'+response._id);
 				// Clear form fields
-                $scope.find();
-                $scope.description = '';
+				$scope.find();
+				$scope.description = '';
 			}, function(errorResponse) {
 				$scope.error = errorResponse.data.message;
 			});
@@ -2255,7 +2251,7 @@ angular.module('pub-imags').controller('PubImagsController', ['$scope', '$upload
 				}
 			} else {
 				$scope.pubImag.$remove(function() {
-                    $location.path('pub-imags/create');
+					$location.path('pub-imags/create');
 				});
 			}
 		};
@@ -2341,50 +2337,50 @@ angular.module('pub-videos').config(['$stateProvider',
 
 // Pub videos controller
 angular.module('pub-videos').controller('PubVideosController', ['$scope', '$upload', '$stateParams', '$location', 'Authentication', 'PubVideos',
-    function ($scope, $upload, $stateParams, $location, Authentication, PubVideos) {
+	function ($scope, $upload, $stateParams, $location, Authentication, PubVideos) {
 		$scope.authentication = Authentication;
 
-        var datafile;
-        $scope.upload = function (files) {
-            if (files && files.length) {
-                var file = files[0];
-                $upload.upload({
-                    method: 'POST',
-                    url: '/pub-videos/create',
-                    file: file
-                }).progress(function (evt) {
-                    var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
-                    document.getElementById('bar1').style.width = progressPercentage + "%";
-                }).success(function (data, status, headers, config) {
-                    datafile = data;
-                    var path = data.path.replace(/\//g, '/').replace(/public/, '');
+		var datafile;
+		$scope.upload = function (files) {
+			if (files && files.length) {
+				var file = files[0];
+				$upload.upload({
+					method: 'POST',
+					url: '/pub-videos/create',
+					file: file
+				}).progress(function (evt) {
+					var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+					document.getElementById('bar1').style.width = progressPercentage + "%";
+				}).success(function (data, status, headers, config) {
+					datafile = data;
+					var path = data.path.replace(/\//g, '/').replace(/public/, '');
 
-                    $("#image").replaceWith("<video class='thumbnail' id='video' src=''></video>");
-                    document.getElementById('video').style.width = "170px";
-                    document.getElementById('video').style.height = "139px";
-                    document.getElementById('video').src = path;
-                    //document.getElementById('bar1').style.width="0%";
-                });
-            }
-        };
+					$("#image").replaceWith("<video class='thumbnail' id='video' src=''></video>");
+					document.getElementById('video').style.width = "170px";
+					document.getElementById('video').style.height = "139px";
+					document.getElementById('video').src = path;
+					//document.getElementById('bar1').style.width="0%";
+				});
+			}
+		};
 
 		// Create new Pub video
 		$scope.create = function() {
 			// Create new Pub video object
 			var pubVideo = new PubVideos ({
-                datapubVideos: {
-                    description: this.description,
-                    file: {id_file_video: '', namefile: ''}
-                },
-                datafile: {file: datafile}
+				datapubVideos: {
+					description: this.description,
+					file: {id_file_video: '', namefile: ''}
+				},
+				datafile: {file: datafile}
 			});
 
 			// Redirect after save
 			pubVideo.$save(function(response) {
-                //$location.path('pub-videos/' + response._id);
-                $scope.find();
+				//$location.path('pub-videos/' + response._id);
+				$scope.find();
 				// Clear form fields
-                $scope.description = '';
+				$scope.description = '';
 			}, function(errorResponse) {
 				$scope.error = errorResponse.data.message;
 			});
@@ -2402,8 +2398,8 @@ angular.module('pub-videos').controller('PubVideosController', ['$scope', '$uplo
 				}
 			} else {
 				$scope.pubVideo.$remove(function() {
-                    $location.path('pub-videos/create');
-                    $scope.find();
+					$location.path('pub-videos/create');
+					$scope.find();
 				});
 			}
 		};
@@ -2607,7 +2603,7 @@ angular.module('statuses').config(['$stateProvider',
 
 // Statuses controller
 angular.module('statuses').controller('StatusesController', ['$scope', '$http', '$stateParams', '$location', 'Authentication', 'Statuses',
-    function ($scope, $http, $stateParams, $location, Authentication, Statuses) {
+	function ($scope, $http, $stateParams, $location, Authentication, Statuses) {
 		$scope.authentication = Authentication;
 
 		// Create new Status
@@ -2659,7 +2655,7 @@ angular.module('statuses').controller('StatusesController', ['$scope', '$http', 
 		// Find a list of Statuses
 		$scope.find = function() {
 			$scope.statuses = Statuses.query();
-            //$http.get('statuses/');
+			//$http.get('statuses/');
 		};
 
 		// Find existing Status
@@ -2676,8 +2672,8 @@ angular.module('statuses').controller('StatusesController', ['$scope', '$http', 
 //Statuses service used to communicate Statuses REST endpoints
 angular.module('statuses').factory('Statuses', ['$resource',
 	function($resource) {
-        return $resource('statuses/:statusId',
-            {statusId: '@_id'}, {
+		return $resource('statuses/:statusId',
+			{statusId: '@_id'}, {
 			update: {
 				method: 'PUT'
 			}

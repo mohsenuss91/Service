@@ -3,7 +3,7 @@
         <h1>Nouveau Offre d'emploie</h1>
     </div>
     <div class="col-md-12  modal-body">
-        <form class="form-horizontal" name="CreateOfferForm" novalidate>
+        <form class="form-horizontal form-offre" name="CreateOfferForm" novalidate>
             <fieldset>
                 <div class="form-group">
                     <div data-ng-show="error" class="text-center text-danger">
@@ -14,21 +14,25 @@
                 </div>
 
                 <div class="form-group">
+                    <label class="control-label" for="entreprise">L'entreprise</label>
                     <div class="controls">
                         <input type="text" data-ng-model="entreprise" id="entreprise" class="form-control" placeholder="L'entreprise" required>
                     </div>
                 </div>
                 <div class="form-group">
+                    <label class="control-label" for="post">Le poste</label>
                     <div class="controls">
                         <input type="text" data-ng-model="poste" id="post" class="form-control" placeholder="Poste" required>
                     </div>
                 </div>
                 <div class="form-group">
+                    <label class="control-label">Les compétences</label>
                     <div class="controls">
                         <textarea ng-model="listCompetence" ng-list="&#10;" ng-trim="false" class="form-control" placeholder="Compétences necessaires"></textarea>
                     </div>
             </div>
                 <div class="form-group">
+                    <label class="control-label">Les documents</label>
                     <div class="controls">
                         <textarea ng-model="listDocument" ng-list="&#10;" ng-trim="false" class="form-control" placeholder="Documents nécessaires"></textarea>
                     </div>

@@ -6,20 +6,15 @@
     color: #73db68;
 }
 
-.glyphicon-trash {
+.glyphicon-pencil {
     margin-right: 10px;
 }
 
-.panel-body-offre{
-
-}
-
-.titre{
-    font-size: 22px;
+.panel-body {
+    font-size: large;
     font-weight: bold;
-    color: #02d4e5;
 }
 
-.form-offre{
-    margin: 2%;
+.like-body {
+    margin-left: 15px;
 }

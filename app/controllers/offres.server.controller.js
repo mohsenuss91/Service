@@ -74,13 +74,21 @@ exports.update = function(req, res) {
 exports.delete = function(req, res) {
 	var offre = req.offre ;
 
-	offre.remove(function(err) {
+    offre.remove(function(err) {
 		if (err) {
 			return res.status(400).send({
 				message: errorHandler.getErrorMessage(err)
 			});
 		} else {
-			res.jsonp(offre);
+            Contenu.findOneAndRemove({offre: req.offre._id}, function (err, contenu) {
+                if (err) {
+                    console.log(err);
+                    return res.send(err);
+                }
+                else {
+                    res.jsonp(offre);
+                }
+            })
 		}
 	});
 };
