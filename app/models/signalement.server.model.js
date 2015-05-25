@@ -20,7 +20,7 @@ var SignalementSchema = new Schema({
         type: Schema.ObjectId,
         ref: 'Contenu'
     },
-    user_signaler: {
+    user_signale: {
         type: Schema.ObjectId,
         ref: 'User'
     },

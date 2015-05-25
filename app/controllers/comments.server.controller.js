@@ -6,7 +6,7 @@
 var mongoose = require('mongoose'),
     errorHandler = require('./errors.server.controller'),
     Comment = mongoose.model('Comment'),
-    Status = mongoose.model('Status'),
+    Contenu = mongoose.model('Contenu'),
     _ = require('lodash');
 
 /**
@@ -16,21 +16,22 @@ exports.create = function (req, res) {
     var comment = new Comment(req.body);
     comment.user = req.user;
 
-    comment.status = req.status;
-    //console.log('req.status: ' + comment.status );
+    comment.contenu = req.contenu;
+    console.log('req.contenu: ' + comment.contenu);
 
     comment.save(function (err, comment) {
-        if (err) return res.status(400).send({message: errorHandler.getErrorMessage(err)});
+        if (err) return res.contenu(400).send({message: errorHandler.getErrorMessage(err)});
 
-        Status.findByIdAndUpdate(
-            comment.status,
-            {'$push': {comments: {'_id': comment._id}}},
-            function (err, status) {
-                //status.save();
+        Contenu.findByIdAndUpdate(
+            comment.contenu,
+            {'$push': {commentaires: {'_id': comment._id}}},
+            function (err, contenu) {
+                //contenu.save();
+                res.json(comment);
             }
         );
 
-        res.json(comment);
+
     });
 };
 
@@ -77,21 +78,21 @@ exports.delete = function (req, res) {
 
     comment.remove(function (err) {
         if (err) {
-            return res.status(400).send({
+            return res.contenu(400).send({
                 message: errorHandler.getErrorMessage(err)
             });
         } else {
-            Status.findByIdAndUpdate(
-                req.status._id,
+            Contenu.findByIdAndUpdate(
+                req.contenu._id,
                 {$pull: {comments: comment._id}},
-                function (err, status) {
+                function (err, contenu) {
                     if (err) {
                         console.log(err);
                         return res.send(err);
                     }
                     else {
                         console.log("remove request recieved from server  " + comment._id);
-                        res.jsonp(status);
+                        res.jsonp(contenu);
                     }
                 }
             );
@@ -104,9 +105,9 @@ exports.delete = function (req, res) {
  */
 exports.list = function (req, res) {
     console.log("comments server");
-    Comment.find({status: req.status}).sort('created').populate('user', 'displayName').exec(function (err, comments) {
+    Comment.find({contenu: req.contenu}).sort('created').populate('user', 'displayName').exec(function (err, comments) {
         if (err) {
-            return res.status(400).send({
+            return res.contenu(400).send({
                 message: errorHandler.getErrorMessage(err)
             });
         } else {
@@ -132,7 +133,7 @@ exports.commentByID = function (req, res, next, id) {
  */
 exports.hasAuthorization = function (req, res, next) {
     if (req.comment.user.id !== req.user.id) {
-        return res.status(403).send('User is not authorized');
+        return res.contenu(403).send('User is not authorized');
     }
     next();
 };

@@ -72,8 +72,10 @@ exports.delete = function(req, res) {
 /**
  * List of Contenus
  */
-exports.list = function(req, res) { 
-	Contenu.find().sort('-created').populate('user', 'displayName').exec(function(err, contenus) {
+exports.list = function(req, res) {
+	Contenu.find().sort('-created').populate('user', 'displayName')
+		.populate('likes', 'user')
+		.exec(function (err, contenus) {
 		if (err) {
 			return res.status(400).send({
 				message: errorHandler.getErrorMessage(err)

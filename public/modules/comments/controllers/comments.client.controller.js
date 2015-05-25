@@ -6,18 +6,18 @@ angular.module('comments').controller('CommentsController', ['$scope', '$http', 
         $scope.authentication = Authentication;
 
         // Create new Comment
-        this.createCommentStatus = function (status) {
+        this.createCommentContenu = function (contenu) {
             // Create new Comment object
             var comment = new Comments({
                 name: $scope.name
             });
 
-            console.log("CommentsController is here" + status._id);
+            console.log("commentaire a été " + contenu._id);
 
             // Redirect after save
-            comment.$save({statusId: status._id},
+            comment.$save({contenuId: contenu._id},
                 function (response) {
-                    //$location.path('statuses/' + status._id);
+                    //$location.path('contenues/' + contenu._id);
 
                     // Clear form fields
                     $scope.name = '';
@@ -26,31 +26,31 @@ angular.module('comments').controller('CommentsController', ['$scope', '$http', 
                     $scope.error = errorResponse.data.message;
                 });
 
-            this.find(status);
+            this.find(contenu);
         };
 
         // Remove existing Comment
-        this.removeCommentStatus = function (status, comment) {
-            $http.delete("/statuses/" + status._id + "/comments/" + comment._id).success(function (response) {
+        this.removeCommentContenu = function (contenu, comment) {
+            $http.delete("/contenus/" + contenu._id + "/comments/" + comment._id).success(function (response) {
                 //console.log("confirme demande de suppression delete		" + response.comment._id);
             });
             //console.log("confirme demande de suppression delete		" + response._id + "   " + $scope.commentsList.length);
-            this.find(status);
+            this.find(contenu);
         };
 
         // Update existing Comment
-        this.updateCommentStatus = function (status, comment) {
+        this.updateCommentContenu = function (contenu, comment) {
             var newComment = comment;
             //console.log("comment  " + comment.name);
-            $http.put('statuses/' + status._id + '/comments/' + comment._id, newComment)
+            $http.put('contenus/' + contenu._id + '/comments/' + comment._id, newComment)
                 .success(function (response) {
                     console.log("comment  " + response.name + " updated");
                 });
         };
 
         // Find a list of Comments
-        this.find = function (status) {
-            $http.get('statuses/' + status._id + '/comments/')
+        this.find = function (contenu) {
+            $http.get('contenus/' + contenu._id + '/comments/')
                 .success(function (response) {
                     console.log("i got the data contactList  " + response.length);
                     $scope.commentsList = response;

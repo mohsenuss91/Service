@@ -24,9 +24,9 @@ var CommentSchema = new Schema({
         type: Schema.ObjectId,
         ref: 'User'
     },
-    status: {
+    contenu: {
         type: Schema.ObjectId,
-        ref: 'Status'
+        ref: 'Contenu'
     }
 });
 

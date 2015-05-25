@@ -6,7 +6,7 @@
 var mongoose = require('mongoose'),
     errorHandler = require('./errors.server.controller'),
     Like = mongoose.model('Like'),
-    Status = mongoose.model('Status'),
+    Contenu = mongoose.model('Contenu'),
     _ = require('lodash');
 
 /**
@@ -15,18 +15,18 @@ var mongoose = require('mongoose'),
 exports.create = function (req, res) {
     var like = new Like(req.body);
     like.user = req.user;
-    //like.status = req.body.
+    //like.contenu = req.body.
 
-    console.log('req.status: ' + like.status);
+    console.log('req.contenu: ' + like.contenu);
 
     like.save(function (err, like) {
         if (err) {
-            return res.status(400).send({message: errorHandler.getErrorMessage(err)});
+            return res.contenu(400).send({message: errorHandler.getErrorMessage(err)});
         } else {
-            Status.findByIdAndUpdate(
-                like.status,
+            Contenu.findByIdAndUpdate(
+                like.contenu,
                 {'$push': {likes: {'_id': like._id}}},
-                function (err, status) {
+                function (err, contenu) {
                     res.json(like);
                 }
             );
@@ -51,7 +51,7 @@ exports.update = function (req, res) {
 
     like.save(function (err) {
         if (err) {
-            return res.status(400).send({
+            return res.contenu(400).send({
                 message: errorHandler.getErrorMessage(err)
             });
         } else {
@@ -64,26 +64,26 @@ exports.update = function (req, res) {
  * Delete an Like
  */
 exports.delete = function (req, res) {
-    //var status = req.stat ;
-    console.log("likes server removing from status  and user  " + req.user._id + " " + req.status._id);
-    Like.findOneAndRemove({$and: [{status: req.status._id}, {user: req.user._id}]}, function (err, like) {
+    //var contenu = req.stat ;
+    console.log("likes server removing from contenu  and user  " + req.user._id + " " + req.contenu._id);
+    Like.findOneAndRemove({$and: [{contenu: req.contenu._id}, {user: req.user._id}]}, function (err, like) {
         if (err) {
-            return res.status(400).send({
+            return res.contenu(400).send({
                 message: errorHandler.getErrorMessage(err)
             });
         } else {
-            Status.findByIdAndUpdate(
-                req.status._id,
+            Contenu.findByIdAndUpdate(
+                req.contenu._id,
                 {'$pull': {likes: like._id}},
-                function (err, status) {
+                function (err, contenu) {
                     if (err) {
-                        return res.status(400).send({
+                        return res.contenu(400).send({
                             message: errorHandler.getErrorMessage(err)
                         });
                     } else {
                         console.log("remove request recieved from server  " + like._id);
-                        status.save();
-                        res.jsonp(status);
+                        contenu.save();
+                        res.jsonp(contenu);
                     }
                 }
             );
@@ -96,10 +96,10 @@ exports.delete = function (req, res) {
  * List of Likes
  */
 exports.list = function (req, res) {
-    //console.log("likes server GET from status  and user  "+req.status._id);
-    Like.find({status: req.status}).sort('-created').populate('user', 'displayName').exec(function (err, likes) {
+    //console.log("likes server GET from contenu  and user  "+req.contenu._id);
+    Like.find({contenu: req.contenu}).sort('-created').populate('user', 'displayName').exec(function (err, likes) {
         if (err) {
-            return res.status(400).send({
+            return res.contenu(400).send({
                 message: errorHandler.getErrorMessage(err)
             });
         } else {
@@ -125,7 +125,7 @@ exports.likeByID = function (req, res, next, id) {
  */
 exports.hasAuthorization = function (req, res, next) {
     if (req.like.user.id !== req.user.id) {
-        return res.status(403).send('User is not authorized');
+        return res.contenu(403).send('User is not authorized');
     }
     next();
 };

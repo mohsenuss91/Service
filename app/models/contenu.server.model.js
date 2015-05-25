@@ -11,11 +11,9 @@ var mongoose = require('mongoose'),
  */
 var ContenuSchema = new Schema({
     typeC: {
-        type: {
-            type: String,
-            enum: ['status', 'image', 'video', 'offre', 'evenement', 'emploi', 'cours', 'commentaire']
-        },
-        default: ['status']
+        type: String,
+        enum: ['status', 'image', 'video', 'offre', 'evenement', 'emploi', 'cours', 'commentaire'],
+        default: 'status'
     },
     name: {
         type: String,
@@ -26,9 +24,13 @@ var ContenuSchema = new Schema({
         type: Schema.ObjectId,
         ref: 'User'
     }],
+    likes: [{
+        type: Schema.ObjectId,
+        ref: 'Like'
+    }],
     commentaires: [{
         type: Schema.ObjectId,
-        ref: 'Contenu'
+        ref: 'Comment'
     }],
     pubImag: {
         type: Schema.ObjectId,
