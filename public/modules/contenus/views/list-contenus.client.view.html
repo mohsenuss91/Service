@@ -24,14 +24,17 @@
                 data-ng-init="LikesCtrl.find(contenu)">
                 <div class="media">
                     <div class="media-body">
-                        <a href="" class="comment-author like-body" ng-click=" LikesCtrl.createLikeContenu(contenu)">
-                            <span ng-hide="aime">j'aime</span></a>
-                        <a href="" class="comment-author" ng-click="LikesCtrl.removeLikeContenu(contenu)">
-                            <span ng-show="aime">je n'aime plus</span></a>
+                        <button class="btn btn-primary btn-circle" data-toggle="tooltip"
+                                ng-hide="aime" ng-click=" LikesCtrl.createLikeContenu(contenu)"
+                                data-original-title="{{list}}" data-placement="top">
+                            <span class="fa fa-fw fa-thumbs-o-up"></span>
+                        </button>
+                        <button class="btn btn-primary btn-circle" data-toggle="tooltip"
+                                ng-show="aime" ng-click=" LikesCtrl.removeLikeContenu(contenu)"
+                                data-original-title="{{list}}" data-placement="top">
+                            <span class="fa fa-fw fa-thumbs-o-down"></span>
+                        </button>
                     </div>
-                </div>
-                <div class="view-all-comments"><a href="#"><i class="fa fa-comments-o"></i> afficher tout</a> 10
-                    comments
                 </div>
             </ul>
             <ul class="comments" data-ng-controller="CommentsController as CommentsCtrl"

@@ -5,7 +5,7 @@
  */
 var mongoose = require('mongoose'),
 	Schema = mongoose.Schema;
-
+var deepPopulate = require('mongoose-deep-populate');
 /**
  * Contenu Schema
  */
@@ -84,5 +84,14 @@ var ContenuSchema = new Schema({
         ref: 'Categorie'
     }]
 });
-
+ContenuSchema.plugin(deepPopulate, {
+    populate: {
+        'likes': {
+            select: 'user'
+        },
+        'likes.user': {
+            select: 'displayName'
+        }
+    }
+});
 mongoose.model('Contenu', ContenuSchema);

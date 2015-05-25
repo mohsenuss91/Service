@@ -12,10 +12,11 @@ angular.module('likes').controller('LikesController', ['$scope', '$http', '$stat
                 contenu: contenu._id
             });
 
-            //console.log("LikesController is here" + contenu._id);
-            // Redirect after save
             like.$save({contenuId: contenu._id},
                 function (response) {
+                    response.user = $scope.authentication.user;
+                    $scope.likesList.push(response);
+                    listLike();
                     $scope.aime = true;
                 }, function (errorResponse) {
                     $scope.error = errorResponse.data.message;
@@ -27,6 +28,8 @@ angular.module('likes').controller('LikesController', ['$scope', '$http', '$stat
         this.removeLikeContenu = function (contenu) {
             //console.log("like delete		" + contenu._id);
             $http.delete("contenus/" + contenu._id + "/likes/").success(function (response) {
+                $scope.likesList.pop($scope.rank);
+                listLike();
                 $scope.aime = false;
                 //console.log("confirme demande de suppression delete		" + response.comment._id);
             });
@@ -49,18 +52,7 @@ angular.module('likes').controller('LikesController', ['$scope', '$http', '$stat
                 .success(function (response) {
                     //console.log("i got the data likesList  " + response.length);
                     $scope.likesList = response;
-                    var like;
-                    //console.log(" nember of likes for contenu ");
-                    var i;
-                    for (i = 0; i < $scope.likesList.length; i++) {
-                        //if($scope.authentication.user._id == like.user)
-                        if ($scope.authentication.user._id == $scope.likesList[i].user._id) {
-                            console.log(" found of likes for contenu " + $scope.likesList[i].user._id);
-                            $scope.aime = true;
-                        }
-
-                    }
-                    ;
+                    listLike(response);
                 });
             //$scope.likes = Likes.query();
         };
@@ -71,5 +63,20 @@ angular.module('likes').controller('LikesController', ['$scope', '$http', '$stat
                 likeId: $stateParams.likeId
             });
         };
+        function listLike() {
+            var like;
+            //console.log(" nember of likes for contenu ");
+            var i;
+            $scope.list = "";
+            for (i = 0; i < $scope.likesList.length; i++) {
+                if ($scope.authentication.user._id == $scope.likesList[i].user._id) {
+                    $scope.rank = i;
+                    $scope.list += "Vous, ";
+                    $scope.aime = true;
+                } else
+                    $scope.list += $scope.likesList[i].user.displayName + ", ";
+
+            }
+        }
     }
 ]);
