@@ -14,9 +14,9 @@ var should = require('should'),
 var credentials, user, pubVideo;
 
 /**
- * Pub video routes tests
+ * Pub video routes datas
  */
-describe('Pub video CRUD tests', function() {
+describe('Pub video CRUD datas', function() {
 	beforeEach(function(done) {
 		// Create user credentials
 		credentials = {

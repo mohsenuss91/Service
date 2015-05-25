@@ -14,7 +14,7 @@ var should = require('should'),
 var user, notification;
 
 /**
- * Unit tests
+ * Unit datas
  */
 describe('Notification Model Unit Tests:', function() {
 	beforeEach(function(done) {

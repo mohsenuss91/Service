@@ -1030,7 +1030,7 @@ setDocument = Sizzle.setDocument = function( node ) {
 	document = doc;
 	docElem = doc.documentElement;
 
-	// Support tests
+	// Support datas
 	documentIsHTML = !isXML( doc );
 
 	// Support: IE>8
@@ -1195,7 +1195,7 @@ setDocument = Sizzle.setDocument = function( node ) {
 
 			// Webkit/Opera - :checked should return selected option elements
 			// http://www.w3.org/TR/2011/REC-css3-selectors-20110929/#checked
-			// IE8 throws error here and will not see later tests
+			// IE8 throws error here and will not see later datas
 			if ( !div.querySelectorAll(":checked").length ) {
 				rbuggyQSA.push(":checked");
 			}
@@ -1215,7 +1215,7 @@ setDocument = Sizzle.setDocument = function( node ) {
 			}
 
 			// FF 3.5 - :enabled/:disabled and hidden elements (hidden elements are still enabled)
-			// IE8 throws error here and will not see later tests
+			// IE8 throws error here and will not see later datas
 			if ( !div.querySelectorAll(":enabled").length ) {
 				rbuggyQSA.push( ":enabled", ":disabled" );
 			}
@@ -5612,7 +5612,7 @@ function addGetHookIf( conditionFn, hookFn ) {
 		"position:absolute";
 	container.appendChild( div );
 
-	// Executing both pixelPosition & boxSizingReliable tests require only one layout
+	// Executing both pixelPosition & boxSizingReliable datas require only one layout
 	// so they're executed at the same time to save the second computation.
 	function computePixelPositionAndBoxSizingReliable() {
 		div.style.cssText =

@@ -14,9 +14,9 @@ var should = require('should'),
 var credentials, user, pubImag;
 
 /**
- * Pub imag routes tests
+ * Pub imag routes datas
  */
-describe('Pub imag CRUD tests', function() {
+describe('Pub imag CRUD datas', function() {
 	beforeEach(function(done) {
 		// Create user credentials
 		credentials = {

@@ -14,9 +14,9 @@ var should = require('should'),
 var credentials, user, emploie;
 
 /**
- * Emploie routes tests
+ * Emploie routes datas
  */
-describe('Emploie CRUD tests', function() {
+describe('Emploie CRUD datas', function() {
 	beforeEach(function(done) {
 		// Create user credentials
 		credentials = {

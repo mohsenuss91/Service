@@ -6,7 +6,7 @@ module.exports = function(app) {
 
     app.route('/pub-videos/create')
         .post(pubVideos.upload);
-	// Pub videos Routes
+        // Pub videos Routes
 	app.route('/pub-videos')
 		.get(pubVideos.list)
 		.post(users.requiresLogin, pubVideos.create);

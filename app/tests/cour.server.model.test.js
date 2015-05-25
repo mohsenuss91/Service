@@ -14,7 +14,7 @@ var should = require('should'),
 var user, cour;
 
 /**
- * Unit tests
+ * Unit datas
  */
 describe('Cour Model Unit Tests:', function() {
 	beforeEach(function(done) {

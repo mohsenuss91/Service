@@ -1,9 +1,9 @@
 'use strict';
 
 //Tests service used to communicate Tests REST endpoints
-angular.module('tests').factory('Tests', ['$resource',
+angular.module('dataVideos').factory('DataVideos', ['$resource',
 	function($resource) {
-		return $resource('tests/:testId', { testId: '@_id'
+		return $resource('dataVideos/:dataVideoId', { testId: '@_id'
 		}, {
 			update: {
 				method: 'PUT'

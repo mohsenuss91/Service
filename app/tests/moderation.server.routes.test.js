@@ -14,9 +14,9 @@ var should = require('should'),
 var credentials, user, moderation;
 
 /**
- * Moderation routes tests
+ * Moderation routes datas
  */
-describe('Moderation CRUD tests', function() {
+describe('Moderation CRUD datas', function() {
 	beforeEach(function(done) {
 		// Create user credentials
 		credentials = {

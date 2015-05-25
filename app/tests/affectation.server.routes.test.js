@@ -14,9 +14,9 @@ var should = require('should'),
 var credentials, user, affectation;
 
 /**
- * Affectation routes tests
+ * Affectation routes datas
  */
-describe('Affectation CRUD tests', function() {
+describe('Affectation CRUD datas', function() {
 	beforeEach(function(done) {
 		// Create user credentials
 		credentials = {

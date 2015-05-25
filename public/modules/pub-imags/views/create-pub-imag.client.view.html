@@ -13,13 +13,13 @@
                 </li>
             </ul>
             <div class="panel-body">
-                <div class="tab-pane" id="tab1">
+                <div class="tab-pane" id="tab1" >
                     <form class="form-horizontal " ng-submit="upload(files)" novalidate >
                         <fieldset>
                             <div class="inline">
                                 <div class="col-xs-6">
                                     <div class="thumbnail" >
-                                        <img id='image' src="/images/260x180.png"  >
+                                        <img id='image' ng-src={{image_data_thumbnail}} >
                                     </div>
                                 </div>
 
@@ -63,7 +63,12 @@
                 <span data-ng-bind="pubImag.user.displayName"></span>
             </small>
             <h1 data-ng-bind="pubImag.description"></h1>
-            <div class="thumbnail"><img src="{{pubImag.file.namefile}}" /></div>
+            <div class="col-xs-12">
+                <div class="thumbnail" >
+                    <img  ng-src={{pubImag.image_data_thumbnail}} >
+                </div>
+            </div>
+
         </a>
     </div>
 </section>

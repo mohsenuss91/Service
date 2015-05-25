@@ -14,7 +14,7 @@ var should = require('should'),
 var user, pubVideo;
 
 /**
- * Unit tests
+ * Unit datas
  */
 describe('Pub video Model Unit Tests:', function() {
 	beforeEach(function(done) {

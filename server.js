@@ -11,7 +11,6 @@ var init = require('./config/init')(),
  * Main application entry file.
  * Please note that the order of loading is important.
  */
-
 // Bootstrap db connection
 var db = mongoose.connect(config.db.uri, config.db.options, function(err) {
 	if (err) {
@@ -27,6 +26,7 @@ mongoose.connection.on('error', function(err) {
 
 // Init the express application
 var app = require('./config/express')(db);
+
 
 // Bootstrap passport config
 require('./config/passport')();

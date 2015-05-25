@@ -14,7 +14,7 @@ var should = require('should'),
 var user, fileImags;
 
 /**
- * Unit tests
+ * Unit datas
  */
 describe('File imags Model Unit Tests:', function() {
 	beforeEach(function(done) {

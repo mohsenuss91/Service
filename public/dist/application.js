@@ -919,9 +919,9 @@ angular.module('statuses').factory('Statuses', ['$resource',
 angular.module('tests').run(['Menus',
 	function(Menus) {
 		// Set top bar menu items
-		Menus.addMenuItem('topbar', 'Tests', 'tests', 'dropdown', '/tests(/create)?');
+		Menus.addMenuItem('topbar', 'Tests', 'tests', 'dropdown', '/datas(/create)?');
 		Menus.addSubMenuItem('topbar', 'tests', 'List Tests', 'tests');
-		Menus.addSubMenuItem('topbar', 'tests', 'New Test', 'tests/create');
+		Menus.addSubMenuItem('topbar', 'tests', 'New Test', 'datas/create');
 	}
 ]);
 'use strict';
@@ -932,20 +932,20 @@ angular.module('tests').config(['$stateProvider',
 		// Tests state routing
 		$stateProvider.
 		state('listTests', {
-			url: '/tests',
-			templateUrl: 'modules/tests/views/list-tests.client.view.html'
+			url: '/datas',
+			templateUrl: 'modules/datas/views/list-datas.client.view.html'
 		}).
 		state('createTest', {
-			url: '/tests/create',
-			templateUrl: 'modules/tests/views/create-test.client.view.html'
+			url: '/datas/create',
+			templateUrl: 'modules/datas/views/create-test.client.view.html'
 		}).
 		state('viewTest', {
-			url: '/tests/:testId',
-			templateUrl: 'modules/tests/views/view-test.client.view.html'
+			url: '/datas/:testId',
+			templateUrl: 'modules/datas/views/view-test.client.view.html'
 		}).
 		state('editTest', {
-			url: '/tests/:testId/edit',
-			templateUrl: 'modules/tests/views/edit-test.client.view.html'
+			url: '/datas/:testId/edit',
+			templateUrl: 'modules/datas/views/edit-test.client.view.html'
 		});
 	}
 ]);
@@ -965,7 +965,7 @@ angular.module('tests').controller('TestsController', ['$scope', '$stateParams',
 
 			// Redirect after save
 			test.$save(function(response) {
-				$location.path('tests/' + response._id);
+				$location.path('datas/' + response._id);
 
 				// Clear form fields
 				$scope.name = '';
@@ -996,7 +996,7 @@ angular.module('tests').controller('TestsController', ['$scope', '$stateParams',
 			var test = $scope.test;
 
 			test.$update(function() {
-				$location.path('tests/' + test._id);
+				$location.path('datas/' + test._id);
 			}, function(errorResponse) {
 				$scope.error = errorResponse.data.message;
 			});
@@ -1020,7 +1020,7 @@ angular.module('tests').controller('TestsController', ['$scope', '$stateParams',
 //Tests service used to communicate Tests REST endpoints
 angular.module('tests').factory('Tests', ['$resource',
 	function($resource) {
-		return $resource('tests/:testId', { testId: '@_id'
+		return $resource('datas/:testId', { testId: '@_id'
 		}, {
 			update: {
 				method: 'PUT'

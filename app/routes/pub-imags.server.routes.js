@@ -6,6 +6,7 @@ module.exports = function(app) {
 
     app.route('/pub-imags/create')
         .post(pubImags.upload);
+
 	// Pub imags Routes
 	app.route('/pub-imags')
 		.get(pubImags.list)

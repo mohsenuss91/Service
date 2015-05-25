@@ -14,9 +14,9 @@ var should = require('should'),
 var credentials, user, signalement;
 
 /**
- * Signalement routes tests
+ * Signalement routes datas
  */
-describe('Signalement CRUD tests', function() {
+describe('Signalement CRUD datas', function() {
 	beforeEach(function(done) {
 		// Create user credentials
 		credentials = {

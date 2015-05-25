@@ -14,9 +14,9 @@ var should = require('should'),
 var credentials, user, notification;
 
 /**
- * Notification routes tests
+ * Notification routes datas
  */
-describe('Notification CRUD tests', function() {
+describe('Notification CRUD datas', function() {
 	beforeEach(function(done) {
 		// Create user credentials
 		credentials = {
