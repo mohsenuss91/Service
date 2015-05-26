@@ -1,9 +1,9 @@
-<section data-ng-controller="EvenementsCreateController as EvenementsCtrl">
+<section>
     <div class="modal-header">
         <h1>Nouveau Evenement</h1>
     </div>
     <div class="col-md-12  modal-body">
-        <form class="form-horizontal" name="CreateEventForm" novalidate>
+        <form class="form-horizontal form-event" name="CreateEventForm" novalidate>
             <fieldset>
 
                 <div class="form-group">
@@ -15,26 +15,31 @@
                 </div>
 
                 <div class="form-group">
+                    <label class="control-label" for="titre">Le titre</label>
                     <div class="controls">
                         <input type="text" data-ng-model="newEventTitle" id="titre" class="form-control" placeholder="Titre" required>
                     </div>
                 </div>
                 <div class="form-group">
+                    <label class="control-label" for="description">Le description</label>
                     <div class="controls">
                         <textarea cols="3" data-ng-model="newEventDescription" id="description" class="form-control" placeholder="Description" required></textarea>
                     </div>
                 </div>
                 <div class="form-group">
+                    <label class="control-label" for="lieu">Le lieu</label>
                     <div class="controls">
                         <input type="text" data-ng-model="newEventPlace" id="lieu" class="form-control" placeholder="Lieu" required>
                     </div>
                 </div>
 
                 <div class="col-md-3">
+                    <label class="control-label">La date</label>
                     <p class="input-group">
                         <input type="date" class="form-control" datepicker-popup ng-model="dt" is-open="opened" min-date="minDate" max-date="'2015-06-22'" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
 
                     </p>
+                    <label class="control-label">L'heure</label>
                     <timepicker ng-model="mytime" hour-step="hstep" minute-step="mstep" show-meridian="ismeridian"></timepicker>
                 </div>
 
@@ -46,7 +51,7 @@
         </form>
     </div>
     <div class="modal-footer">
-        <button class="btn btn-success btn-lg" ng-click="EvenementsCtrl.create(); ok()" ng-disabled="CreateEventForm.$invalid">Créer</button>
+        <button class="btn btn-success btn-lg" ng-click="ok()" ng-disabled="CreateEventForm.$invalid">Créer</button>
         <button class="btn btn-warning btn-lg" ng-click="cancel()">Cancel</button>
     </div>
 </section>

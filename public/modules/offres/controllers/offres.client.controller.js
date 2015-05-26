@@ -51,10 +51,7 @@ angular.module('offres').controller('OffresController', ['$scope', '$http', '$st
 
         // Open a modal window to update a single event record
         this.modalUpdate = function(size, selectedOffre){
-            console.log("yow yow from modalUpdate");
-            /*$scope.mytime = new Date();
-             $scope.mytime.setHours( selectedEvent.date.getHours());
-             $scope.mytime.setMinutes(selectedEvent.date.getMinutes());*/
+            //console.log("yow yow from modalUpdate");
             var modalInstance = $modal.open({
                 templateUrl:'modules/offres/views/edit-offre.client.view.html',
                 controller: function($scope, $modalInstance, offre) {
@@ -87,29 +84,18 @@ angular.module('offres').controller('OffresController', ['$scope', '$http', '$st
         $scope.find = this.find = function() {
             $http.get('offres/')
                 .success(function (response) {
-                    console.log("i got the data offresList  " + response.length);
+                    //console.log("i got the data offresList  " + response.length);
                     $scope.offresList = response;
                     //$scope.nbreComments = $scope.commentsList.length;
                 });
-            //$scope.evenements = Evenements.query();
-            //console.log(" lenght of evenements list "+Evenements.query().length);
         };
 
         // Remove existing Evenement
         this.remove = function(offre) {
-            if ( offre ) {
-                offre.$remove();
-
-                for (var i in $scope.offres) {
-                    if ($scope.offres [i] === offre) {
-                        $scope.offres.splice(i, 1);
-                    }
-                }
-            } else {
-                $scope.offres.$remove(function() {
-                    //$location.path('offres');
-                });
-            }
+            $http.delete("/offres/" + offre._id).success(function (response) {
+                $scope.find();
+                //console.log("confirme demande de suppression		" + response.comment._id);
+            });
         };
 
         // Find existing Evenement
@@ -120,30 +106,6 @@ angular.module('offres').controller('OffresController', ['$scope', '$http', '$st
         };
     }]);
 
-angular.module('offres').controller('OffresCreateController', ['$scope', 'Offres',
-    function($scope, Offres) {
-
-        // Create new Evenement
-                this.create = function() {
-            // Create new Evenement object
-            var offre = new Offres ({
-                entreprise: $scope.entreprise,
-                post: $scope.poste,
-                competences: $scope.listCompetence,
-                documents : $scope.listDocument
-            });
-
-
-            // Redirect after save
-            offre.$save(function(response) {
-                //console.log("yow yow event has been created ");
-            }, function(errorResponse) {
-                $scope.error = errorResponse.data.message;
-            });
-        };
-    }
-]);
-
 
 angular.module('offres').controller('OffresUpdateController', ['$scope', 'Offres', '$http',
     function($scope, Offres, $http) {
@@ -151,18 +113,11 @@ angular.module('offres').controller('OffresUpdateController', ['$scope', 'Offres
         // Update existing Evenement
         this.update = function(updatedOffre) {
             var offre = updatedOffre;
-
-
-             console.log("updating of evenement "+offre.competences);
+             //console.log("updating of evenement "+offre.competences);
              $http.put('offres/' + offre._id, offre)
              .success(function (response) {
 
              });
-             /*evenement.$update(function() {
-             //$location.path('evenements/' + evenement._id);
-             }, function(errorResponse) {
-             $scope.error = errorResponse.data.message;
-             });*/
         };
     }
 ]);

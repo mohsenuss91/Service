@@ -87,15 +87,23 @@ exports.update = function(req, res) {
 exports.delete = function(req, res) {
 	var evenement = req.evenement ;
 
-	evenement.remove(function(err) {
-		if (err) {
-			return res.status(400).send({
-				message: errorHandler.getErrorMessage(err)
-			});
-		} else {
-			res.jsonp(evenement);
-		}
-	});
+    evenement.remove(function(err) {
+        if (err) {
+            return res.status(400).send({
+                message: errorHandler.getErrorMessage(err)
+            });
+        } else {
+            Contenu.findOneAndRemove({evenement: req.evenement._id}, function (err, contenu) {
+                if (err) {
+                    console.log(err);
+                    return res.send(err);
+                }
+                else {
+                    res.jsonp(evenement);
+                }
+            })
+        }
+    });
 };
 
 /**
