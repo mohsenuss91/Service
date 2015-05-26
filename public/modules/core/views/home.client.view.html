@@ -3,10 +3,10 @@
 		<a id="brand" href="/#!/">Esi-Life</a>
 
 		<div id="menu" data-scrollable>
-			<ul data-ng-if="menu.shouldRender(authentication.user);">
+			<ul >
 				<li class="category">Navigation</li>
 				<li data-ng-repeat="item in menu.items | orderBy: 'position'"
-					data-ng-if="item.shouldRender(authentication.user);" ng-switch="item.menuItemType"
+					ng-switch="item.menuItemType"
 					ui-route="{{item.uiRoute}}" ng-class="{active: ($uiRoute)}"
 						>
 					<a ng-switch-default href="/#!/{{item.link}}"><i class="{{item.menuItemClass}}"></i>
