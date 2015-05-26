@@ -3,25 +3,14 @@
 		<a id="brand" href="/#!/">Esi-Life</a>
 
 		<div id="menu" data-scrollable>
-			<ul>
+			<ul data-ng-if="menu.shouldRender(authentication.user);">
 				<li class="category">Navigation</li>
-				<li class="{% if (page.slug == '') %} active {% endif %}">
-					<a href="/#!/statuses"><i class="icon-ship-wheel"></i> Status</a>
-				</li>
-				<li class="{% if (page.slug == 'profile') %} active {% endif %}">
-					<a href="/#!/pub-imags"><i class="icon-user-1"></i> Images</a>
-				</li>
-				<li class="{% if (page.slug == 'users') %} active{% endif %}">
-					<a href="/#!/pub-videos"><i class="fa fa-group"></i> Videos</a>
-				</li>
-				<li class="{% if (page.slug == 'messages') %} active{% endif %}">
-					<a href="/#!/offres"><i class="icon-comment-fill-1"></i> Offres</a>
-				</li>
-				<li class="{% if (page.slug == 'messages') %} active{% endif %}">
-					<a href="/#!/evenements"><i class="icon-comment-fill-1"></i> Evenements</a>
-				</li>
-				<li class="{% if (page.slug == 'login') %} active{% endif %}">
-					<a href="/#!/signIn"><i class="icon-lock-fill"></i> S'identifier</a>
+				<li data-ng-repeat="item in menu.items | orderBy: 'position'"
+					data-ng-if="item.shouldRender(authentication.user);" ng-switch="item.menuItemType"
+					ui-route="{{item.uiRoute}}" ng-class="{active: ($uiRoute)}"
+						>
+					<a ng-switch-default href="/#!/{{item.link}}"><i class="{{item.menuItemClass}}"></i>
+						<span data-ng-bind="item.title"></span></a>
 				</li>
 				<li class="category border top">Fils d'actualités</li>
 				<li class="reset">
