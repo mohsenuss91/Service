@@ -3,10 +3,10 @@
         <h1>Offres</h1>
     </div>
     <div class="text-center">
-        <a ng-click="OffresCtrl.modalCreate('lg')">Créer un offre d'emploie</a>?
+        <a ng-click="OffresCtrl.modalCreate('sm')">Créer un offre d'emploie</a>?
     </div>
-    <div class="list-group">
-        <div data-ng-repeat="offre in offresList" class="list-group-item">
+    <div class="timeline-block">
+        <div data-ng-repeat="offre in offresList" class="panel panel-default">
             <div class="panel-heading">
                 <div class="media">
                     <a href="" class="pull-left"><img src="images/people/50/guy-2.jpg" class="media-object"></a>
@@ -18,7 +18,7 @@
                         <a class="pull-right text-muted" data-ng-click="OffresCtrl.remove(offre)">
                             <i class="glyphicon glyphicon-trash"></i>
                         </a>
-                        <a class="nom-user"><span data-ng-bind="offre.user.displayName"></span></a><br>
+                        <a class="nom-user"><span data-ng-bind="offre.user.displayName"></span></a>
                         <span>on <span data-ng-bind="offre.created | date:'medium'"></span></span>
                     </div>
                 </div>
