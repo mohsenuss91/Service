@@ -14,7 +14,7 @@ var should = require('should'),
 var user, evenement;
 
 /**
- * Unit tests
+ * Unit datas
  */
 describe('Evenement Model Unit Tests:', function() {
 	beforeEach(function(done) {

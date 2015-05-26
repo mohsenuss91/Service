@@ -14,9 +14,9 @@ var should = require('should'),
 var credentials, user, contenu;
 
 /**
- * Contenu routes tests
+ * Contenu routes datas
  */
-describe('Contenu CRUD tests', function() {
+describe('Contenu CRUD datas', function() {
 	beforeEach(function(done) {
 		// Create user credentials
 		credentials = {

@@ -9,7 +9,7 @@ var mongoose = require('mongoose'),
 	errorHandler = require('./errors.server.controller'),
 	PubImag = mongoose.model('PubImag'),
 	_ = require('lodash');
-
+var Busboy = require('busboy');
 var conn = mongoose.connection;
 Grid.mongo = mongoose.mongo;
 
@@ -18,68 +18,114 @@ conn.once('open', function () {
     gfs = Grid(conn.db);
 });
 
-var file;
-var buffer;
-var buffer2;
 /**
  * Create a Pub imag
  */
 
-exports.upload = function (req, res) {
-    var data = req.files.file;
-    res.send(data);
-    res.end();
-};
+var im = require('imagemagick-stream');
 
-
-var _id_file;
-exports.create = function (req, res) {
-    var file = req.body.datafile.file;
-    var pubImageData = req.body.datapubImages;
-    var name = file.originalname;
-    var path = file.path.replace(/\//g, '/');
-    var writestream = gfs.createWriteStream({
-        filename: name
-    });
-    fs.createReadStream(path).pipe(writestream);
-    writestream.on('close', function (file) {
-        _id_file = file._id;
-        pubImageData.file.id_file_image = _id_file;
-        pubImageData.file.namefile = '/uploads/' + name;
-        var pubImag = new PubImag(pubImageData);
-        pubImag.user = req.user;
-        pubImag.save(function (err) {
-            if (err) {
-                return res.status(400).send({
-                    message: errorHandler.getErrorMessage(err)
-                });
-            } else {
-                res.jsonp(pubImag);
-                console.log(pubImag);
-            }
+exports.upload = function(req,res){
+    var resize = im().resize('400x400').quality(90);
+    var busboy = new Busboy({ headers: req.headers });
+    busboy.on('file', function(fieldname, file, filename, encoding, mimetype) {
+        var dataResp= {
+            originalFile : '',
+            data:'',
+            typeData : mimetype
+        };
+        var writeStreamOrginal = gfs.createWriteStream({
+            filename: filename+'original'
+        });
+        file.pipe(writeStreamOrginal);
+        writeStreamOrginal.on('close',function(originalFile){
+            dataResp.originalFile = originalFile;
+        });
+        var bufs = [];
+        file.pipe(resize).on('data',function(chunk){
+            bufs.push(chunk);
+        }).on('end',function(){
+            var fbuf = Buffer.concat(bufs);
+            var base64 = (fbuf.toString('base64'));
+            var data = 'data:'+mimetype+';base64,' + base64 + '';
+            dataResp.data = data;
+            res.jsonp(dataResp);
         });
     });
+    busboy.on('finish', function() {
+        console.log('uploade finish');
+    });
+    req.pipe(busboy);
 };
-/**
- * Show the current Pub imag
- */
-exports.read = function(req, res) {
-    gfs.findOne({_id: _id_file}, function (err, file) {
+
+
+exports.create = function(req, res) {
+    var pubImag = new PubImag(req.body);
+    pubImag.user = req.user;
+    pubImag.save(function (err) {
         if (err) {
             return res.status(400).send({
                 message: errorHandler.getErrorMessage(err)
             });
         } else {
-            if (file != null) {
-                var path = '/uploads/' + file.filename;
-                var writeStream = fs.createWriteStream('./public' + path);
-                var readStream = gfs.createReadStream({_id: _id_file});
-                readStream.pipe(writeStream);
-                readStream.on('close', function () {
-                    console.log('the file is readed complitelly ');
+            res.jsonp(pubImag);
+        }
+    });
+};
+/**
+ * Show the current Pub imag
+ */
+/**
+ * read object  file of image
+ * @param req
+ * @param res
+ */
+exports.read = function(req, res) {
+    var pubImag=req.pubImag;
+    res.jsonp(pubImag);
+};
+/**
+ * read object  file of image
+ * @param req
+ * @param res
+ */
+exports.readFile = function (req,res){
+    var pubImag=req.pubImag;
+    gfs.findOne({_id : pubImag.id_file_original},function (err, file) {
+        if(err){return res.status(400).send({
+            message: errorHandler.getErrorMessage(err)
+        });
+        }else{
+            if(file!=null){
+                res.jsonp(file);
+            }
+        };
+    })
+};
+/**
+ * read data  of image
+ * @param req
+ * @param res
+ */
+exports.readData = function(req, res) {
+    var pubImag=req.pubImag;
+    gfs.findOne({_id : pubImag.id_file_original},function (err, file) {
+        if(err){return res.status(400).send({
+            message: errorHandler.getErrorMessage(err)
+        });
+        }else{
+            if(file!=null){
+             var readStream = gfs.createReadStream({_id: pubImag.id_file_original});
+                var bufs = [];
+                readStream.on('data',function(chunk){
+                    bufs.push(chunk);
+                });
+                readStream.on('close',function(){
+                    var fbuf = Buffer.concat(bufs);
+                    var base64 = (fbuf.toString('base64'));
+                    var data = 'data:'+pubImag.typeImage+';base64,' + base64 + '';
+                    res.jsonp({data : data});
                 });
             }
-            res.jsonp(req.pubImag);
         }
     });
 };
@@ -112,7 +158,7 @@ exports.delete = function(req, res) {
 				message: errorHandler.getErrorMessage(err)
 			});
 		} else {
-            gfs.remove({_id: pubImag.file.id_file_image}, function (err) {
+            gfs.remove({_id :pubImag.id_file_original}, function (err) {
                 if (err) return handleError(err);
                 console.log('success');
             });
@@ -124,59 +170,17 @@ exports.delete = function(req, res) {
 /**
  * List of Pub imags
  */
-exports.list = function (req, res) {
-
+exports.list = function(req, res) {
 	PubImag.find().sort('-created').populate('user', 'displayName').exec(function(err, pubImags) {
 		if (err) {
 			return res.status(400).send({
 				message: errorHandler.getErrorMessage(err)
 			});
 		} else {
-            var i = 0;
-            while (pubImags[i] != null && i < pubImags.length - 1) {
-                gfs.findOne({_id: pubImags[i].file.id_file_image}, function (err, file) {
-                    if (err) {
-                        return res.status(400).send({
-                            message: errorHandler.getErrorMessage(err)
-                        });
-                    } else {
-                        if (file != null) {
-                            var path = '/uploads/' + file.filename;
-                            var writeStream = fs.createWriteStream('./public' + path);
-                            var readStream = gfs.createReadStream({_id: file._id});
-                            readStream.pipe(writeStream);
-                            readStream.on('close', function () {
-                                console.log('the file is readed complitelly ');
-                            });
-                        }
-                    }
-                });
-                i++;
-            }
-            if (i == pubImags.length - 1) {
-                gfs.findOne({_id: pubImags[i].file.id_file_image}, function (err, file) {
-                    if (err) {
-                        return res.status(400).send({
-                            message: errorHandler.getErrorMessage(err)
-                        });
-                    } else {
-                        if (file != null) {
-                            var path = '/uploads/' + file.filename;
-                            var writeStream = fs.createWriteStream('./public' + path);
-                            var readStream = gfs.createReadStream({_id: file._id});
-                            readStream.pipe(writeStream);
-                            readStream.on('close', function () {
-                                console.log('the file is readed complitelly ');
-                                res.jsonp(pubImags);
-                            });
-                        }
-                    }
-                });
-            }
+            res.jsonp(pubImags);
         }
     });
 };
-
 /**
  * Pub imag middleware
  */

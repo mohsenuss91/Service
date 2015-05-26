@@ -11,20 +11,23 @@ var mongoose = require('mongoose'),
  * Pub imag Schema
  */
 var PubImagSchema = new Schema({
-    file: {
-        id_file_image: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'fs.files'
-        },
-        namefile: {
-            type: String,
-            default: '',
-            required: 'Please fill Pub imag description',
-            trim: true
-        }
+    id_file_original:
+    {
+        type: mongoose.Schema.Types.ObjectId
     },
-
-
+    image_data_thumbnail:
+    {
+        type: String,
+        default: '',
+        required: 'Please fill Pub imag description',
+        trim: true
+    },
+    typeImage: {
+        type: String,
+        default: '',
+        required: 'Please fill Pub imag description',
+        trim: true
+    },
     description: {
         type: String,
         default: '',

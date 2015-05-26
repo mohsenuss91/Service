@@ -5,11 +5,12 @@
  */
 var mongoose = require('mongoose'),
     Grid = require('gridfs-stream'),
-    fs = require('fs'),
-	errorHandler = require('./errors.server.controller'),
+    fs=require('fs'),
+    errorHandler = require('./errors.server.controller'),
 	PubVideo = mongoose.model('PubVideo'),
 	_ = require('lodash');
 
+var Busboy = require('busboy');
 var conn = mongoose.connection;
 Grid.mongo = mongoose.mongo;
 
@@ -17,45 +18,48 @@ var gfs
 conn.once('open', function () {
     gfs = Grid(conn.db);
 });
-var file;
-var buffer2;
-var buffer;
-exports.upload = function (req, res) {
-    var data = req.files.file;
-    console.log(data);
-    res.jsonp(data);
-    res.end();
+var SpawnStream = require('spawn-stream');
+
+exports.upload = function(req,res){
+    var busboy = new Busboy({ headers: req.headers });
+    busboy.on('file', function(fieldname, file, filename, encoding, mimetype) {
+        var dataResp= {
+            originalFile : '',
+            data:'',
+            typeData : mimetype
+        };
+        var writeStreamOrginal = gfs.createWriteStream({
+            filename: filename+'original'
+        });
+        file.pipe(writeStreamOrginal);
+        writeStreamOrginal.on('close',function(originalFile){
+            dataResp.originalFile = originalFile;
+            var ffmpeg = SpawnStream('ffmpeg', ['-i','-','-vcodec','mjpeg','-ss','00:00:03','-vframes','1','-s','100x80']);
+            gfs.createReadStream({_id:originalFile._id}).pipe(ffmpeg).pipe(fs.createWriteStream('./public/uploads/test.jpg', 'w'));
+        });
+    });
+    busboy.on('finish', function() {
+        console.log('uploade finish');
+    });
+    req.pipe(busboy);
 
 };
 /**
  * Create a Pub video
  */
-var _id_file;
+
+
 exports.create = function(req, res) {
-    var file = req.body.datafile.file;
-    var pubVideoData = req.body.datapubVideos;
-    console.log(pubVideoData);
-    var name = file.originalname;
-    var path = file.path.replace(/\//g, '/');
-    var writestream = gfs.createWriteStream({
-        filename: name
-    });
-    fs.createReadStream(path).pipe(writestream);
-    writestream.on('close', function (file) {
-        _id_file = file._id;
-        pubVideoData.file.id_file_video = _id_file;
-        pubVideoData.file.namefile = '/uploads/' + name;
-        var pubVideo = new PubVideo(pubVideoData);
-        pubVideo.user = req.user;
-        pubVideo.save(function (err) {
-            if (err) {
-                return res.status(400).send({
-                    message: errorHandler.getErrorMessage(err)
-                });
-            } else {
-                res.jsonp(pubVideo);
-            }
-        });
+    var pubVideo = new PubVideo(req.body);
+    pubVideo.user = req.user;
+    pubVideo.save(function (err) {
+        if (err) {
+            return res.status(400).send({
+                message: errorHandler.getErrorMessage(err)
+            });
+        } else {
+            res.jsonp(pubVideo);
+        }
     });
 };
 
@@ -63,34 +67,19 @@ exports.create = function(req, res) {
  * Show the current Pub video
  */
 exports.read = function(req, res) {
-    gfs.findOne({_id: _id_file}, function (err, file) {
-        if (err) {
-            return res.status(400).send({
-                message: errorHandler.getErrorMessage(err)
-            });
-        } else {
-            if (file != null) {
-                var path = '/uploads/' + file.filename;
-                var writeStream = fs.createWriteStream('./public' + path);
-                var readStream = gfs.createReadStream({_id: _id_file});
-                readStream.pipe(writeStream);
-                readStream.on('close', function () {
-                    console.log('the file is readed complitelly ');
-                });
-            }
-            res.jsonp(req.pubVideo);
-        }
-    });
+    var pubVideo = req.body;
+    res.jsonp(pubVideo);
 };
 
+exports.readData=function(req,res){
+
+}
 /**
  * Update a Pub video
  */
 exports.update = function(req, res) {
 	var pubVideo = req.pubVideo ;
-
 	pubVideo = _.extend(pubVideo , req.body);
-
 	pubVideo.save(function(err) {
 		if (err) {
 			return res.status(400).send({
@@ -107,18 +96,13 @@ exports.update = function(req, res) {
  */
 exports.delete = function(req, res) {
 	var pubVideo = req.pubVideo ;
-
 	pubVideo.remove(function(err) {
 		if (err) {
 			return res.status(400).send({
 				message: errorHandler.getErrorMessage(err)
 			});
 		} else {
-            gfs.remove({_id: pubVideo.file.id_file_video}, function (err) {
-                if (err) return handleError(err);
-                console.log('success');
-            });
-			res.jsonp(pubVideo);
+
 		}
 	});
 };
@@ -126,54 +110,14 @@ exports.delete = function(req, res) {
 /**
  * List of Pub videos
  */
-exports.list = function (req, res) {
+exports.list = function(req, res) {
 	PubVideo.find().sort('-created').populate('user', 'displayName').exec(function(err, pubVideos) {
 		if (err) {
 			return res.status(400).send({
 				message: errorHandler.getErrorMessage(err)
 			});
 		} else {
-            var i = 0;
-            while (pubVideos[i] != null && i < pubVideos.length - 1) {
-                gfs.findOne({_id: pubVideos[i].file.id_file_video}, function (err, file) {
-                    if (err) {
-                        return res.status(400).send({
-                            message: errorHandler.getErrorMessage(err)
-                        });
-                    } else {
-                        if (file != null) {
-                            var path = '/uploads/' + file.filename;
-                            var writeStream = fs.createWriteStream('./public' + path);
-                            var readStream = gfs.createReadStream({_id: file._id});
-                            readStream.pipe(writeStream);
-                            readStream.on('close', function () {
-                                console.log('the file is readed complitelly ' + file.filename);
-                            });
-                        }
-                    }
-                });
-                i++;
-            }
-            if (i == pubVideos.length - 1) {
-                gfs.findOne({_id: pubVideos[i].file.id_file_video}, function (err, file) {
-                    if (err) {
-                        return res.status(400).send({
-                            message: errorHandler.getErrorMessage(err)
-                        });
-                    } else {
-                        if (file != null) {
-                            var path = '/uploads/' + file.filename;
-                            var writeStream = fs.createWriteStream('./public' + path);
-                            var readStream = gfs.createReadStream({_id: file._id});
-                            readStream.pipe(writeStream);
-                            readStream.on('close', function () {
-                                console.log('the file is readed complitelly ' + file.filename);
-                                res.jsonp(pubVideos);
-                            });
-                        }
-                    }
-                });
-            }
+            res.jsonp(pubVideos);
 		}
 	});
 };

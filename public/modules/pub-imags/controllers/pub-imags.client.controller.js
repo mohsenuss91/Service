@@ -2,48 +2,47 @@
 
 
 // Pub imags controller
-angular.module('pub-imags').controller('PubImagsController', ['$scope', '$upload', '$stateParams', '$location', 'Authentication', 'PubImags',
-	function ($scope, $upload, $stateParams, $location, Authentication, PubImags) {
+angular.module('pub-imags').controller('PubImagsController', ['$scope','$upload','$stateParams','$location', 'Authentication', 'PubImags','DataImages',
+    function($scope,$upload,$stateParams,$location,Authentication, PubImags,DataImages) {
 		$scope.authentication = Authentication;
-		var datafile;
-		$scope.upload = function (files) {
 
-			if (files && files.length) {
-				var file = files[0];
-				$upload.upload({
-					method: 'POST',
-					url: '/pub-imags/create',
-					file: file
-				}).progress(function (evt) {
-					var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
-					document.getElementById('bar1').style.width = progressPercentage + "%";
-				}).success(function (data, status, headers, config) {
-					datafile = data;
-					var path = data.path.replace(/\//g, '/').replace(/public/, '');
-					document.getElementById('image').style.width = "181px";
-					document.getElementById('image').style.height = "125px";
-					document.getElementById('image').src = path;
-					//document.getElementById('bar1').style.width="0%";
-				});
-			}
-		};
+        $scope.image_data_thumbnail = "/images/260x180.png";
+        $scope.upload = function(files) {
+            if (files && files.length) {
+                var file = files[0];
+                $upload.upload({
+                    method:'POST',
+                    url:'/pub-imags/create',
+                    file: file
+                }).progress(function(evt) {
+                    var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+                    document.getElementById('bar1').style.width= progressPercentage+"%";
+                }).success(function(data, status, headers, config) {
+                    $scope.originalFile = data.originalFile;
+                    $scope.image_data_thumbnail = data.data;
+                    $scope.image_data_type = data.typeData;
+                });
+            }
+        };
 
-		// Create new Pub imag
+        // Create new Pub imag
 		$scope.create = function() {
 			// Create new Pub imag object
 			var pubImag = new PubImags ({
-				datapubImages: {
-					description: this.description,
-					file: {id_file_image: '', namefile: ''}
-				},
-				datafile: {file: datafile}
+                id_file_original: this.originalFile._id,
+                image_data_thumbnail:this.image_data_thumbnail,
+                typeImage: this.image_data_type,
+                description: this.description
 			});
-			// Redirect after save
+            // Redirect after save
 			pubImag.$save(function(response) {
 				//$location.path('/pub-imags/'+response._id);
 				// Clear form fields
-				$scope.find();
-				$scope.description = '';
+                document.getElementById('bar1').style.width= "0%";
+                $scope.find();
+                $scope.image_data = "/images/260x180.png";
+                $scope.image_data_type="";
+				$scope.description= '';
 			}, function(errorResponse) {
 				$scope.error = errorResponse.data.message;
 			});
@@ -60,7 +59,7 @@ angular.module('pub-imags').controller('PubImagsController', ['$scope', '$upload
 					}
 				}
 			} else {
-				$scope.pubImag.$remove(function() {
+                $scope.pubImag.$remove(function() {
 					$location.path('pub-imags/create');
 				});
 			}
@@ -84,10 +83,13 @@ angular.module('pub-imags').controller('PubImagsController', ['$scope', '$upload
 
 		// Find existing Pub imag
 		$scope.findOne = function() {
-			$scope.pubImag = PubImags.get({
+            $scope.pubImag = PubImags.get({
 				pubImagId: $stateParams.pubImagId
 			});
-		};
+            $scope.dataImageUrl = DataImages.get({
+                dataImageId: $stateParams.pubImagId
+            });
+        };
 	}
 ]);
 

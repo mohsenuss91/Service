@@ -14,7 +14,7 @@ var should = require('should'),
 var user, pubImag;
 
 /**
- * Unit tests
+ * Unit datas
  */
 describe('Pub imag Model Unit Tests:', function() {
 	beforeEach(function(done) {

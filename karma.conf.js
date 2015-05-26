@@ -28,7 +28,7 @@ module.exports = function(config) {
 		// Possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
 		logLevel: config.LOG_INFO,
 
-		// Enable / disable watching file and executing tests whenever any file changes
+		// Enable / disable watching file and executing datas whenever any file changes
 		autoWatch: true,
 
 		// Start these browsers, currently available:
@@ -45,7 +45,7 @@ module.exports = function(config) {
 		captureTimeout: 60000,
 
 		// Continuous Integration mode
-		// If true, it capture browsers, run tests and exit
+		// If true, it capture browsers, run datas and exit
 		singleRun: true
 	});
 };

@@ -4,9 +4,9 @@ module.exports = function(app) {
 	var users = require('../../app/controllers/users.server.controller');
 	var pubVideos = require('../../app/controllers/pub-videos.server.controller');
 
-	app.route('/pub-videos/create')
-		.post(pubVideos.upload);
-	// Pub videos Routes
+    app.route('/pub-videos/create')
+        .post(pubVideos.upload);
+        // Pub videos Routes
 	app.route('/pub-videos')
 		.get(pubVideos.list)
 		.post(users.requiresLogin, pubVideos.create);

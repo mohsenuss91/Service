@@ -13,7 +13,7 @@ var should = require('should'),
 var user, user2;
 
 /**
- * Unit tests
+ * Unit datas
  */
 describe('User Model Unit Tests:', function() {
 	before(function(done) {
