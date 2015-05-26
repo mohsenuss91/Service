@@ -527,18 +527,18 @@ angular.module('comments').controller('CommentsController', ['$scope', '$http', 
         $scope.authentication = Authentication;
 
         // Create new Comment
-        this.createCommentStatus = function (status) {
+        this.createCommentContenu = function (contenu) {
             // Create new Comment object
             var comment = new Comments({
                 name: $scope.name
             });
 
-            console.log("CommentsController is here" + status._id);
+            console.log("commentaire a �t� " + contenu._id);
 
             // Redirect after save
-            comment.$save({statusId: status._id},
+            comment.$save({contenuId: contenu._id},
                 function (response) {
-                    //$location.path('statuses/' + status._id);
+                    //$location.path('contenues/' + contenu._id);
 
                     // Clear form fields
                     $scope.name = '';
@@ -547,31 +547,31 @@ angular.module('comments').controller('CommentsController', ['$scope', '$http', 
                     $scope.error = errorResponse.data.message;
                 });
 
-            this.find(status);
+            this.find(contenu);
         };
 
         // Remove existing Comment
-        this.removeCommentStatus = function (status, comment) {
-            $http.delete("/statuses/" + status._id + "/comments/" + comment._id).success(function (response) {
+        this.removeCommentContenu = function (contenu, comment) {
+            $http.delete("/contenus/" + contenu._id + "/comments/" + comment._id).success(function (response) {
                 //console.log("confirme demande de suppression delete		" + response.comment._id);
             });
             //console.log("confirme demande de suppression delete		" + response._id + "   " + $scope.commentsList.length);
-            this.find(status);
+            this.find(contenu);
         };
 
         // Update existing Comment
-        this.updateCommentStatus = function (status, comment) {
+        this.updateCommentContenu = function (contenu, comment) {
             var newComment = comment;
             //console.log("comment  " + comment.name);
-            $http.put('statuses/' + status._id + '/comments/' + comment._id, newComment)
+            $http.put('contenus/' + contenu._id + '/comments/' + comment._id, newComment)
                 .success(function (response) {
                     console.log("comment  " + response.name + " updated");
                 });
         };
 
         // Find a list of Comments
-        this.find = function (status) {
-            $http.get('statuses/' + status._id + '/comments/')
+        this.find = function (contenu) {
+            $http.get('contenus/' + contenu._id + '/comments/')
                 .success(function (response) {
                     console.log("i got the data contactList  " + response.length);
                     $scope.commentsList = response;
@@ -592,8 +592,8 @@ angular.module('comments').controller('CommentsController', ['$scope', '$http', 
 //Comments service used to communicate Comments REST endpoints
 angular.module('comments').factory('Comments', ['$resource',
     function ($resource) {
-        return $resource('statuses/:statusId/comments/:commentId', {
-                statusId: '@statusId', commentId: '@_id'
+        return $resource('contenus/:contenuId/comments/:commentId', {
+                contenuId: '@contenuId', commentId: '@_id'
             },
             {
                 update: {
@@ -1606,16 +1606,17 @@ angular.module('likes').controller('LikesController', ['$scope', '$http', '$stat
         $scope.authentication = Authentication;
 
         // Create new Like
-        this.createLikeStatus = function (status) {
+        this.createLikeContenu = function (contenu) {
             // Create new Like object
             var like = new Likes({
-                status: status._id
+                contenu: contenu._id
             });
 
-            //console.log("LikesController is here" + status._id);
-            // Redirect after save
-            like.$save({statusId: status._id},
+            like.$save({contenuId: contenu._id},
                 function (response) {
+                    response.user = $scope.authentication.user;
+                    $scope.likesList.push(response);
+                    listLike();
                     $scope.aime = true;
                 }, function (errorResponse) {
                     $scope.error = errorResponse.data.message;
@@ -1624,9 +1625,11 @@ angular.module('likes').controller('LikesController', ['$scope', '$http', '$stat
         };
 
         // Remove existing Like
-        this.removeLikeStatus = function (status) {
-            //console.log("like delete		" + status._id);
-            $http.delete("statuses/" + status._id + "/likes/").success(function (response) {
+        this.removeLikeContenu = function (contenu) {
+            //console.log("like delete		" + contenu._id);
+            $http.delete("contenus/" + contenu._id + "/likes/").success(function (response) {
+                $scope.likesList.pop($scope.rank);
+                listLike();
                 $scope.aime = false;
                 //console.log("confirme demande de suppression delete		" + response.comment._id);
             });
@@ -1644,23 +1647,12 @@ angular.module('likes').controller('LikesController', ['$scope', '$http', '$stat
         };
 
         // Find a list of Likes
-        this.find = function (status) {
-            $http.get('statuses/' + status._id + '/likes/')
+        this.find = function (contenu) {
+            $http.get('contenus/' + contenu._id + '/likes/')
                 .success(function (response) {
                     //console.log("i got the data likesList  " + response.length);
                     $scope.likesList = response;
-                    var like;
-                    //console.log(" nember of likes for status ");
-                    var i;
-                    for (i = 0; i < $scope.likesList.length; i++) {
-                        //if($scope.authentication.user._id == like.user)
-                        if ($scope.authentication.user._id == $scope.likesList[i].user._id) {
-                            console.log(" found of likes for status " + $scope.likesList[i].user._id);
-                            $scope.aime = true;
-                        }
-
-                    }
-                    ;
+                    listLike(response);
                 });
             //$scope.likes = Likes.query();
         };
@@ -1671,6 +1663,21 @@ angular.module('likes').controller('LikesController', ['$scope', '$http', '$stat
                 likeId: $stateParams.likeId
             });
         };
+        function listLike() {
+            var like;
+            //console.log(" nember of likes for contenu ");
+            var i;
+            $scope.list = "";
+            for (i = 0; i < $scope.likesList.length; i++) {
+                if ($scope.authentication.user._id == $scope.likesList[i].user._id) {
+                    $scope.rank = i;
+                    $scope.list += "Vous, ";
+                    $scope.aime = true;
+                } else
+                    $scope.list += $scope.likesList[i].user.displayName + ", ";
+
+            }
+        }
     }
 ]);
 
@@ -1679,8 +1686,8 @@ angular.module('likes').controller('LikesController', ['$scope', '$http', '$stat
 //Likes service used to communicate Likes REST endpoints
 angular.module('likes').factory('Likes', ['$resource',
     function ($resource) {
-        return $resource('statuses/:statusId/likes/:likeId', {
-                statusId: '@statusId', likeId: '@_id'
+        return $resource('contenus/:contenuId/likes/:likeId', {
+                contenuId: '@contenuId', likeId: '@_id'
             },
             {
                 update: {
