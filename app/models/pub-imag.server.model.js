@@ -15,13 +15,13 @@ var PubImagSchema = new Schema({
     {
         type: mongoose.Schema.Types.ObjectId
     },
-    image_data_thumbnail:
+    /*image_data_thumbnail:
     {
         type: String,
         default: '',
         required: 'Please fill Pub imag description',
         trim: true
-    },
+    },*/
     typeImage: {
         type: String,
         default: '',
