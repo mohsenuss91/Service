@@ -6,7 +6,7 @@
          <a ng-click="EvenementsCtrl.modalCreate(); EvenementsCtrl.find()">Créer un evenement</a>?
     </div>
     <div class="timeline-block">
-        <div data-ng-repeat="evenement in evenementsList" class="panel panel-default">
+        <div data-ng-repeat="evenement in evenementsList" class="panel panel-default event">
             <div class="panel-heading">
                 <div class="media">
                     <a href="" class="pull-left"><img src="images/people/50/guy-2.jpg" class="media-object"></a>
@@ -23,12 +23,16 @@
                     </div>
                 </div>
             </div>
-            <div class="panel-body">
-                <p>L'evenement <span class="titre">{{evenement.titre}} </span></p>
-                <p> aura lieu  <span class="date">{{evenement.date | date:'medium'}}</span></p>
-                <p>dans <span class="date">{{evenement.lieu}}</span></p>
-                <p>{{evenement.description}}</p>
+            <div class="title form-event">
+                {{evenement.titre}}
             </div>
+            <ul class="list-group">
+                <li class="list-group-item"><i class="fa fa-globe"></i>{{evenement.lieu}}</li>
+                <li class="list-group-item"><i class="fa fa-calendar-o"></i>{{evenement.date | date:'mediumDate'}}</li>
+                <li class="list-group-item"><i class="fa fa-clock-o"></i>{{evenement.date | date:'mediumTime'}}</li>
+                <li class="list-group-item"><i class="fa fa-comment-o"></i>{{evenement.description}}<a href="#" class="btn btn-primary btn-xs pull-right">Attend</a></li>
+            </ul>
+            <div class="clearfix"></div>
         </div>
     </div>
 </section>
