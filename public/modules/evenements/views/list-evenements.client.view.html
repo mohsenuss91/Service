@@ -6,7 +6,7 @@
          <a ng-click="EvenementsCtrl.modalCreate(); EvenementsCtrl.find()">Créer un evenement</a>?
     </div>
     <div class="timeline-block">
-        <div data-ng-repeat="evenement in evenementsList" class="panel panel-default event">
+        <div data-ng-repeat="contenu in evenementsList" class="panel panel-default event">
             <div class="panel-heading">
                 <div class="media">
                     <a href="" class="pull-left"><img src="images/people/50/guy-2.jpg" class="media-object"></a>
@@ -15,22 +15,22 @@
                         <!--<a class="pull-right text-muted" ng-click="EvenementsCtrl.modalUpdate('lg',evenement)">
                             <i class="glyphicon glyphicon-pencil"></i>
                         </a>-->
-                        <a class="pull-right text-muted" data-ng-click="EvenementsCtrl.remove(evenement)">
+                        <a class="pull-right text-muted" data-ng-click="EvenementsCtrl.remove(contenu)">
                             <i class="glyphicon glyphicon-trash"></i>
                         </a>
-                        <a class=""><span data-ng-bind="evenement.user.displayName"></span></a>
-                        <span class=" dte">on <span data-ng-bind="evenement.created | date:'medium'"></span></span>
+                        <a class=""><span data-ng-bind="contenu.user.displayName"></span></a>
+                        <span class=" dte">on <span data-ng-bind="contenu.created | date:'medium'"></span></span>
                     </div>
                 </div>
             </div>
             <div class="title form-event">
-                {{evenement.titre}}
+                {{contenu.evenement.titre}}
             </div>
             <ul class="list-group">
-                <li class="list-group-item"><i class="fa fa-globe"></i>{{evenement.lieu}}</li>
-                <li class="list-group-item"><i class="fa fa-calendar-o"></i>{{evenement.date | date:'mediumDate'}}</li>
-                <li class="list-group-item"><i class="fa fa-clock-o"></i>{{evenement.date | date:'mediumTime'}}</li>
-                <li class="list-group-item"><i class="fa fa-comment-o"></i>{{evenement.description}}<a href="#" class="btn btn-primary btn-xs pull-right">Attend</a></li>
+                <li class="list-group-item"><i class="fa fa-globe"></i>{{contenu.evenement.lieu}}</li>
+                <li class="list-group-item"><i class="fa fa-calendar-o"></i>{{contenu.evenement.date | date:'mediumDate'}}</li>
+                <li class="list-group-item"><i class="fa fa-clock-o"></i>{{contenu.evenement.date | date:'mediumTime'}}</li>
+                <li class="list-group-item"><i class="fa fa-comment-o"></i>{{contenu.evenement.description}}<a href="#" class="btn btn-primary btn-xs pull-right">Attend</a></li>
             </ul>
             <div class="clearfix"></div>
         </div>

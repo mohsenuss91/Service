@@ -182,8 +182,8 @@ angular.module('evenements').controller('EvenementsController', ['$scope', '$htt
         };
 
         // Remove existing Evenement
-        this.remove = function(evenement) {
-            $http.delete("/evenements/" + evenement._id).success(function (response) {
+        this.remove = function(contenu) {
+            $http.delete("/evenements/" + contenu.evenement._id).success(function (response) {
                 $scope.find();
                 //console.log("confirme demande de suppression		" + response.comment._id);
             });

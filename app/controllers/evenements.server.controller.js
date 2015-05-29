@@ -87,7 +87,7 @@ exports.update = function(req, res) {
 exports.delete = function(req, res) {
 	var evenement = req.evenement ;
 
-    evenement.remove(function(err) {
+    Evenement.findByIdAndRemove(req.evenement._id, function(err) {
         if (err) {
             return res.status(400).send({
                 message: errorHandler.getErrorMessage(err)
@@ -109,17 +109,22 @@ exports.delete = function(req, res) {
 /**
  * List of Evenements
  */
-exports.list = function(req, res) { 
-	Evenement.find().sort('-created').populate('user', 'displayName').exec(function(err, evenements) {
-		if (err) {
-			return res.status(400).send({
-				message: errorHandler.getErrorMessage(err)
-			});
-		} else {
-			res.jsonp(evenements);
-            console.log("evenements.server.ctrl "+evenements.length);
-		}
-	});
+exports.list = function(req, res) {
+    Contenu.find({typeC : 'evenement'}).sort('-created')
+        .populate('user', 'displayName')
+        .populate({
+            path: 'evenement',
+            select: 'titre description date lieu'
+        })
+        .exec(function (err, contenus) {
+            if (err) {
+                return res.status(400).send({
+                    message: errorHandler.getErrorMessage(err)
+                });
+            } else {
+                res.jsonp(contenus);
+            }
+        });
 };
 
 /**
