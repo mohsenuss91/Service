@@ -84,7 +84,7 @@ exports.delete = function (req, res) {
         } else {
             Contenu.findByIdAndUpdate(
                 req.contenu._id,
-                {$pull: {comments: comment._id}},
+                {$pull: {commentaires: comment._id}},
                 function (err, contenu) {
                     if (err) {
                         console.log(err);
