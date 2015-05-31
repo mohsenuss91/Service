@@ -91,8 +91,8 @@ angular.module('offres').controller('OffresController', ['$scope', '$http', '$st
         };
 
         // Remove existing Evenement
-        this.remove = function(offre) {
-            $http.delete("/offres/" + offre._id).success(function (response) {
+        this.remove = function(contenu) {
+            $http.delete("/offres/" + contenu.offre._id).success(function (response) {
                 $scope.find();
                 //console.log("confirme demande de suppression		" + response.comment._id);
             });

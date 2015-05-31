@@ -58,10 +58,10 @@ exports.read = function(req, res) {
 exports.update = function(req, res) {
 	var offre = req.offre ;
 
-    console.log("apdate request titre:" +req.body.entreprise +", description :");
+    console.log("apdate request titre:" +req.body.documents +", description :");
     Offre.findByIdAndUpdate(
         offre._id,
-         {$set: {entreprise: req.body.entreprise, post : req.body.post, competences : req.body.competences, date: req.body.documents}},
+         {$set: {entreprise: req.body.entreprise, post : req.body.post, competences : req.body.competences, documents: req.body.documents}},
          function (err, offre) {
              res.jsonp(offre);
          }
@@ -74,12 +74,12 @@ exports.update = function(req, res) {
 exports.delete = function(req, res) {
 	var offre = req.offre ;
 
-    offre.remove(function(err) {
-		if (err) {
-			return res.status(400).send({
-				message: errorHandler.getErrorMessage(err)
-			});
-		} else {
+    Offre.findByIdAndRemove(req.offre._id, function(err) {
+        if (err) {
+            return res.status(400).send({
+                message: errorHandler.getErrorMessage(err)
+            });
+        } else {
             Contenu.findOneAndRemove({offre: req.offre._id}, function (err, contenu) {
                 if (err) {
                     console.log(err);
@@ -89,23 +89,29 @@ exports.delete = function(req, res) {
                     res.jsonp(offre);
                 }
             })
-		}
-	});
+        }
+    });
 };
 
 /**
  * List of Offres
  */
-exports.list = function(req, res) { 
-	Offre.find().sort('-created').populate('user', 'displayName').exec(function(err, offres) {
-		if (err) {
-			return res.status(400).send({
-				message: errorHandler.getErrorMessage(err)
-			});
-		} else {
-			res.jsonp(offres);
-		}
-	});
+exports.list = function(req, res) {
+    Contenu.find({typeC : 'offre'}).sort('-created')
+        .populate('user', 'displayName')
+        .populate({
+            path: 'offre',
+            select: 'entreprise post competences documents'
+        })
+        .exec(function (err, contenus) {
+            if (err) {
+                return res.status(400).send({
+                    message: errorHandler.getErrorMessage(err)
+                });
+            } else {
+                res.jsonp(contenus);
+            }
+        });
 };
 
 /**
