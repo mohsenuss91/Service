@@ -2,24 +2,12 @@
     color: red;
 }
 
-.glyphicon-pencil:hover {
-    color: #73db68;
-}
-
 .glyphicon-trash {
     margin-right: 10px;
 }
-.titre{
-    font-size: 22px;
-    font-weight: bold;
-    color: #02d4e5;
-}
-
-.date{
-    font-size: 18px;
-    color: #0dc7e5;
-}
 
 .form-event{
-    margin: 2%;
+    background-color: rgba(34, 150, 173, 0.37);
+    font-size: xx-large;
+    padding-left: 50px;
 }

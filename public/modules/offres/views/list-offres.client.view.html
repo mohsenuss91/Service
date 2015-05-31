@@ -6,6 +6,39 @@
         <a ng-click="OffresCtrl.modalCreate('sm')">Créer un offre d'emploie</a>?
     </div>
     <div class="timeline-block">
+        <div data-ng-repeat="contenu in offresList" class="panel panel-default profile-card">
+
+            <div class="panel-body">
+                <div class="profile-card-icon">
+                    <i class="fa fa-graduation-cap"></i>
+                </div>
+                <h4 class="text-center">Offre d'Emploie</h4>
+                <div class="panel-heading">
+                    <div class="media">
+                        <a href="" class="pull-left"><img src="images/people/50/guy-2.jpg" class="media-object"></a>
+
+                        <div class="media-body">
+                            <a class="pull-right text-muted" ng-click="OffresCtrl.modalUpdate('lg',contenu.offre)">
+                                <i class="glyphicon glyphicon-pencil"></i>
+                            </a>
+                            <a class="pull-right text-muted" data-ng-click="OffresCtrl.remove(contenu)">
+                                <i class="glyphicon glyphicon-trash"></i>
+                            </a>
+                            <a class="nom-user"><span data-ng-bind="contenu.user.displayName"></span></a>
+                            <span>on <span data-ng-bind="contenu.created | date:'medium'"></span></span>
+                        </div>
+                    </div>
+                </div>
+                <ul class="profile-card-items">
+                    <li><i class="fa fa-institution"></i>{{contenu.offre.entreprise}}</li>
+                    <li><i class="fa fa-desktop"></i>{{contenu.offre.post}}</li>
+                    <li><i class="fa fa-graduation-cap"></i><span ng-repeat="compet in contenu.offre.competences">{{compet}}, </span></li>
+                    <li><i class="fa fa-suitcase"></i><span ng-repeat="docum in contenu.offre.documents">{{docum}}, </span></li>
+                </ul>
+            </div>
+        </div>
+    </div><!--
+    <div class="timeline-block">
         <div data-ng-repeat="offre in offresList" class="panel panel-default">
             <div class="panel-heading">
                 <div class="media">
@@ -30,5 +63,5 @@
                 <p>les documents pour le dossier sont : <span class="titre" ng-repeat="docum in offre.documents">{{docum}}, </span></p>
             </div>
         </div>
-    </div>
+    </div>-->
 </section>
