@@ -608,7 +608,7 @@ angular.module('contenus').run(['Menus',
 		Menus.addMenuItem('topbar', 'Contenus', 'contenus', 'icon-ship-wheel', '/contenus(/create)?');
 		Menus.addMenuItem('topbar', 'Images', 'pub-imags', 'fa fa-picture-o', '/pub-imags(/create)?');
 		Menus.addMenuItem('topbar', 'Videos', 'pub-videos', 'fa fa-group', '/pub-videos(/create)?');
-		Menus.addMenuItem('topbar', 'Emplois', 'emploies', 'icon-user-1', '/emploies(/create)?');
+		Menus.addMenuItem('topbar', 'Offres', 'offres', 'icon-user-1', '/offres(/create)?');
 		Menus.addMenuItem('topbar', 'Evenements', 'evenements', 'icon-comment-fill-1', '/evenements(/create)?');
 	}
 ]);
@@ -641,7 +641,7 @@ angular.module('contenus').config(['$stateProvider',
 'use strict';
 
 // Contenus controller
-angular.module('contenus').controller('ContenusController', ['$scope', '$stateParams', '$location', 'Authentication', 'Contenus',
+angular.module('contenus').controller('ContenusController', ['$scope', '$stateParams', '$location', 'Authentication','ngTagsInput', 'Contenus',
 	function($scope, $stateParams, $location, Authentication, Contenus) {
 		$scope.authentication = Authentication;
 
@@ -649,7 +649,8 @@ angular.module('contenus').controller('ContenusController', ['$scope', '$statePa
 		$scope.create = function() {
 			// Create new Contenu object
 			var contenu = new Contenus ({
-				name: this.name
+				name: this.name,
+				tags: this.tags
 			});
 
 			// Redirect after save
@@ -704,6 +705,7 @@ angular.module('contenus').controller('ContenusController', ['$scope', '$statePa
 		};
 	}
 ]);
+
 'use strict';
 
 //Contenus service used to communicate Contenus REST endpoints
@@ -1429,8 +1431,8 @@ angular.module('evenements').controller('EvenementsController', ['$scope', '$htt
         };
 
         // Remove existing Evenement
-        this.remove = function(evenement) {
-            $http.delete("/evenements/" + evenement._id).success(function (response) {
+        this.remove = function(contenu) {
+            $http.delete("/evenements/" + contenu.evenement._id).success(function (response) {
                 $scope.find();
                 //console.log("confirme demande de suppression		" + response.comment._id);
             });
@@ -2079,8 +2081,8 @@ angular.module('offres').controller('OffresController', ['$scope', '$http', '$st
         };
 
         // Remove existing Evenement
-        this.remove = function(offre) {
-            $http.delete("/offres/" + offre._id).success(function (response) {
+        this.remove = function(contenu) {
+            $http.delete("/offres/" + contenu.offre._id).success(function (response) {
                 $scope.find();
                 //console.log("confirme demande de suppression		" + response.comment._id);
             });

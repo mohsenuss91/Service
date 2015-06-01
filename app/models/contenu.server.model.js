@@ -57,7 +57,9 @@ var ContenuSchema = new Schema({
         ref: 'Emploi'
     },
     tags: [{
-        type: String
+        text:{
+            type: String
+        }
     }],
     created: {
         type: Date,

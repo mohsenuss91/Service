@@ -1,7 +1,7 @@
 {
-  "name": "meanjs",
+  "name": "ESI-Life",
   "version": "0.3.2",
-  "description": "Fullstack JavaScript with MongoDB, Express, AngularJS, and Node.js.",
+  "description": "Site social de l'ESI",
   "dependencies": {
     "bootstrap": "~3",
     "angular": "~1.2",
@@ -12,6 +12,7 @@
     "angular-ui-utils": "~0.1.1",
     "angular-ui-router": "~0.2.11",
     "ng-file-upload": "~3.2.4",
-    "ng-file-upload-shim": "~3.2.4"
+    "ng-file-upload-shim": "~3.2.4",
+    "ng-tags-input": "~2.3.0"
   }
 }

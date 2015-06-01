@@ -52,7 +52,6 @@ angular.module('comments').controller('CommentsController', ['$scope', '$http', 
         this.find = function (contenu) {
             $http.get('contenus/' + contenu._id + '/comments/')
                 .success(function (response) {
-                    console.log("i got the data contactList  " + response.length);
                     $scope.commentsList = response;
                 });
         };

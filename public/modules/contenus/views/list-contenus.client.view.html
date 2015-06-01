@@ -1,6 +1,15 @@
 <section data-ng-controller="ContenusController" data-ng-init="find()">
     <div class="timeline-block">
-        <div data-ng-repeat="contenu in contenus" data-ng-href="#!/contenus/{{contenu._id}}"
+        <tags-input class="bootstrap"
+                    ng-model="tags"
+                    placeholder="Ajouter un Tag"
+                    replace-spaces-with-dashes="false">
+            <auto-complete source="autoComplete()"
+                           min-length="0"
+                           debounce-delay="200"
+                           max-results="7"></auto-complete>
+        </tags-input>
+        <div data-ng-repeat="contenu in contenus | filter:filterByTag" data-ng-href="#!/contenus/{{contenu._id}}"
              class="panel panel-default">
             <div class="panel-heading">
                 <div class="media">
@@ -19,7 +28,15 @@
             <div class="panel-body">
                 <p data-ng-bind="contenu.name"></p>
             </div>
-
+            <ul class="comments">
+                <div class="media">
+                    <div class="media-body">
+                        <button data-ng-repeat="tag in contenu.tags" class="btn btn-primary btn-xs">
+                            <i class="fa fa-tag"></i> <span data-ng-bind="tag.text"></span>
+                        </button>
+                    </div>
+                </div>
+            </ul>
             <ul class="comments" data-ng-controller="LikesController as LikesCtrl"
                 data-ng-init="LikesCtrl.find(contenu)">
                 <div class="media">
