@@ -1,14 +1,14 @@
 <section data-ng-controller="ContenusController" data-ng-init="find()">
     <div class="timeline-block">
-        <tags-input class="bootstrap"
-                    ng-model="tags"
+        <!--<tags-input class="bootstrap"
+                    ng-model="$root.tags"
                     placeholder="Ajouter un Tag"
                     replace-spaces-with-dashes="false">
-            <auto-complete source="autoComplete()"
+            <auto-complete source="$root.autoComplete()"
                            min-length="0"
                            debounce-delay="200"
                            max-results="7"></auto-complete>
-        </tags-input>
+        </tags-input>-->
         <div data-ng-repeat="contenu in contenus | filter:filterByTag" data-ng-href="#!/contenus/{{contenu._id}}"
              class="panel panel-default">
             <div class="panel-heading">

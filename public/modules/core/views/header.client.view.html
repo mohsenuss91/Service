@@ -89,11 +89,21 @@
 			</li>
 		</ul>
 	</div>
-	<ul class="nav navbar-nav hidden-xs pull-right" data-ng-show="authentication.user">
+	<ul class="nav navbar-nav hidden-xs" data-ng-show="authentication.user">
 		<!-- Search -->
-		<div class="input-group">
+		<div class="input-group" data-ng-controller="ContenusController">
 			<span class="input-group-addon"><i class="icon-search"></i></span>
-			<input type="text" class="form-control" placeholder="Trouver un Amis">
+			<!--<input type="text" class="form-control" placeholder="Trouver un Amis">-->
+			<span  class="form-control container"><tags-input class="fixed-witdh"
+						ng-model="$root.tags"
+						placeholder="Chercher Avec un Tag"
+						replace-spaces-with-dashes="false">
+				<auto-complete source="$root.autoComplete()"
+							   min-length="0"
+							   debounce-delay="200"
+							   max-results="7"></auto-complete>
+			</tags-input>
+			</span>
 		</div>
 	</ul>
 	<!-- Authentification -->

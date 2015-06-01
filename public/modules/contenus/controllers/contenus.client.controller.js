@@ -1,10 +1,10 @@
 'use strict';
 
 // Contenus controller
-angular.module('contenus').controller('ContenusController', ['$scope', '$stateParams', '$location', 'Authentication', 'Contenus',
-	function($scope, $stateParams, $location, Authentication, Contenus) {
+angular.module('contenus').controller('ContenusController', ['$scope', '$rootScope','$stateParams', '$location', 'Authentication', 'Contenus',
+	function($scope,$rootScope, $stateParams, $location, Authentication, Contenus) {
 		$scope.authentication = Authentication;
-		$scope.tags = [];
+		$rootScope.tags = [];
 		// Create new Contenu
 		$scope.create = function() {
 			// Create new Contenu object
@@ -55,12 +55,12 @@ angular.module('contenus').controller('ContenusController', ['$scope', '$statePa
 
 		// Find a list of Contenus
 		$scope.find = function() {
-			$scope.contenus = Contenus.query();
+			$rootScope.contenus = Contenus.query();
 		};
 
-		$scope.autoComplete= function(){
+		$rootScope.autoComplete= function(){
 			var auto =[];
-			$scope.contenus.forEach(function (item) {
+			$rootScope.contenus.forEach(function (item) {
 					item.tags.forEach(function (tag){
 						var matches = auto.some(function (tags) {
 							var logique =  (tags.text.indexOf(tag.text) > -1)
@@ -87,7 +87,7 @@ angular.module('contenus').controller('ContenusController', ['$scope', '$statePa
 		$scope.filterByTag =  function (items) {
 			var filter = true;
 			//console.log(items.tags);
-			($scope.tags || []).forEach(function (item) {
+			($rootScope.tags || []).forEach(function (item) {
 				var matches = items.tags.some(function (tag) {
 					var logique =  (item.text.indexOf(tag.text) > -1)
 					//console.log(item.text + '=' + tag.text);
