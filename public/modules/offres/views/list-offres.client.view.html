@@ -10,7 +10,7 @@
 
             <div class="panel-body">
                 <div class="profile-card-icon">
-                    <i class="fa fa-graduation-cap"></i>
+                    <i class="fa fa-suitcase"></i>
                 </div>
                 <h4 class="text-center">Offre d'Emploie</h4>
                 <div class="panel-heading">
@@ -24,8 +24,8 @@
                             <a class="pull-right text-muted" data-ng-click="OffresCtrl.remove(contenu)">
                                 <i class="glyphicon glyphicon-trash"></i>
                             </a>
-                            <a class="nom-user"><span data-ng-bind="contenu.user.displayName"></span></a>
-                            <span>on <span data-ng-bind="contenu.created | date:'medium'"></span></span>
+                            <a><span data-ng-bind="contenu.user.displayName"></span></a>
+                            <span>dans le <span data-ng-bind="contenu.created | date:' d MMM y h:mm a'"></span></span>
                         </div>
                     </div>
                 </div>
@@ -33,7 +33,7 @@
                     <li><i class="fa fa-institution"></i>{{contenu.offre.entreprise}}</li>
                     <li><i class="fa fa-desktop"></i>{{contenu.offre.post}}</li>
                     <li><i class="fa fa-graduation-cap"></i><span ng-repeat="compet in contenu.offre.competences">{{compet}}, </span></li>
-                    <li><i class="fa fa-suitcase"></i><span ng-repeat="docum in contenu.offre.documents">{{docum}}, </span></li>
+                    <li><i class="fa fa-folder"></i><span ng-repeat="docum in contenu.offre.documents">{{docum}}, </span></li>
                 </ul>
             </div>
 
@@ -72,7 +72,7 @@
                             <a href="" class="comment-author"><span data-ng-bind="comment.user.displayName"></span></a>
                             <span data-ng-bind="comment.name"></span>
 
-                            <div class="comment-date"><span data-ng-bind="comment.created | date:'medium'"></span></div>
+                            <div class="comment-date"><span data-ng-bind="comment.created | date:'d MMM y h:mm a'"></span></div>
                         </div>
                     </div>
                     <div ng-show="Update">

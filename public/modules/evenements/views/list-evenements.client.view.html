@@ -19,7 +19,7 @@
                             <i class="glyphicon glyphicon-trash"></i>
                         </a>
                         <a class=""><span data-ng-bind="contenu.user.displayName"></span></a>
-                        <span class=" dte">on <span data-ng-bind="contenu.created | date:'medium'"></span></span>
+                        <span class=" dte">dans le <span data-ng-bind="contenu.created | date:'d MMM y h:mm a'"></span></span>
                     </div>
                 </div>
             </div>
@@ -68,7 +68,7 @@
                             <a href="" class="comment-author"><span data-ng-bind="comment.user.displayName"></span></a>
                             <span data-ng-bind="comment.name"></span>
 
-                            <div class="comment-date"><span data-ng-bind="comment.created | date:'medium'"></span></div>
+                            <div class="comment-date"><span data-ng-bind="comment.created | date:'d MMM y h:mm a'"></span></div>
                         </div>
                     </div>
                     <div ng-show="Update">
