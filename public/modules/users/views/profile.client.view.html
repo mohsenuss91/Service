@@ -1,0 +1,31 @@
+<section class="row" data-ng-controller="SettingsController">
+    <div class="panel panel-default">
+        <div class="panel-heading panel-heading-gray">
+            <a href="#!/settings/profile" class="btn btn-white btn-xs pull-right"><i class="fa fa-pencil"></i></a>
+            <img ng-src="{{user.file_image}}" width="35" alt="Bill" class="img-circle">
+        </div>
+        <div class="panel-body">
+            <ul class="list-unstyled profile-about">
+                <li>
+                    <div class="row">
+                        <div class="col-sm-4"><span class="text-muted">Nom</span></div>
+                        <div class="col-sm-8" data-ng-bind="user.firstName"></div>
+                    </div>
+                </li>
+                <li>
+                    <div class="row">
+                        <div class="col-sm-4"><span class="text-muted">Prenom</span></div>
+                        <div class="col-sm-8" data-ng-bind="user.lastName"></div>
+                    </div>
+                </li>
+                <li>
+                    <div class="row">
+                        <div class="col-sm-4"><span class="text-muted">Adresse Email</span></div>
+                        <div class="col-sm-8" data-ng-bind="user.email"></div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    </div>
+</section>

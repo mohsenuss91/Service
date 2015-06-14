@@ -1,5 +1,43 @@
 <section class="row" data-ng-controller="SettingsController">
-	<h3 class="col-md-12 text-center">Edit your profile</h3>
+    <h3 class="col-md-12 text-center">Edit your profile</h3>
+    <div class="panel panel-default  col-md-offset-3 col-md-6">
+        <div class="panel-heading panel-heading-gray">
+            Image Profile
+        </div>
+        <div class="panel-body">
+            <form class="form-horizontal " ng-submit="upload(files)" novalidate >
+                <fieldset>
+                    <div class="inline">
+                        <div class="col-xs-6">
+                            <div class="thumbnail" >
+                                <img id='image' ng-src={{image_data_thumbnail}} >
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <input type="text" class="form-control"  value="{{files[0].name}}">
+                            <span class="input-group-btn">
+                                        <button class="btn btn-primary btn-file" >
+                                            <input type="file"  id="file"   ng-file-select  data-ng-model="files"  accept="image/*">
+                                            <i class="fa fa-download"></i>
+                                        </button>
+                                    </span>
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="progress">
+                        <div class="progress-bar" id="bar1" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"/>
+                    </div>
+                            <span class="input-group-btn">
+                                <button type="submit" class="btn btn-primary btn-xs pull-right " href="#" >upload</button>
+                            </span>
+                </fieldset>
+            </form>
+            </div>
+        </div>
+        </div>
+    </div>
+    </div>
+    </div>
 	<div class="col-xs-offset-2 col-xs-8 col-md-offset-5 col-md-2">
 		<form name="userForm" data-ng-submit="updateUserProfile(userForm.$valid)" class="signin form-horizontal" autocomplete="off">
 			<fieldset>
@@ -30,5 +68,6 @@
 				</div>
 			</fieldset>
 		</form>
-	</div>
+    </div>
 </section>
+
