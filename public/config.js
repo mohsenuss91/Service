@@ -8,7 +8,7 @@ var ApplicationConfiguration = (function() {
 
 
 
-	var applicationModuleVendorDependencies = ['ngResource', 'ngAnimate', 'ui.router', 'ui.bootstrap', 'ui.utils','angularFileUpload'];
+	var applicationModuleVendorDependencies = ['ngResource', 'ngAnimate', 'ui.router', 'ui.bootstrap', 'ui.utils','angularFileUpload','ngSocket'];
 
 	// Add a new vertical module
 	var registerModule = function(moduleName, dependencies) {

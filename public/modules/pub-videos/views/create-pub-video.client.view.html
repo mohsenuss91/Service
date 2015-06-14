@@ -19,7 +19,7 @@
                             <div class="inline">
                                 <div class="col-xs-6">
                                     <div class="thumbnail" id='image'>
-                                        <img  src="/images/260x180.png"  >
+                                        <img  ng-src="{{video_data_thumbnail}}"  >
                                     </div>
                                 </div>
                                 <br/>
@@ -64,6 +64,11 @@
                 <span data-ng-bind="pubVideo.user.displayName"></span>
             </small>
             <h1 data-ng-bind="pubVideo.description"></h1>
+            <div class="col-xs-12">
+                <div class="thumbnail" >
+                    <img  ng-src={{pubVideo.video_data_thumbnail}} >
+                </div>
+            </div>
         </a>
     </div>
 </section>

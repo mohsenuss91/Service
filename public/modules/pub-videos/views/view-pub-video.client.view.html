@@ -1,9 +1,11 @@
-<section data-ng-controller="PubVideosController" data-ng-init="findOne()">
+<section data-ng-controller="PubVideosController" data-ng-init="findOne()" xmlns="http://www.w3.org/1999/html">
 
     <div class="page-header">
          <div class="col-xs-6">
              <h1 data-ng-bind="pubVideo.description"></h1>
-            <video ng-src={{data.data}}  class="thumbnail col-xs-12"/>
+        </div>
+        <div class="col-xs-12">
+            <div class="thumbnail"><video ng-src="{{dataVideoUrl.data}}"></video></div>
         </div>
 	</div>
 	<div class="pull-right" data-ng-show="((authentication.user) && (authentication.user._id == pubVideo.user._id))">

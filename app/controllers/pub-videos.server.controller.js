@@ -18,9 +18,13 @@ var gfs
 conn.once('open', function () {
     gfs = Grid(conn.db);
 });
+
 var SpawnStream = require('spawn-stream');
 
 exports.upload = function(req,res){
+    var ffmpeg = SpawnStream("ffmpeg", ['-i', 'pipe:0', '-f', 'yuyv422', '-vf', 'thumbnail,scale=400:300',
+        '-r', '1', '-frames:v', '1', '-f', 'mjpeg', '-pix_fmt', 'yuyv422', 'pipe:1'
+    ]);
     var busboy = new Busboy({ headers: req.headers });
     busboy.on('file', function(fieldname, file, filename, encoding, mimetype) {
         var dataResp= {
@@ -28,21 +32,33 @@ exports.upload = function(req,res){
             data:'',
             typeData : mimetype
         };
+        /*******    save in gridFs    ******/
         var writeStreamOrginal = gfs.createWriteStream({
             filename: filename+'original'
         });
-        file.pipe(writeStreamOrginal);
-        writeStreamOrginal.on('close',function(originalFile){
-            dataResp.originalFile = originalFile;
-            var ffmpeg = SpawnStream('ffmpeg', ['-i','-','-vcodec','mjpeg','-ss','00:00:03','-vframes','1','-s','100x80']);
-            gfs.createReadStream({_id:originalFile._id}).pipe(ffmpeg).pipe(fs.createWriteStream('./public/uploads/test.jpg', 'w'));
-        });
+        var bufs=[];
+        file.pipe(writeStreamOrginal)
+            .on('close',function(originalFile){
+                dataResp.originalFile=originalFile;
+                res.jsonp(dataResp);
+            });
+
+        /*******    thumbnail video    ******/
+        file.pipe(ffmpeg)
+            .on('data',function(chunk){
+                bufs.push(chunk);
+            })
+            .on('end',function(){
+                var fbuf = Buffer.concat(bufs);
+                var base64 = (fbuf.toString('base64'));
+                var data = 'data:image/jpeg;base64,' + base64 + '';
+                dataResp.data = data;
+            });
     });
     busboy.on('finish', function() {
         console.log('uploade finish');
     });
     req.pipe(busboy);
-
 };
 /**
  * Create a Pub video
@@ -67,12 +83,36 @@ exports.create = function(req, res) {
  * Show the current Pub video
  */
 exports.read = function(req, res) {
-    var pubVideo = req.body;
+    var pubVideo = req.pubVideo;
     res.jsonp(pubVideo);
 };
 
 exports.readData=function(req,res){
-
+    var pubVideo=req.pubVideo;
+    gfs.findOne({_id : pubVideo.id_file_original},function (err, file) {
+        if(err){return res.status(400).send({
+            message: errorHandler.getErrorMessage(err)
+        });
+        }else{
+            if(file!=null){
+                var readStream = gfs.createReadStream({_id: pubVideo.id_file_original,
+                    range: {
+                        startPos: 0,
+                        endPos: file.chunkSize
+                }});
+                var bufs = [];
+                readStream.on('data',function(chunk){
+                    bufs.push(chunk);
+                });
+                readStream.on('close',function() {
+                    var fbuf = Buffer.concat(bufs);
+                    var base64 = (fbuf.toString('base64'));
+                    var data = 'data:' + pubVideo.typeVideo + ';base64,' + base64 + '';
+                    res.jsonp({data: data});
+                });
+            }
+        }
+    });
 }
 /**
  * Update a Pub video

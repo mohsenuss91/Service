@@ -11,3 +11,4 @@ angular.module('pub-videos').factory('PubVideos', ['$resource',
 		});
 	}
 ]);
+
