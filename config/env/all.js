@@ -2,8 +2,8 @@
 
 module.exports = {
 	app: {
-		title: 'MEAN.JS',
-		description: 'Full-Stack JavaScript with MongoDB, Express, AngularJS, and Node.js',
+		title: 'ESI-Life',
+		description: 'Site social de l ESI',
 		keywords: 'mongodb, express, angularjs, node.js, mongoose, passport'
 	},
 	port: process.env.PORT || 3000,
@@ -53,8 +53,7 @@ module.exports = {
 				'public/lib/angular-ui-router/release/angular-ui-router.js',
 				'public/lib/angular-ui-utils/ui-utils.js',
 				'public/lib/angular-bootstrap/ui-bootstrap-tpls.js',
-                'public/lib/ng-file-upload/angular-file-upload.js',
-                'public/lib/ng-socket/ngSocket.js'
+				'public/lib/ng-file-upload/angular-file-upload.js'
 			]
 		},
 		css: [

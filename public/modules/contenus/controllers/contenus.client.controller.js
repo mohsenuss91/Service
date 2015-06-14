@@ -1,17 +1,19 @@
 'use strict';
 
 // Contenus controller
-angular.module('contenus').controller('ContenusController', ['$scope', '$stateParams', '$location', 'Authentication', 'Contenus',
-	function($scope, $stateParams, $location, Authentication, Contenus) {
+angular.module('contenus').controller('ContenusController', ['$scope', '$rootScope','$stateParams', '$location', 'Authentication', 'Contenus',
+	function($scope,$rootScope, $stateParams, $location, Authentication, Contenus) {
 		$scope.authentication = Authentication;
-
+		$rootScope.tags = [];
 		// Create new Contenu
 		$scope.create = function() {
 			// Create new Contenu object
 			var contenu = new Contenus ({
-				name: this.name
+				name: this.name,
+				tags: this.tags
 			});
-
+			console.log(this.tags);
+			console.log(contenu);
 			// Redirect after save
 			contenu.$save(function(response) {
 				$location.path('contenus/' + response._id);
@@ -53,7 +55,25 @@ angular.module('contenus').controller('ContenusController', ['$scope', '$statePa
 
 		// Find a list of Contenus
 		$scope.find = function() {
-			$scope.contenus = Contenus.query();
+			$rootScope.contenus = Contenus.query();
+		};
+
+		$rootScope.autoComplete= function(){
+			var auto =[];
+			$rootScope.contenus.forEach(function (item) {
+					item.tags.forEach(function (tag){
+						var matches = auto.some(function (tags) {
+							var logique =  (tags.text.indexOf(tag.text) > -1)
+							//console.log(item.text + '=' + tag.text);
+							return logique ;
+						});
+						if (!matches) auto.push(tag);
+					});
+
+				}
+			);
+			//console.log(auto);
+			return auto;
 		};
 
 		// Find existing Contenu
@@ -61,6 +81,24 @@ angular.module('contenus').controller('ContenusController', ['$scope', '$statePa
 			$scope.contenu = Contenus.get({ 
 				contenuId: $stateParams.contenuId
 			});
+		};
+
+		//Appliquer le filtre
+		$scope.filterByTag =  function (items) {
+			var filter = true;
+			//console.log(items.tags);
+			($rootScope.tags || []).forEach(function (item) {
+				var matches = items.tags.some(function (tag) {
+					var logique =  (item.text.indexOf(tag.text) > -1)
+					//console.log(item.text + '=' + tag.text);
+					return logique ;
+				});
+				if (!matches) {
+					//console.log(item.text + ': Miss match');
+					filter = false;
+				}
+			});
+			return filter;
 		};
 	}
 ]);

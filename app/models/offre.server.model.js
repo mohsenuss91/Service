@@ -22,12 +22,6 @@ var OffreSchema = new Schema({
         required: '',
         trim: true
     },
-    duree: {
-        type: String,
-        default: '',
-        required: '',
-        trim: true
-    },
     competences:[{
         type: String,
         default: '',

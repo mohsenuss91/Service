@@ -6,6 +6,7 @@
 var mongoose = require('mongoose'),
 	errorHandler = require('./errors.server.controller'),
 	Evenement = mongoose.model('Evenement'),
+    Contenu = mongoose.model('Contenu'),
 	_ = require('lodash');
 
 /**
@@ -15,13 +16,31 @@ exports.create = function(req, res) {
 	var evenement = new Evenement(req.body);
 	evenement.user = req.user;
 
-	evenement.save(function(err) {
+
+
+	evenement.save(function(err, evenement) {
 		if (err) {
 			return res.status(400).send({
 				message: errorHandler.getErrorMessage(err)
 			});
 		} else {
-			res.jsonp(evenement);
+            var contenu = new Contenu();
+            contenu.user = req.user;
+            contenu.typeC = 'evenement';
+            contenu.evenement = evenement._id;
+
+            //console.log("evenement.server.controller "+contenu.created);
+
+            contenu.save(function(err) {
+                if (err) {
+                    return res.status(400).send({
+                        message: errorHandler.getErrorMessage(err)
+                    });
+                } else {
+                    res.jsonp(evenement);
+                }
+            });
+
 		}
 	});
 };
@@ -39,6 +58,16 @@ exports.read = function(req, res) {
 exports.update = function(req, res) {
 	var evenement = req.evenement ;
 
+
+    console.log("apdate request titre:" +req.body.titre +", description :"
+                + req.body.description+", lieu : "+req.body.lieu+", date:"+ req.body.date);
+    /*Evenement.findByIdAndUpdate(
+        evenement._id,
+        {$set: {titre: req.body.titre, description : req.body.description, lieu : req.body.lieu, date: req.body.date}},
+        function (err, comment) {
+            //status.save();
+        }
+    );
 	evenement = _.extend(evenement , req.body);
 
 	evenement.save(function(err) {
@@ -49,7 +78,7 @@ exports.update = function(req, res) {
 		} else {
 			res.jsonp(evenement);
 		}
-	});
+	});*/
 };
 
 /**
@@ -58,30 +87,44 @@ exports.update = function(req, res) {
 exports.delete = function(req, res) {
 	var evenement = req.evenement ;
 
-	evenement.remove(function(err) {
-		if (err) {
-			return res.status(400).send({
-				message: errorHandler.getErrorMessage(err)
-			});
-		} else {
-			res.jsonp(evenement);
-		}
-	});
+    Evenement.findByIdAndRemove(req.evenement._id, function(err) {
+        if (err) {
+            return res.status(400).send({
+                message: errorHandler.getErrorMessage(err)
+            });
+        } else {
+            Contenu.findOneAndRemove({evenement: req.evenement._id}, function (err, contenu) {
+                if (err) {
+                    console.log(err);
+                    return res.send(err);
+                }
+                else {
+                    res.jsonp(evenement);
+                }
+            })
+        }
+    });
 };
 
 /**
  * List of Evenements
  */
-exports.list = function(req, res) { 
-	Evenement.find().sort('-created').populate('user', 'displayName').exec(function(err, evenements) {
-		if (err) {
-			return res.status(400).send({
-				message: errorHandler.getErrorMessage(err)
-			});
-		} else {
-			res.jsonp(evenements);
-		}
-	});
+exports.list = function(req, res) {
+    Contenu.find({typeC : 'evenement'}).sort('-created')
+        .populate('user', 'displayName')
+        .populate({
+            path: 'evenement',
+            select: 'titre description date lieu'
+        })
+        .exec(function (err, contenus) {
+            if (err) {
+                return res.status(400).send({
+                    message: errorHandler.getErrorMessage(err)
+                });
+            } else {
+                res.jsonp(contenus);
+            }
+        });
 };
 
 /**

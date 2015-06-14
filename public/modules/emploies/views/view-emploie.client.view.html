@@ -1,21 +1,21 @@
 <section data-ng-controller="EmploiesController" data-ng-init="findOne()">
-	<div class="page-header">
-		<h1 data-ng-bind="emploie.name"></h1>
-	</div>
-	<div class="pull-right" data-ng-show="((authentication.user) && (authentication.user._id == emploie.user._id))">
-		<a class="btn btn-primary" href="/#!/emploies/{{emploie._id}}/edit">
-			<i class="glyphicon glyphicon-edit"></i>
-		</a>
-		<a class="btn btn-primary" data-ng-click="remove();">
-			<i class="glyphicon glyphicon-trash"></i>
-		</a>
-	</div>
-	<small>
-		<em class="text-muted">
-			Posted on
-			<span data-ng-bind="emploie.created | date:'mediumDate'"></span>
-			by
-			<span data-ng-bind="emploie.user.displayName"></span>
-		</em>
-	</small>
+    <div class="page-header">
+        <h1 data-ng-bind="emploie.name"></h1>
+    </div>
+    <div class="pull-right" data-ng-show="((authentication.user) && (authentication.user._id == emploie.user._id))">
+        <a class="btn btn-primary" href="/#!/emploies/{{emploie._id}}/edit">
+            <i class="glyphicon glyphicon-edit"></i>
+        </a>
+        <a class="btn btn-primary" data-ng-click="remove();">
+            <i class="glyphicon glyphicon-trash"></i>
+        </a>
+    </div>
+    <small>
+        <em class="text-muted">
+            Posted on
+            <span data-ng-bind="emploie.created | date:'mediumDate'"></span>
+            by
+            <span data-ng-bind="emploie.user.displayName"></span>
+        </em>
+    </small>
 </section>

@@ -1,23 +1,45 @@
-<section data-ng-controller="OffresController" data-ng-init="findOne()">
+<section data-ng-controller="OffresUpdateController as OffresUpdateCtrl">
     <div class="page-header">
-        <h1>Edit Offre</h1>
+        <h1>Mise à jour de l'offre</h1>
     </div>
     <div class="col-md-12">
-        <form class="form-horizontal" data-ng-submit="update()" novalidate>
+        <form class="form-horizontal" name="CreateEventForm" novalidate>
             <fieldset>
+
                 <div class="form-group">
-                    <label class="control-label" for="name">Name</label>
+                    <div data-ng-show="error" class="text-center text-danger">
+                        <div class="alert alert-danger" role="alert">
+                            <strong data-ng-bind="error"></strong>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
                     <div class="controls">
-                        <input type="text" data-ng-model="offre.name" id="name" class="form-control" placeholder="Name" required>
+                        <input type="text" data-ng-model="offre.entreprise" id="entreprise" class="form-control" placeholder="L'entreprise" required>
                     </div>
                 </div>
                 <div class="form-group">
-                    <input type="submit" value="Update" class="btn btn-default">
+                    <div class="controls">
+                        <input type="text" data-ng-model="offre.post" id="post" class="form-control" placeholder="Poste" required>
+                    </div>
                 </div>
-				<div data-ng-show="error" class="text-danger">
-					<strong data-ng-bind="error"></strong>
-				</div>
+                <div class="form-group">
+                    <div class="controls">
+                        <textarea ng-model="offre.competences" ng-list="&#10;" ng-trim="false" class="form-control" placeholder="Compétences necessaires"></textarea>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="controls">
+                        <textarea ng-model="offre.documents" ng-list="&#10;" ng-trim="false" class="form-control" placeholder="Documents nécessaires"></textarea>
+                    </div>
+                </div>
+
             </fieldset>
         </form>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-success btn-lg" ng-click="OffresUpdateCtrl.update(offre); ok()" ng-disabled="CreateEventForm.$invalid">Mettre à jour</button>
+        <button class="btn btn-warning btn-lg" ng-click="cancel()">Cancel</button>
     </div>
 </section>

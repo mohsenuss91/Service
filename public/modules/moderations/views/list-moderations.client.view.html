@@ -3,17 +3,18 @@
         <h1>Moderations</h1>
     </div>
     <div class="list-group">
-        <a data-ng-repeat="moderation in moderations" data-ng-href="#!/moderations/{{moderation._id}}" class="list-group-item">
-			<small class="list-group-item-text">
-				Posted on
-				<span data-ng-bind="moderation.created | date:'medium'"></span>
-				by
-				<span data-ng-bind="moderation.user.displayName"></span>
-			</small>
-			<h4 class="list-group-item-heading" data-ng-bind="moderation.name"></h4>
+        <a data-ng-repeat="moderation in moderations" data-ng-href="#!/moderations/{{moderation._id}}"
+           class="list-group-item">
+            <small class="list-group-item-text">
+                Posted on
+                <span data-ng-bind="moderation.created | date:'medium'"></span>
+                by
+                <span data-ng-bind="moderation.user.displayName"></span>
+            </small>
+            <h4 class="list-group-item-heading" data-ng-bind="moderation.name"></h4>
         </a>
     </div>
     <div class="alert alert-warning text-center" data-ng-hide="!moderations.$resolved || moderations.length">
-    	No Moderations yet, why don't you <a href="/#!/moderations/create">create one</a>?
+        No Moderations yet, why don't you <a href="/#!/moderations/create">create one</a>?
     </div>
 </section>

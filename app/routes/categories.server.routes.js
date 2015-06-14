@@ -1,19 +1,19 @@
 'use strict';
 
-module.exports = function(app) {
-	var users = require('../../app/controllers/users.server.controller');
-	var categories = require('../../app/controllers/categories.server.controller');
+module.exports = function (app) {
+    var users = require('../../app/controllers/users.server.controller');
+    var categories = require('../../app/controllers/categories.server.controller');
 
-	// Categories Routes
-	app.route('/categories')
-		.get(categories.list)
-		.post(users.requiresLogin, categories.create);
+    // Categories Routes
+    app.route('/categories')
+        .get(categories.list)
+        .post(users.requiresLogin, categories.create);
 
-	app.route('/categories/:categorieId')
-		.get(categories.read)
-		.put(users.requiresLogin, categories.hasAuthorization, categories.update)
-		.delete(users.requiresLogin, categories.hasAuthorization, categories.delete);
+    app.route('/categories/:categorieId')
+        .get(categories.read)
+        .put(users.requiresLogin, categories.hasAuthorization, categories.update)
+        .delete(users.requiresLogin, categories.hasAuthorization, categories.delete);
 
-	// Finish by binding the Categorie middleware
-	app.param('categorieId', categories.categorieByID);
+    // Finish by binding the Categorie middleware
+    app.param('categorieId', categories.categorieByID);
 };

@@ -29,13 +29,13 @@ var UserSchema = new Schema({
 		type: String,
 		trim: true,
 		default: '',
-		validate: [validateLocalStrategyProperty, 'Please fill in your first name']
+		validate: [validateLocalStrategyProperty, 'Entrez votre nom svp']
 	},
 	lastName: {
 		type: String,
 		trim: true,
 		default: '',
-		validate: [validateLocalStrategyProperty, 'Please fill in your last name']
+		validate: [validateLocalStrategyProperty, 'Entrez votre prenom']
 	},
 	displayName: {
 		type: String,
@@ -50,14 +50,14 @@ var UserSchema = new Schema({
 	},
 	username: {
 		type: String,
-		unique: 'Username already exists',
-		required: 'Please fill in a username',
+		unique: 'Username existe déjà',
+		required: 'Entrez votre username',
 		trim: true
 	},
 	password: {
 		type: String,
 		default: '',
-		validate: [validateLocalStrategyPassword, 'Password should be longer']
+		validate: [validateLocalStrategyPassword, 'Le mot de pass est court']
 	},
 	salt: {
 		type: String
@@ -71,9 +71,9 @@ var UserSchema = new Schema({
 	roles: {
 		type: [{
 			type: String,
-			enum: ['user', 'admin']
+			enum: ['étudiant affilé', 'étudiant non affilé', 'contributeur', 'administratuer', 'enseignant', 'administratif', 'modérateur']
 		}],
-		default: ['user']
+		default: ['étudiant affilé']
 	},
 	updated: {
 		type: Date
@@ -88,7 +88,37 @@ var UserSchema = new Schema({
 	},
 	resetPasswordExpires: {
 		type: Date
+	},
+	bloque: {
+		type: Boolean,
+		default: false
+	},
+	suit: [{
+		type: Schema.ObjectId,
+		ref: 'User'
+	}],
+	estSuivi: [{
+		type: Schema.ObjectId,
+		ref: 'User'
+	}],
+	notifications: [{
+		type: Schema.ObjectId,
+		ref: 'Notification'
+	}],
+	categories: [{
+		type: Schema.ObjectId,
+		ref: 'Categorie'
+	}],
+	affectations: [{
+		type: Schema.ObjectId,
+		ref: 'Notification'
+	}],
+	pubImag: {
+		type: Schema.ObjectId,
+		ref: 'PubImag'
 	}
+
+
 });
 
 /**

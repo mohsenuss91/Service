@@ -1,0 +1,13 @@
+.glyphicon-trash:hover {
+    color: red;
+}
+
+.glyphicon-trash {
+    margin-right: 10px;
+}
+
+.form-event{
+    background-color: rgba(34, 150, 173, 0.37);
+    font-size: xx-large;
+    padding-left: 50px;
+}

@@ -1,19 +1,114 @@
 <section data-ng-controller="ContenusController" data-ng-init="find()">
-    <div class="page-header">
-        <h1>Contenus</h1>
-    </div>
-    <div class="list-group">
-        <a data-ng-repeat="contenu in contenus" data-ng-href="#!/contenus/{{contenu._id}}" class="list-group-item">
-			<small class="list-group-item-text">
-				Posted on
-				<span data-ng-bind="contenu.created | date:'medium'"></span>
-				by
-				<span data-ng-bind="contenu.user.displayName"></span>
-			</small>
-			<h4 class="list-group-item-heading" data-ng-bind="contenu.name"></h4>
-        </a>
-    </div>
-    <div class="alert alert-warning text-center" data-ng-hide="!contenus.$resolved || contenus.length">
-    	No Contenus yet, why don't you <a href="/#!/contenus/create">create one</a>?
+    <div class="timeline-block">
+        <!--<tags-input class="bootstrap"
+                    ng-model="$root.tags"
+                    placeholder="Ajouter un Tag"
+                    replace-spaces-with-dashes="false">
+            <auto-complete source="$root.autoComplete()"
+                           min-length="0"
+                           debounce-delay="200"
+                           max-results="7"></auto-complete>
+        </tags-input>-->
+        <div data-ng-repeat="contenu in contenus | filter:filterByTag" data-ng-href="#!/contenus/{{contenu._id}}"
+             class="panel panel-default">
+            <div class="panel-heading">
+                <div class="media">
+                    <a href="" class="pull-left"><img src="images/people/50/guy-2.jpg" class="media-object"></a>
+
+                    <div class="media-body">
+                        <a href="#" class="pull-right text-muted"><i class="icon-reply-all-fill fa fa-2x "></i></a>
+                        <a class="pull-right text-muted" data-ng-click="remove(contenu);">
+                            <i class="glyphicon glyphicon-trash"></i>
+                        </a>
+                        <a href=""><span data-ng-bind="contenu.user.displayName"></span></a>
+                        <span>on <span data-ng-bind="contenu.created | date:'medium'"></span></span>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body">
+                <p data-ng-bind="contenu.name"></p>
+            </div>
+            <ul class="comments">
+                <div class="media">
+                    <div class="media-body">
+                        <button data-ng-repeat="tag in contenu.tags" class="btn btn-primary btn-xs">
+                            <i class="fa fa-tag"></i> <span data-ng-bind="tag.text"></span>
+                        </button>
+                    </div>
+                </div>
+            </ul>
+            <ul class="comments" data-ng-controller="LikesController as LikesCtrl"
+                data-ng-init="LikesCtrl.find(contenu)">
+                <div class="media">
+                    <div class="media-body">
+                        <button class="btn btn-primary btn-circle" data-toggle="tooltip"
+                                ng-hide="aime" ng-click=" LikesCtrl.createLikeContenu(contenu)"
+                                data-original-title="{{list}}" data-placement="top">
+                            <span class="fa fa-fw fa-thumbs-o-up"></span>
+                        </button>
+                        <button class="btn btn-primary btn-circle" data-toggle="tooltip"
+                                ng-show="aime" ng-click=" LikesCtrl.removeLikeContenu(contenu)"
+                                data-original-title="{{list}}" data-placement="top">
+                            <span class="fa fa-fw fa-thumbs-o-down"></span>
+                        </button>
+                    </div>
+                </div>
+            </ul>
+            <ul class="comments" data-ng-controller="CommentsController as CommentsCtrl"
+                data-ng-init="CommentsCtrl.find(contenu)">
+                <li data-ng-repeat="comment in commentsList"
+                    data-ng-href="#!/contenus/{{contenu._id}}/comments/{{comment._id}}">
+                    <div class="media" ng-hide="Update">
+                        <a href="" class="pull-left"><img src="images/people/50/guy-4.jpg" class="media-object"></a>
+
+                        <div class="media-body">
+                            <a class="pull-right text-muted"
+                               ng-click="CommentsCtrl.removeCommentContenu(contenu,comment)">
+                                <i class="glyphicon glyphicon-trash"></i>
+                            </a>
+                            <a class="pull-right text-muted" ng-click="Update=true">
+                                <i class="glyphicon glyphicon-pencil"></i>
+                            </a>
+                            <a href="" class="comment-author"><span data-ng-bind="comment.user.displayName"></span></a>
+                            <span data-ng-bind="comment.name"></span>
+
+                            <div class="comment-date"><span data-ng-bind="comment.created | date:'medium'"></span></div>
+                        </div>
+                    </div>
+                    <div ng-show="Update">
+                        <form class="form-horizontal"
+                              data-ng-submit="Update=false;CommentsCtrl.updateCommentContenu(contenu,comment)"
+                              novalidate>
+                            <div class="input-group">
+                                <input type="text" data-ng-model="comment.name" class="form-control">
+                                      <span class="input-group-btn">
+                                        <button class="btn btn-default" type="submit">Update!</button>
+                                      </span>
+                            </div>
+                            <!-- /input-group -->
+                        </form>
+                    </div>
+                </li>
+
+                <li>
+                    <div>
+                        <form class="form-horizontal" data-ng-submit="CommentsCtrl.createCommentContenu(contenu)"
+                              novalidate>
+                            <div class="input-group">
+                                <input type="text" data-ng-model="name" class="form-control"
+                                       placeholder="Rédiger un commentaire...">
+                                      <span class="input-group-btn">
+                                        <button class="btn btn-default" type="submit">Go!</button>
+                                      </span>
+                            </div>
+                            <!-- /input-group -->
+                        </form>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div class="alert alert-warning text-center" data-ng-hide="!contenus.$resolved || contenus.length">
+            Il n'y a pas de contenus dans cette catégorie <a href="/#!/contenus/create">create one</a>?
+        </div>
     </div>
 </section>

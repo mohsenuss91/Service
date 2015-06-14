@@ -4,12 +4,12 @@
  * Module dependencies.
  */
 var mongoose = require('mongoose'),
-	Schema = mongoose.Schema;
+    Schema = mongoose.Schema;
 
 /**
  * FileImags Schema
  */
-var FileImagsSchema = new Schema({},{ strict: false });
+var FileImagsSchema = new Schema({}, {strict: false});
 
-mongoose.model('FileImags', FileImagsSchema,"fs.files");
+mongoose.model('FileImags', FileImagsSchema, "fs.files");
 

@@ -7,6 +7,13 @@ var init = require('./config/init')(),
 	mongoose = require('mongoose'),
 	chalk = require('chalk');
 
+var winston = require('winston');
+
+winston.add(winston.transports.File, {filename: 'journal.log'});
+winston.remove(winston.transports.Console);
+
+winston.log('info', 'Serveur demmarer sur le port' + config.port);
+
 /**
  * Main application entry file.
  * Please note that the order of loading is important.
