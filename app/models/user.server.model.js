@@ -111,7 +111,7 @@ var UserSchema = new Schema({
 	}],
 	affectations: [{
 		type: Schema.ObjectId,
-		ref: 'Notification'
+		ref: 'Affectation'
 	}],
 	pubImag: {
 		type: Schema.ObjectId,
