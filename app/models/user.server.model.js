@@ -25,6 +25,13 @@ var validateLocalStrategyPassword = function(password) {
  * User Schema
  */
 var UserSchema = new Schema({
+    file_image:
+    {
+        type: String
+    },
+    typeImage: {
+        type: String
+    },
 	firstName: {
 		type: String,
 		trim: true,
@@ -50,7 +57,7 @@ var UserSchema = new Schema({
 	},
 	username: {
 		type: String,
-		unique: 'Username existe déjà',
+		unique: 'Username existe dï¿½jï¿½',
 		required: 'Entrez votre username',
 		trim: true
 	},
@@ -71,9 +78,9 @@ var UserSchema = new Schema({
 	roles: {
 		type: [{
 			type: String,
-			enum: ['étudiant affilé', 'étudiant non affilé', 'contributeur', 'administratuer', 'enseignant', 'administratif', 'modérateur']
+			enum: ['ï¿½tudiant affilï¿½', 'ï¿½tudiant non affilï¿½', 'contributeur', 'administratuer', 'enseignant', 'administratif', 'modï¿½rateur']
 		}],
-		default: ['étudiant affilé']
+		default: ['ï¿½tudiant affilï¿½']
 	},
 	updated: {
 		type: Date
@@ -112,13 +119,7 @@ var UserSchema = new Schema({
 	affectations: [{
 		type: Schema.ObjectId,
 		ref: 'Notification'
-	}],
-	pubImag: {
-		type: Schema.ObjectId,
-		ref: 'PubImag'
-	}
-
-
+	}]
 });
 
 /**
