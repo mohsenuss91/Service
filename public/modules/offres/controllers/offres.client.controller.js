@@ -82,6 +82,7 @@ angular.module('offres').controller('OffresController', ['$scope', '$http', '$st
 
         // Find a list of Evenements
         $scope.find = this.find = function() {
+            console.log('hi');
             $http.get('offres/')
                 .success(function (response) {
                     //console.log("i got the data offresList  " + response.length);
@@ -99,9 +100,12 @@ angular.module('offres').controller('OffresController', ['$scope', '$http', '$st
         };
 
         // Find existing Evenement
-        $scope.findOne = function() {
-            $scope.offre = Evenements.get({
-                offreId: $stateParams.offreId
+        this.findOne = function(id) {
+            Offres.get({
+                offreId: id
+            }, function(response){
+                 $scope.offre = response;
+                console.log($scope.offre);
             });
         };
     }]);

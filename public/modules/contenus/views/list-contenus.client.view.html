@@ -1,21 +1,54 @@
 <section data-ng-controller="ContenusController" data-ng-init="find()">
     <div class="timeline-block">
-        <!--<tags-input class="bootstrap"
-                    ng-model="$root.tags"
-                    placeholder="Ajouter un Tag"
-                    replace-spaces-with-dashes="false">
-            <auto-complete source="$root.autoComplete()"
-                           min-length="0"
-                           debounce-delay="200"
-                           max-results="7"></auto-complete>
-        </tags-input>-->
+    <div class="panel panel-default">
+        <form data-ng-submit="create()" novalidate>
+            <div class="timeline-block">
+                <div class="panel panel-default share">
+                    <div class="panel-heading panel-heading-gray title">
+                        Quoi de noeuf
+                    </div>
+                    <div class="panel-body">
+                        <textarea name="status" class="form-control share-text" data-ng-model="name" rows="3" placeholder="Partager ton status..."></textarea>
+
+                    <p>{{name}}</p>
+                    <div class="form-group">
+                        <tags-input class="bootstrap"
+                                    ng-model="tags"
+                                    placeholder="Ajouter un Tag"
+                                    replace-spaces-with-dashes="false">
+                        </tags-input>
+                    </div>
+
+                    <div class="panel-footer">
+                        <div class="">
+                            <a href="#">
+                                <i class="fa fa-map-marker"></i>
+                            </a>
+                            <a href="#">
+                                <i class="fa fa-photo"></i>
+                            </a>
+                            <a href="#">
+                                <i class="fa fa-video-camera"></i>
+                            </a>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-xs pull-right " href="#">Publier</button>
+                    </div>
+                    </div>
+                    <div data-ng-show="error" class="text-danger">
+                        <strong data-ng-bind="error"></strong>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
         <div data-ng-repeat="contenu in contenus | filter:filterByTag" data-ng-href="#!/contenus/{{contenu._id}}"
-             class="panel panel-default">
-            <div class="panel-heading">
+             class="panel panel-default" ng-class="{'profile-card':contenu.typeC == 'offre'}">
+            <div class="panel-heading" ng-hide="contenu.typeC == 'offre'">
                 <div class="media">
                     <a href="" class="pull-left"><img src="images/people/50/guy-2.jpg" class="media-object"></a>
 
-                    <div class="media-body">
+                    <div class="media-body" >
                         <a href="#" class="pull-right text-muted"><i class="icon-reply-all-fill fa fa-2x "></i></a>
                         <a class="pull-right text-muted" data-ng-click="remove(contenu);">
                             <i class="glyphicon glyphicon-trash"></i>
@@ -25,19 +58,59 @@
                     </div>
                 </div>
             </div>
-            <div class="panel-body">
-                <p data-ng-bind="contenu.name"></p>
-            </div>
-            <ul class="comments">
-                <div class="media">
-                    <div class="media-body">
-                        <button data-ng-repeat="tag in contenu.tags" class="btn btn-primary btn-xs">
-                            <i class="fa fa-tag"></i> <span data-ng-bind="tag.text"></span>
-                        </button>
+            <div class="panel-body" >
+                <div class="panel-body" ng-show="contenu.typeC == 'offre'" data-ng-controller="OffresController as OffresCtrl" data-ng-init="contenu.offre ? OffresCtrl.findOne(contenu.offre) : null">
+                        <div class="profile-card-icon">
+                            <i class="fa fa-graduation-cap"></i>
+                        </div>
+                        <h4 class="text-center" >Offre d'Emploie</h4>
+                        <div class="panel-heading">
+                            <div class="media">
+                                <a href="" class="pull-left"><img src="images/people/50/guy-2.jpg" class="media-object"></a>
+
+                                <div class="media-body">
+                                    <a class="pull-right text-muted" ng-click="OffresCtrl.modalUpdate('lg',offre)">
+                                        <i class="glyphicon glyphicon-pencil"></i>
+                                    </a>
+                                    <a class="pull-right text-muted" data-ng-click="OffresCtrl.remove(contenu)">
+                                        <i class="glyphicon glyphicon-trash"></i>
+                                    </a>
+                                    <a class="nom-user"><span data-ng-bind="offre.user.displayName"></span></a>
+                                    <span>on <span data-ng-bind="offre.created | date:'medium'"></span></span>
+                                </div>
+                            </div>
+                        </div>
+                        <ul class="profile-card-items">
+                            <li><i class="fa fa-institution"></i>{{offre.entreprise}}</li>
+                            <li><i class="fa fa-desktop"></i>{{offre.post}}</li>
+                            <li><i class="fa fa-graduation-cap"></i><span ng-repeat="compet in offre.competences">{{compet}}, </span></li>
+                            <li><i class="fa fa-suitcase"></i><span ng-repeat="docum in offre.documents">{{docum}}, </span></li>
+                        </ul>
                     </div>
+                <div  class="panel-body" ng-show="contenu.typeC == 'evenement'" data-ng-controller="EvenementsController as EvenementsCtrl" data-ng-init="contenu.evenement ? EvenementsCtrl.findOne(contenu.evenement) : null">
+                    <div class="form-event">
+                        {{evenement.titre}}
+                    </div>
+                    <ul class="list-group">
+                        <li class="list-group-item"><i class="fa fa-globe"></i>  {{evenement.lieu}}</li>
+                        <li class="list-group-item"><i class="fa fa-calendar-o"></i>  {{evenement.date | date:'mediumDate'}}</li>
+                        <li class="list-group-item"><i class="fa fa-clock-o"></i>  {{evenement.date | date:'mediumTime'}}</li>
+                        <li class="list-group-item"><i class="fa fa-comment-o"></i>  {{evenement.description}}</li>
+                    </ul>
+                    <div class="clearfix"></div>
                 </div>
-            </ul>
-            <ul class="comments" data-ng-controller="LikesController as LikesCtrl"
+                <p ng-show="contenu.typeC == 'status'" data-ng-bind="contenu.name"></p>
+            </div>
+                <ul class="comments">
+                    <div class="media">
+                        <div class="media-body">
+                            <button data-ng-repeat="tag in contenu.tags" class="btn btn-primary btn-xs">
+                                <i class="fa fa-tag"></i> <span data-ng-bind="tag.text"></span>
+                            </button>
+                        </div>
+                    </div>
+                </ul>
+                <ul class="comments" data-ng-controller="LikesController as LikesCtrl"
                 data-ng-init="LikesCtrl.find(contenu)">
                 <div class="media">
                     <div class="media-body">
