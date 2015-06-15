@@ -18,6 +18,7 @@ angular.module('pub-imags').controller('PubImagsController', ['$scope','$upload'
                     var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
                     document.getElementById('bar1').style.width= progressPercentage+"%";
                 }).success(function(data, status, headers, config) {
+					console.log(data);
                     $scope.originalFile = data.originalFile;
                     $scope.image_data_thumbnail = data.data;
                     $scope.image_data_type = data.typeData;
@@ -30,7 +31,7 @@ angular.module('pub-imags').controller('PubImagsController', ['$scope','$upload'
 			// Create new Pub imag object
 			var pubImag = new PubImags ({
                 id_file_original: this.originalFile._id,
-                image_data_thumbnail:this.image_data_thumbnail,
+                //image_data_thumbnail:this.image_data_thumbnail,
                 typeImage: this.image_data_type,
                 description: this.description
 			});
@@ -78,7 +79,14 @@ angular.module('pub-imags').controller('PubImagsController', ['$scope','$upload'
 
 		// Find a list of Pub imags
 		$scope.find = function() {
-			$scope.pubImags = PubImags.query();
+			$scope.pubImags = PubImags.query(function(){
+				var i=0;
+				for (i=0;i<$scope.pubImags.length;i++){
+					$scope.pubImags[i].dataImageUrl = DataImages.get({
+						dataImageId: $scope.pubImags[i]._id
+					});
+				}
+			});
 		};
 
 		// Find existing Pub imag

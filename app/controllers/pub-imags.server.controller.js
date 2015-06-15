@@ -13,7 +13,7 @@ var Busboy = require('busboy');
 var conn = mongoose.connection;
 Grid.mongo = mongoose.mongo;
 
-var gfs
+var gfs;
 conn.once('open', function () {
     gfs = Grid(conn.db);
 });
@@ -22,10 +22,10 @@ conn.once('open', function () {
  * Create a Pub imag
  */
 
-var im = require('imagemagick-stream');
+//var im = require('imagemagick-stream');
 
 exports.upload = function(req,res){
-    var resize = im().resize('400x400').quality(90);
+    //var resize = im().resize('400x400').quality(90);
     var busboy = new Busboy({ headers: req.headers });
     busboy.on('file', function(fieldname, file, filename, encoding, mimetype) {
         var dataResp= {
@@ -36,19 +36,19 @@ exports.upload = function(req,res){
         var writeStreamOrginal = gfs.createWriteStream({
             filename: filename+'original'
         });
-        file.pipe(writeStreamOrginal);
-        writeStreamOrginal.on('close',function(originalFile){
-            dataResp.originalFile = originalFile;
-        });
+        file.pipe(writeStreamOrginal)
+            .on('close',function(originalFile){
+                dataResp.originalFile = originalFile;
+                res.jsonp(dataResp);
+            });
         var bufs = [];
-        file.pipe(resize).on('data',function(chunk){
+        file.on('data',function(chunk){
             bufs.push(chunk);
         }).on('end',function(){
             var fbuf = Buffer.concat(bufs);
             var base64 = (fbuf.toString('base64'));
             var data = 'data:'+mimetype+';base64,' + base64 + '';
             dataResp.data = data;
-            res.jsonp(dataResp);
         });
     });
     busboy.on('finish', function() {
@@ -109,13 +109,15 @@ exports.readFile = function (req,res){
 exports.readData = function(req, res) {
     var pubImag=req.pubImag;
     gfs.findOne({_id : pubImag.id_file_original},function (err, file) {
-        if(err){return res.status(400).send({
-            message: errorHandler.getErrorMessage(err)
-        });
-        }else{
-            if(file!=null){
-             var readStream = gfs.createReadStream({_id: pubImag.id_file_original});
-                var bufs = [];
+        if(err){
+            return res.status(400).send({
+                message: errorHandler.getErrorMessage(err)
+            });
+        }
+        console.log(file);
+        if(file!=null){
+            var bufs = [];
+            var readStream = gfs.createReadStream({_id: pubImag.id_file_original});
                 readStream.on('data',function(chunk){
                     bufs.push(chunk);
                 });
@@ -126,7 +128,7 @@ exports.readData = function(req, res) {
                     res.jsonp({data : data});
                 });
             }
-        }
+
     });
 };
 
