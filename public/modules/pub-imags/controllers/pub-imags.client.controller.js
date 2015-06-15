@@ -79,7 +79,14 @@ angular.module('pub-imags').controller('PubImagsController', ['$scope','$upload'
 
 		// Find a list of Pub imags
 		$scope.find = function() {
-			$scope.pubImags = PubImags.query();
+			$scope.pubImags = PubImags.query(function(){
+				var i=0;
+				for (i=0;i<$scope.pubImags.length;i++){
+					$scope.pubImags[i].dataImageUrl = DataImages.get({
+						dataImageId: $scope.pubImags[i]._id
+					});
+				}
+			});
 		};
 
 		// Find existing Pub imag
