@@ -5,7 +5,7 @@ angular.module('users').controller('SettingsController', ['$scope','$upload', '$
 		$scope.user = Authentication.user;
 
         $scope.image_data_thumbnail = "/images/260x180.png";
-
+        $scope.suivre="suivi+";
         $scope.upload = function(files) {
             if (files && files.length) {
                 var file = files[0];
@@ -88,5 +88,38 @@ angular.module('users').controller('SettingsController', ['$scope','$upload', '$
 				$scope.error = response.message;
 			});
 		};
+        /************************/
+        $scope.find = function() {
+            $scope.Users = Users.query();
+        };
+        /************************/
+        $scope.ajoutSuiv = function(userOther){
+            $scope.success = $scope.error = null;
+            $scope.user.suit.push(userOther._id);
+            userOther.estSuivi.push($scope.user._id);
+            var userSuit = new Users({
+                user:$scope.user,
+                userOther:userOther
+            });
+            userSuit.$update(function(response) {
+                $scope.success = true;
+                Authentication.user = response;
+                $scope.suivre="accepter";
+                $scope.find();
+            }, function(response) {
+                $scope.error = response.data.message;
+            });
+        }
+        $scope.showlist=false;
+        $scope.listSuivis=function(){
+            $http.get('/users/me', {
+            }).success(function(response) {
+                $scope.EstSuivis=response.estSuivi;
+                $scope.Suits=response.suit;
+                $scope.showlist=true;
+            }).error(function(response) {
+
+            });
+        }
 	}
 ]);
