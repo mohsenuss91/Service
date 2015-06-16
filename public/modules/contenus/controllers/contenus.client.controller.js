@@ -1,9 +1,11 @@
-'use strict';
-
 // Contenus controller
 angular.module('contenus').controller('ContenusController', ['$scope', '$rootScope','$stateParams', '$location', 'Authentication', 'Contenus',
 	function($scope,$rootScope, $stateParams, $location, Authentication, Contenus) {
 		$scope.authentication = Authentication;
+		$scope.navbar = 'status';
+		$scope.predicate = 'created';
+		$scope.predicateInv = false;
+
 		$rootScope.tags = [];
 		// Create new Contenu
 		$scope.create = function() {

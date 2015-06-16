@@ -1,50 +1,101 @@
+
 <section data-ng-controller="ContenusController" data-ng-init="find()">
     <div class="timeline-block">
-    <div class="panel panel-default">
+
+
+    <div class="panel panel-default" >
         <form data-ng-submit="create()" novalidate>
-            <div class="timeline-block">
+            <div class="timeline-block"  >
                 <div class="panel panel-default share">
-                    <div class="panel-heading panel-heading-gray title">
-                        Quoi de noeuf
+                    <div class="panel-heading panel-heading-gray">
+                        <div class="navbar-header fixed">
+                            <ul class="nav nav-tabs nav-justified">
+                                <li ng-class="{'active': navbar == 'status'}"><a href ng-click="navbar = 'status'"><i class="fa fa-pencil"></i> Status</a></li>
+                                <li ng-class="{'active': navbar == 'photo' }"><a href ng-click="navbar = 'photo'"><i class="fa fa-photo"></i> Photo</a></li>
+                                <li ng-class="{'active': navbar == 'video' }"><a href ng-click="navbar = 'video'"><i class="fa fa-video-camera"></i> Video</a></li>
+                                <li ng-class="{'active': navbar == 'offre' }" data-ng-controller="OffresController as OffresCtrl">
+                                    <a href ng-click="navbar = 'offre'; OffresCtrl.modalCreate(); OffresCtrl.find()">
+                                    <i class="fa fa-graduation-cap"></i>
+                                    offre
+                                </a></li>
+                                <li ng-class="{'active': navbar == 'evenement' }" data-ng-controller="EvenementsController as EvenementsCtrl" >
+                                    <a href ng-click="navbar = 'evenement'; EvenementsCtrl.modalCreate(); EvenementsCtrl.find()">
+                                        <i class="fa fa fa-fw fa-calendar"></i>
+                                        Evenement
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                     <div class="panel-body">
-                        <textarea name="status" class="form-control share-text" data-ng-model="name" rows="3" placeholder="Partager ton status..."></textarea>
 
-                    <p>{{name}}</p>
-                    <div class="form-group">
-                        <tags-input class="bootstrap"
-                                    ng-model="tags"
-                                    placeholder="Ajouter un Tag"
-                                    replace-spaces-with-dashes="false">
-                        </tags-input>
-                    </div>
+                        <div ng-show="navbar == 'photo'"  data-ng-controller="PubImagsController">
+                            <div class="panel panel-default">
+                                <div class="panel-body">
+                                    <div class="tab-pane" id="tab1" >
+                                        <div class="form-horizontal " novalidate >
+                                            <fieldset>
+                                                <div class="inline">
+                                                    <div class="col-xs-6">
+                                                        <div class="thumbnail" >
+                                                            <img id='image' ng-src={{image_data_thumbnail}} >
+                                                        </div>
+                                                    </div>
 
-                    <div class="panel-footer">
-                        <div class="">
-                            <a href="#">
-                                <i class="fa fa-map-marker"></i>
-                            </a>
-                            <a href="#">
-                                <i class="fa fa-photo"></i>
-                            </a>
-                            <a href="#">
-                                <i class="fa fa-video-camera"></i>
-                            </a>
+                                                    <div class="input-group">
+                                                        <input type="text" class="form-control"  value="{{files[0].name}}">
+                                                    <span class="input-group-btn">
+                                                        <button class="btn btn-primary btn-file" >
+                                                            <input type="file"   ng-file-select  data-ng-model="files"  accept="image/*">
+                                                            <i class="fa fa-download"></i>
+                                                        </button>
+                                                    </span>
+                                                    </div>
+                                                </div>
+                                                <br/>
+                                                <div class="progress">
+                                                    <div class="progress-bar" id="bar1" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"/>
+                                                </div>
+                                                <span class="input-group-btn">
+                                                    <button  ng-click="upload(files)" class="btn btn-primary btn-xs pull-right " >upload</button>
+                                                </span>
+                                            </fieldset>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="panel-footer input-groupe">
+                                    <div class="form-horizontal"  novalidate>
+                                        <textarea name="commentaire"  placeholder="ajouter un commentaire..." class="form-control share-text" data-ng-model="description"></textarea>
+                                        <span class="input-group-btn">
+                                            <button ng-click="create()" class="btn btn-primary btn-xs pull-right " >Publier</button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <button type="submit" class="btn btn-primary btn-xs pull-right " href="#">Publier</button>
+
+                        <div ng-show="navbar == 'status'">
+                            <textarea name="status" class="form-control share-text" data-ng-model="name" rows="3" placeholder="Partager ton status..."></textarea>
+                        </div>
+                        <div class="panel-footer">
+                            <div class="form-group">
+                                <tags-input class="bootstrap"
+                                            ng-model="tags"
+                                            placeholder="Ajouter un Tag"
+                                            replace-spaces-with-dashes="false">
+                                </tags-input>
+                            </div>
                     </div>
+                        <button type="submit" class="btn btn-default pull-right " href="#">Publier <i class="text-primary fa fa-arrow-circle-o-right"></i></button>
                     </div>
-                    <div data-ng-show="error" class="text-danger">
-                        <strong data-ng-bind="error"></strong>
                     </div>
                 </div>
-            </div>
         </form>
     </div>
-
-        <div data-ng-repeat="contenu in contenus | filter:filterByTag" data-ng-href="#!/contenus/{{contenu._id}}"
-             class="panel panel-default" ng-class="{'profile-card':contenu.typeC == 'offre'}">
-            <div class="panel-heading" ng-hide="contenu.typeC == 'offre'">
+        <a class="btn btn-default pull-right" ng-click="predicate = predicate == 'created' ? 'likes.length' : 'created';predicateInv=!predicateInv"><i class="text-primary fa fa-sort-amount-desc"></i></a>
+        <div data-ng-repeat="contenu in contenus | filter:filterByTag | orderBy: [predicate,'created']:true" data-ng-href="#!/contenus/{{contenu._id}}"
+             class="panel panel-default" ng-class="{'profile-card':contenu.typeC == 'offre'|| contenu.typeC == 'evenement'}">
+            <div class="panel-heading" ng-hide="contenu.typeC == 'offre'|| contenu.typeC == 'evenement'">
                 <div class="media">
                     <a href="" class="pull-left"><img src="images/people/50/guy-2.jpg" class="media-object"></a>
 
@@ -54,12 +105,12 @@
                             <i class="glyphicon glyphicon-trash"></i>
                         </a>
                         <a href=""><span data-ng-bind="contenu.user.displayName"></span></a>
-                        <span>on <span data-ng-bind="contenu.created | date:'medium'"></span></span>
+                        <span>En <span data-ng-bind="contenu.created | date:'medium'"></span></span>
                     </div>
                 </div>
             </div>
             <div class="panel-body" >
-                <div class="panel-body" ng-show="contenu.typeC == 'offre'" data-ng-controller="OffresController as OffresCtrl" data-ng-init="contenu.offre ? OffresCtrl.findOne(contenu.offre) : null">
+                <div  ng-show="contenu.typeC == 'offre'" data-ng-controller="OffresController as OffresCtrl" data-ng-init="contenu.offre ? OffresCtrl.findOne(contenu.offre) : null">
                         <div class="profile-card-icon">
                             <i class="fa fa-graduation-cap"></i>
                         </div>
@@ -76,7 +127,7 @@
                                         <i class="glyphicon glyphicon-trash"></i>
                                     </a>
                                     <a class="nom-user"><span data-ng-bind="offre.user.displayName"></span></a>
-                                    <span>on <span data-ng-bind="offre.created | date:'medium'"></span></span>
+                                    <span>En <span data-ng-bind="offre.created | date:'medium'"></span></span>
                                 </div>
                             </div>
                         </div>
@@ -87,19 +138,46 @@
                             <li><i class="fa fa-suitcase"></i><span ng-repeat="docum in offre.documents">{{docum}}, </span></li>
                         </ul>
                     </div>
-                <div  class="panel-body" ng-show="contenu.typeC == 'evenement'" data-ng-controller="EvenementsController as EvenementsCtrl" data-ng-init="contenu.evenement ? EvenementsCtrl.findOne(contenu.evenement) : null">
-                    <div class="form-event">
-                        {{evenement.titre}}
+                <div ng-show="contenu.typeC == 'evenement'" data-ng-controller="EvenementsController as EvenementsCtrl" data-ng-init="contenu.evenement ? EvenementsCtrl.findOne(contenu.evenement) : null">
+                    <div class="profile-card-icon">
+                        <i class="fa fa-calendar"></i>
                     </div>
-                    <ul class="list-group">
-                        <li class="list-group-item"><i class="fa fa-globe"></i>  {{evenement.lieu}}</li>
-                        <li class="list-group-item"><i class="fa fa-calendar-o"></i>  {{evenement.date | date:'mediumDate'}}</li>
-                        <li class="list-group-item"><i class="fa fa-clock-o"></i>  {{evenement.date | date:'mediumTime'}}</li>
-                        <li class="list-group-item"><i class="fa fa-comment-o"></i>  {{evenement.description}}</li>
+                    <h4 class="text-center" >Evenement</h4>
+                    <div class="panel-heading">
+                        <div class="media">
+                            <a href="" class="pull-left"><img src="images/people/50/guy-2.jpg" class="media-object"></a>
+
+                            <div class="media-body">
+                                <a class="pull-right text-muted" ng-click="EvenementsCtrl.modalUpdate('lg',offre)">
+                                    <i class="glyphicon glyphicon-pencil"></i>
+                                </a>
+                                <a class="pull-right text-muted" data-ng-click="EvenementsCtrl.remove(contenu)">
+                                    <i class="glyphicon glyphicon-trash"></i>
+                                </a>
+                                <a class="nom-user"><span data-ng-bind="evenement.user.displayName"></span></a>
+                                <span>En <span data-ng-bind="evenement.created | date:'medium'"></span></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <ul class="profile-card-items ">
+                        <li><i class="fa fa-comment-o"></i> {{evenement.description}}</li>
+                        <li><i class="fa fa-globe"></i> {{evenement.lieu}}</li>
+                        <li><i class="fa fa-calendar-o"></i> {{evenement.date | date:'mediumDate'}}</li>
+                        <li><i class="fa fa-clock-o"></i> {{evenement.date | date:'mediumTime'}}</li>
                     </ul>
-                    <div class="clearfix"></div>
+                    <div class="innerAll text-center half">
+                        <div class="btn-group">
+                            <button class="btn btn-success"><i class="fa fa-fw fa-check"></i> Aller</button>
+                            <button class="btn btn-default">Peut être</button>
+                        </div>
+                    </div>
                 </div>
                 <p ng-show="contenu.typeC == 'status'" data-ng-bind="contenu.name"></p>
+                <a ng-show="contenu.typeC == 'image'" data-ng-controller="PubImagsController as PubImagsCtrl" data-ng-init="contenu.pubImag ? PubImagsCtrl.findOne(contenu.pubImag) : null">
+                    <h1 data-ng-bind="pubImag.description"></h1>
+                    <div class="thumbnail"><img ng-src="{{dataImageUrl.data}}" /></div>
+                </a>
             </div>
                 <ul class="comments">
                     <div class="media">

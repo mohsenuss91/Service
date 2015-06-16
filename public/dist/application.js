@@ -6,7 +6,7 @@ var ApplicationConfiguration = (function() {
 	var applicationModuleName = 'mean';
 
 
-	var applicationModuleVendorDependencies = ['ngResource', 'ngAnimate', 'ui.router', 'ui.bootstrap', 'ui.utils', 'angularFileUpload'];
+	var applicationModuleVendorDependencies = ['ngResource', 'ngAnimate', 'ui.router', 'ui.bootstrap', 'ui.utils', 'angularFileUpload','ngTagsInput'];
 
 	// Add a new vertical module
 	var registerModule = function(moduleName, dependencies) {
@@ -569,7 +569,6 @@ angular.module('comments').controller('CommentsController', ['$scope', '$http', 
         this.find = function (contenu) {
             $http.get('contenus/' + contenu._id + '/comments/')
                 .success(function (response) {
-                    console.log("i got the data contactList  " + response.length);
                     $scope.commentsList = response;
                 });
         };
@@ -621,8 +620,26 @@ angular.module('contenus').config(['$stateProvider',
 		// Contenus state routing
 		$stateProvider.
 		state('listContenus', {
-			url: '/contenus',
-			templateUrl: 'modules/contenus/views/list-contenus.client.view.html'
+				url: '/contenus',
+				views : {
+					'':{
+						templateUrl: 'modules/contenus/views/list-contenus.client.view.html'
+					},
+					'offre': {
+						templateUrl: 'modules/offres/views/list-offres.client.view.html'
+					}
+				}
+		}).
+		state('listContenus.offre', {
+			url: '/contenus/offre',
+			views : {
+				'':{
+					templateUrl: 'modules/contenus/views/list-contenus.client.view.html'
+				},
+				'offre': {
+					templateUrl: 'modules/offres/views/list-offres.client.view.html'
+				}
+			}
 		}).
 		state('createContenu', {
 			url: '/contenus/create',
@@ -638,13 +655,12 @@ angular.module('contenus').config(['$stateProvider',
 		});
 	}
 ]);
-'use strict';
 
 // Contenus controller
-angular.module('contenus').controller('ContenusController', ['$scope', '$stateParams', '$location', 'Authentication','ngTagsInput', 'Contenus',
-	function($scope, $stateParams, $location, Authentication, Contenus) {
+angular.module('contenus').controller('ContenusController', ['$scope', '$rootScope','$stateParams', '$location', 'Authentication', 'Contenus',
+	function($scope,$rootScope, $stateParams, $location, Authentication, Contenus) {
 		$scope.authentication = Authentication;
-
+		$rootScope.tags = [];
 		// Create new Contenu
 		$scope.create = function() {
 			// Create new Contenu object
@@ -652,7 +668,8 @@ angular.module('contenus').controller('ContenusController', ['$scope', '$statePa
 				name: this.name,
 				tags: this.tags
 			});
-
+			console.log(this.tags);
+			console.log(contenu);
 			// Redirect after save
 			contenu.$save(function(response) {
 				$location.path('contenus/' + response._id);
@@ -694,7 +711,25 @@ angular.module('contenus').controller('ContenusController', ['$scope', '$statePa
 
 		// Find a list of Contenus
 		$scope.find = function() {
-			$scope.contenus = Contenus.query();
+			$rootScope.contenus = Contenus.query();
+		};
+
+		$rootScope.autoComplete= function(){
+			var auto =[];
+			$rootScope.contenus.forEach(function (item) {
+					item.tags.forEach(function (tag){
+						var matches = auto.some(function (tags) {
+							var logique =  (tags.text.indexOf(tag.text) > -1)
+							//console.log(item.text + '=' + tag.text);
+							return logique ;
+						});
+						if (!matches) auto.push(tag);
+					});
+
+				}
+			);
+			//console.log(auto);
+			return auto;
 		};
 
 		// Find existing Contenu
@@ -702,6 +737,24 @@ angular.module('contenus').controller('ContenusController', ['$scope', '$statePa
 			$scope.contenu = Contenus.get({ 
 				contenuId: $stateParams.contenuId
 			});
+		};
+
+		//Appliquer le filtre
+		$scope.filterByTag =  function (items) {
+			var filter = true;
+			//console.log(items.tags);
+			($rootScope.tags || []).forEach(function (item) {
+				var matches = items.tags.some(function (tag) {
+					var logique =  (item.text.indexOf(tag.text) > -1)
+					//console.log(item.text + '=' + tag.text);
+					return logique ;
+				});
+				if (!matches) {
+					//console.log(item.text + ': Miss match');
+					filter = false;
+				}
+			});
+			return filter;
 		};
 	}
 ]);
@@ -719,6 +772,7 @@ angular.module('contenus').factory('Contenus', ['$resource',
 		});
 	}
 ]);
+
 'use strict';
 
 // Setting up route
@@ -751,8 +805,10 @@ angular.module('core').controller('HeaderController', ['$scope', 'Authentication
 		$scope.$on('$stateChangeSuccess', function() {
 			$scope.isCollapsed = false;
 		});
+
 	}
 ]);
+
 'use strict';
 
 
@@ -1439,9 +1495,9 @@ angular.module('evenements').controller('EvenementsController', ['$scope', '$htt
         };
 
         // Find existing Evenement
-        $scope.findOne = function() {
+        $scope.findOne = this.findOne = function(id) {
             $scope.evenement = Evenements.get({
-                evenementId: $stateParams.evenementId
+                evenementId: id
             });
         };
     }]);
@@ -2072,6 +2128,7 @@ angular.module('offres').controller('OffresController', ['$scope', '$http', '$st
 
         // Find a list of Evenements
         $scope.find = this.find = function() {
+            console.log('hi');
             $http.get('offres/')
                 .success(function (response) {
                     //console.log("i got the data offresList  " + response.length);
@@ -2089,9 +2146,12 @@ angular.module('offres').controller('OffresController', ['$scope', '$http', '$st
         };
 
         // Find existing Evenement
-        $scope.findOne = function() {
-            $scope.offre = Evenements.get({
-                offreId: $stateParams.offreId
+        this.findOne = function(id) {
+            Offres.get({
+                offreId: id
+            }, function(response){
+                 $scope.offre = response;
+                console.log($scope.offre);
             });
         };
     }]);
@@ -2184,6 +2244,7 @@ angular.module('pub-imags').controller('PubImagsController', ['$scope','$upload'
                     var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
                     document.getElementById('bar1').style.width= progressPercentage+"%";
                 }).success(function(data, status, headers, config) {
+					console.log(data);
                     $scope.originalFile = data.originalFile;
                     $scope.image_data_thumbnail = data.data;
                     $scope.image_data_type = data.typeData;
@@ -2196,7 +2257,7 @@ angular.module('pub-imags').controller('PubImagsController', ['$scope','$upload'
 			// Create new Pub imag object
 			var pubImag = new PubImags ({
                 id_file_original: this.originalFile._id,
-                image_data_thumbnail:this.image_data_thumbnail,
+                //image_data_thumbnail:this.image_data_thumbnail,
                 typeImage: this.image_data_type,
                 description: this.description
 			});
@@ -2244,7 +2305,14 @@ angular.module('pub-imags').controller('PubImagsController', ['$scope','$upload'
 
 		// Find a list of Pub imags
 		$scope.find = function() {
-			$scope.pubImags = PubImags.query();
+			$scope.pubImags = PubImags.query(function(){
+				var i=0;
+				for (i=0;i<$scope.pubImags.length;i++){
+					$scope.pubImags[i].dataImageUrl = DataImages.get({
+						dataImageId: $scope.pubImags[i]._id
+					});
+				}
+			});
 		};
 
 		// Find existing Pub imag

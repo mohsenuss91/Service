@@ -28,6 +28,7 @@ angular.module('pub-imags').controller('PubImagsController', ['$scope','$upload'
 
         // Create new Pub imag
 		$scope.create = function() {
+			console.log('create');
 			// Create new Pub imag object
 			var pubImag = new PubImags ({
                 id_file_original: this.originalFile._id,
@@ -79,6 +80,7 @@ angular.module('pub-imags').controller('PubImagsController', ['$scope','$upload'
 
 		// Find a list of Pub imags
 		$scope.find = function() {
+			console.log('list');
 			$scope.pubImags = PubImags.query(function(){
 				var i=0;
 				for (i=0;i<$scope.pubImags.length;i++){
@@ -90,13 +92,15 @@ angular.module('pub-imags').controller('PubImagsController', ['$scope','$upload'
 		};
 
 		// Find existing Pub imag
-		$scope.findOne = function() {
+		$scope.findOne = this.findOne = function(id) {
+			console.log(id);
             $scope.pubImag = PubImags.get({
-				pubImagId: $stateParams.pubImagId
+				pubImagId: id
 			});
             $scope.dataImageUrl = DataImages.get({
-                dataImageId: $stateParams.pubImagId
+                dataImageId: id
             });
+			console.log($scope.dataImageUrl);
         };
 	}
 ]);

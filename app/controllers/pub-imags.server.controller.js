@@ -6,6 +6,7 @@
 var mongoose = require('mongoose'),
     fs = require('fs'),
     Grid = require('gridfs-stream'),
+    Contenu = mongoose.model('Contenu'),
 	errorHandler = require('./errors.server.controller'),
 	PubImag = mongoose.model('PubImag'),
 	_ = require('lodash');
@@ -61,13 +62,33 @@ exports.upload = function(req,res){
 exports.create = function(req, res) {
     var pubImag = new PubImag(req.body);
     pubImag.user = req.user;
-    pubImag.save(function (err) {
+    pubImag.save(function (err,pubImag) {
         if (err) {
+            console.log()
             return res.status(400).send({
                 message: errorHandler.getErrorMessage(err)
             });
         } else {
-            res.jsonp(pubImag);
+            var contenu = new Contenu();
+            contenu.user = req.user;
+            contenu.typeC = 'image';
+            contenu.pubImag = pubImag._id;
+
+            console.log('Sauvegarde de contenu : '+contenu);
+            //console.log("evenement.server.controller "+contenu.created);
+
+            contenu.save(function(err) {
+                if (err) {
+                    console.log(err);
+                    return res.status(400).send({
+                        message: errorHandler.getErrorMessage(err)
+                    });
+                } else {
+
+                    console.log('contenu saved');
+                    res.jsonp(pubImag);
+                }
+            });
         }
     });
 };

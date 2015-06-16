@@ -105,7 +105,6 @@ angular.module('offres').controller('OffresController', ['$scope', '$http', '$st
                 offreId: id
             }, function(response){
                  $scope.offre = response;
-                console.log($scope.offre);
             });
         };
     }]);
