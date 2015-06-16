@@ -1,8 +1,8 @@
 'use strict';
 
 // Comments controller
-angular.module('comments').controller('CommentsController', ['$scope', '$http', '$stateParams', '$location', 'Authentication', 'Comments',
-    function ($scope, $http, $stateParams, $location, Authentication, Comments) {
+angular.module('comments').controller('CommentsController', ['$scope', '$http', '$stateParams', '$location', 'Authentication', 'Comments','Moderationcomments',
+    function ($scope, $http, $stateParams, $location, Authentication, Comments,Moderationcomments) {
         $scope.authentication = Authentication;
 
         // Create new Comment
@@ -12,12 +12,24 @@ angular.module('comments').controller('CommentsController', ['$scope', '$http', 
                 name: $scope.name
             });
 
-            console.log("commentaire a été " + contenu._id);
+            console.log("commentaire a ï¿½tï¿½ " + contenu._id);
 
             // Redirect after save
             comment.$save({contenuId: contenu._id},
                 function (response) {
                     //$location.path('contenues/' + contenu._id);
+
+                    /********************************************************/
+                    var modertaionComment = new Moderationcomments({
+                        contenuComment:response._id,
+                        content_Url:'/#!/comments/'
+                    });
+                    modertaionComment.$save(function(response){
+                        console.log(response)
+                    },function(errResponse){
+                        console.log(errResponse);
+                    });
+                /************************************************************/
 
                     // Clear form fields
                     $scope.name = '';

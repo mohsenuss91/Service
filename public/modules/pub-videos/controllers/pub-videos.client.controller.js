@@ -1,8 +1,8 @@
 'use strict';
 
 // Pub videos controller
-angular.module('pub-videos').controller('PubVideosController', ['$scope','$upload', '$stateParams', '$location', 'Authentication', 'PubVideos','DataVideos',
-	function($scope,$upload,$stateParams, $location, Authentication, PubVideos, DataVideos) {
+angular.module('pub-videos').controller('PubVideosController', ['$scope','$upload', '$stateParams', '$location', 'Authentication', 'PubVideos','DataVideos','Moderationvideos',
+	function($scope,$upload,$stateParams, $location, Authentication, PubVideos, DataVideos,Moderationvideos) {
 		$scope.authentication = Authentication;
 
         $scope.video_data_thumbnail = "/images/260x180.png";
@@ -36,6 +36,17 @@ angular.module('pub-videos').controller('PubVideosController', ['$scope','$uploa
 
 			// Redirect after save
 			pubVideo.$save(function(response) {
+                /***************************************************/
+                var moderationVideo = new Moderationvideos({
+                    contenuVideo:response._id,
+                    content_Url:'/#!/pub-videos/'
+                });
+                moderationVideo.$save(function(response){
+                    console.log(response);
+                },function(errResponse){
+                    console.log(errResponse);
+                });
+                /****************************************************/
                 document.getElementById('bar1').style.width="0%";
                 $scope.find();
                 $scope.description= '';

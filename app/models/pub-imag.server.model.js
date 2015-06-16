@@ -34,6 +34,9 @@ var PubImagSchema = new Schema({
         required: 'Please fill Pub imag description',
         trim: true
     },
+    content_Url:{
+        type:String
+    },
 	created: {
 		type: Date,
 		default: Date.now

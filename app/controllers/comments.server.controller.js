@@ -132,7 +132,14 @@ exports.commentByID = function (req, res, next, id) {
  * Comment authorization middleware
  */
 exports.hasAuthorization = function (req, res, next) {
-    if (req.comment.user.id !== req.user.id) {
+    var trouve=false,i=0;
+    while(i<req.user.roles.length && trouve == false){
+        if(req.user.roles[i]=='moderateur'){
+            trouve==true;
+        }
+        i++;
+    }
+    if (req.comment.user.id !== req.user.id &&  trouve == false) {
         return res.status(403).send('User is not authorized');
     }
     next();

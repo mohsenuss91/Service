@@ -9,6 +9,10 @@ angular.module('users').config(['$stateProvider',
                 url: '/profile',
                 templateUrl: 'modules/users/views/profile.client.view.html'
             }).
+            state('Moderation', {
+                url: '/listModeration',
+                templateUrl: 'modules/users/views/list-moderation.client.view.html'
+            }).
             state('Users', {
                 url: '/listUser',
                 templateUrl: 'modules/users/views/Users.List.client.view.html'

@@ -7,7 +7,7 @@ module.exports = function (app) {
     // Moderations Routes
     app.route('/moderations')
         .get(users.requiresLogin, moderations.hasAuthorization,moderations.list)
-        .post(users.requiresLogin, moderations.create);
+        .post(users.requiresLogin,moderations.create);
     app.route('/moderations/?')
         .get(users.requiresLogin, moderations.hasAuthorization,moderations.list)
 

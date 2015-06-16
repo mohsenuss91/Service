@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('users').controller('SettingsController', ['$scope','$upload', '$http', '$location', 'Users', 'Authentication',
-	function($scope, $upload,$http, $location, Users,Authentication) {
+angular.module('users').controller('SettingsController', ['$scope','$upload', '$http', '$location', 'Users', 'Authentication','Moderationcomments','Moderationimages','Moderationstatuses','Moderationvideos',
+	function($scope, $upload,$http, $location, Users,Authentication,Moderationcomments,Moderationimages,Moderationstatuses,Moderationvideos) {
 		$scope.user = Authentication.user;
 
         $scope.image_data_thumbnail = "/images/260x180.png";
@@ -119,6 +119,75 @@ angular.module('users').controller('SettingsController', ['$scope','$upload', '$
                 $scope.showlist=true;
             }).error(function(response) {
 
+            });
+        }
+
+        $scope.findModerationImage=function(){
+            $scope.moderationImages = Moderationimages.query();
+        }
+
+        $scope.findModerationVideo=function(){
+            $scope.moderationVideos = Moderationvideos.query();
+        }
+
+        $scope.findModerationComment=function(){
+            $scope.moderationComments = Moderationcomments.query();
+        }
+
+        $scope.findModerationStatus=function(){
+            $scope.moderationStatus = Moderationstatuses.query();
+        }
+
+        $scope.modererImage=function(moderationImage){
+            moderationImage.moderer_par = $scope.user._id;
+            moderationImage.modere = true;
+            var moderationImage = new Moderationimages(moderationImage);
+
+            moderationImage.$update(function(response) {
+                console.log(response);
+                $scope.findModerationImage();
+            }, function(response) {
+                $scope.error = response.data.message;
+            });
+        }
+
+        $scope.modererVideo=function(moderationVideo){
+            moderationVideo.moderer_par = $scope.user._id;
+            moderationVideo.modere = true;
+            var moderationVideo = new Moderationimages(moderationVideo);
+
+            moderationVideo.$update(function(response) {
+                console.log(response);
+                $scope.findModerationVideo();
+            }, function(response) {
+                $scope.error = response.data.message;
+            });
+
+        }
+
+        $scope.modererStatus=function(moderationStatus){
+            moderationStatus.moderer_par = $scope.user._id;
+            moderationStatus.modere = true;
+            var moderationStatus = new Moderationimages(moderationStatus);
+
+            moderationStatus.$update(function(response) {
+                console.log(response);
+                $scope.findModerationStatus();
+            }, function(response) {
+                $scope.error = response.data.message;
+            });
+        }
+
+        $scope.modererComment=function(moderationComment){
+            moderationComment.moderer_par = $scope.user._id;
+            moderationComment.modere = true;
+            var moderationComment = new Moderationimages(moderationComment);
+
+            moderationComment.$update(function(response) {
+                console.log(response);
+                $scope.findModerationComment();
+            }, function(response) {
+                $scope.error = response.data.message;
             });
         }
 	}

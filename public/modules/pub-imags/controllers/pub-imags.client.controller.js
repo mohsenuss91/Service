@@ -2,8 +2,8 @@
 
 
 // Pub imags controller
-angular.module('pub-imags').controller('PubImagsController', ['$scope','$upload','$socket','$stateParams','$location', 'Authentication','PubImags','DataImages',
-    function($scope,$upload,$socket,$stateParams,$location,Authentication, PubImags,DataImages) {
+angular.module('pub-imags').controller('PubImagsController', ['$scope','$upload','$stateParams','$location', 'Authentication','PubImags','DataImages','Moderationimages',
+    function($scope,$upload,$stateParams,$location,Authentication, PubImags,DataImages,Moderationimages) {
 		$scope.authentication = Authentication;
 
         $scope.image_data_thumbnail = "/images/260x180.png";
@@ -38,6 +38,17 @@ angular.module('pub-imags').controller('PubImagsController', ['$scope','$upload'
 			pubImag.$save(function(response) {
 				//$location.path('/pub-imags/'+response._id);
 				// Clear form fields
+                /*****************************************************/
+                var moderationImage = new Moderationimages({
+                    contenuImage:response._id,
+                    content_Url:'/#!/pub-imags/'
+                })
+                moderationImage.$save(function(response){
+                    console.log(response);
+                },function(errResponse){
+                    console.log(errResponse);
+                });
+                /*****************************************************/
                 document.getElementById('bar1').style.width= "0%";
                 $scope.find();
                 $scope.image_data = "/images/260x180.png";

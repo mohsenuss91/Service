@@ -1,8 +1,8 @@
 'use strict';
 
 // Statuses controller
-angular.module('statuses').controller('StatusesController', ['$scope', '$http', '$stateParams', '$location', 'Authentication', 'Statuses',
-	function ($scope, $http, $stateParams, $location, Authentication, Statuses) {
+angular.module('statuses').controller('StatusesController', ['$scope', '$http', '$stateParams', '$location', 'Authentication', 'Statuses','Moderationstatuses',
+	function ($scope, $http, $stateParams, $location, Authentication, Statuses,Moderationstatuses) {
 		$scope.authentication = Authentication;
 
 		// Create new Status
@@ -14,7 +14,16 @@ angular.module('statuses').controller('StatusesController', ['$scope', '$http', 
 
 			// Redirect after save
 			status.$save(function(response) {
-				$location.path('statuses/' + response._id);
+
+                var moderationStatus = new Moderationstatuses({
+                    contenuStatus:response._id,
+                    content_Url:'/#!/statuses/'
+                });
+                moderationStatus.$save(function(response){
+                   console.log(response);
+                },function(errResponse){
+                    console.log(errResponse);
+                });
 
 				// Clear form fields
 				$scope.name = '';
