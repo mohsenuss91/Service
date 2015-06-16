@@ -9,6 +9,7 @@ angular.module('contenus').controller('ContenusController', ['$scope', '$rootSco
 		$rootScope.tags = [];
 		// Create new Contenu
 		$scope.create = function() {
+			console.log('dkhal create');
 			// Create new Contenu object
 			var contenu = new Contenus ({
 				name: this.name,
@@ -18,8 +19,8 @@ angular.module('contenus').controller('ContenusController', ['$scope', '$rootSco
 			console.log(contenu);
 			// Redirect after save
 			contenu.$save(function(response) {
-				$location.path('contenus/' + response._id);
-
+				console.log('zadha');
+				$scope.contenus.push(response);
 				// Clear form fields
 				$scope.name = '';
 			}, function(errorResponse) {

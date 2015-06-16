@@ -77,16 +77,15 @@ exports.create = function(req, res) {
             console.log('Sauvegarde de contenu : '+contenu);
             //console.log("evenement.server.controller "+contenu.created);
 
-            contenu.save(function(err) {
+            contenu.save(function(err,contenu) {
                 if (err) {
                     console.log(err);
                     return res.status(400).send({
                         message: errorHandler.getErrorMessage(err)
                     });
                 } else {
-
                     console.log('contenu saved');
-                    res.jsonp(pubImag);
+                    res.jsonp(contenu);
                 }
             });
         }

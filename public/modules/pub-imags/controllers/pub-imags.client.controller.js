@@ -7,7 +7,7 @@ angular.module('pub-imags').controller('PubImagsController', ['$scope','$upload'
 		$scope.authentication = Authentication;
 
         $scope.image_data_thumbnail = "/images/260x180.png";
-        $scope.upload = function(files) {
+        $scope.upload = this.upload = function(files) {
             if (files && files.length) {
                 var file = files[0];
                 $upload.upload({
@@ -18,7 +18,7 @@ angular.module('pub-imags').controller('PubImagsController', ['$scope','$upload'
                     var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
                     document.getElementById('bar1').style.width= progressPercentage+"%";
                 }).success(function(data, status, headers, config) {
-					console.log(data);
+					console.log("success");
                     $scope.originalFile = data.originalFile;
                     $scope.image_data_thumbnail = data.data;
                     $scope.image_data_type = data.typeData;
@@ -27,19 +27,23 @@ angular.module('pub-imags').controller('PubImagsController', ['$scope','$upload'
         };
 
         // Create new Pub imag
-		$scope.create = function() {
+		$scope.create = this.create = function() {
 			console.log('create');
 			// Create new Pub imag object
 			var pubImag = new PubImags ({
-                id_file_original: this.originalFile._id,
+                id_file_original: $scope.originalFile._id,
                 //image_data_thumbnail:this.image_data_thumbnail,
-                typeImage: this.image_data_type,
-                description: this.description
+                typeImage: $scope.image_data_type,
+                description: $scope.description
 			});
             // Redirect after save
 			pubImag.$save(function(response) {
 				//$location.path('/pub-imags/'+response._id);
 				// Clear form fields
+				response.user = Authentication.user;
+				console.log('response in');
+				console.log(response);
+				$scope.contenus.push(response);
                 document.getElementById('bar1').style.width= "0%";
                 $scope.find();
                 $scope.image_data = "/images/260x180.png";
@@ -68,7 +72,7 @@ angular.module('pub-imags').controller('PubImagsController', ['$scope','$upload'
 		};
 
 		// Update existing Pub imag
-		$scope.update = function() {
+		$scope.update = this.update = function() {
 			var pubImag = $scope.pubImag;
 
 			pubImag.$update(function() {

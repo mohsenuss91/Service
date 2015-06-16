@@ -7,25 +7,8 @@ angular.module('contenus').config(['$stateProvider',
 		$stateProvider.
 		state('listContenus', {
 				url: '/contenus',
-				views : {
-					'':{
-						templateUrl: 'modules/contenus/views/list-contenus.client.view.html'
-					},
-					'offre': {
-						templateUrl: 'modules/offres/views/list-offres.client.view.html'
-					}
-				}
-		}).
-		state('listContenus.offre', {
-			url: '/contenus/offre',
-			views : {
-				'':{
-					templateUrl: 'modules/contenus/views/list-contenus.client.view.html'
-				},
-				'offre': {
-					templateUrl: 'modules/offres/views/list-offres.client.view.html'
-				}
-			}
+				templateUrl: 'modules/contenus/views/list-contenus.client.view.html'
+
 		}).
 		state('createContenu', {
 			url: '/contenus/create',
