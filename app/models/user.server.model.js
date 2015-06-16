@@ -50,7 +50,7 @@ var UserSchema = new Schema({
 	},
 	username: {
 		type: String,
-		unique: 'Username existe d�j�',
+		unique: 'Username existe déjà',
 		required: 'Entrez votre username',
 		trim: true
 	},
@@ -111,7 +111,7 @@ var UserSchema = new Schema({
 	}],
 	affectations: [{
 		type: Schema.ObjectId,
-		ref: 'Notification'
+		ref: 'Affectation'
 	}],
 	pubImag: {
 		type: Schema.ObjectId,

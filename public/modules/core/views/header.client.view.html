@@ -69,8 +69,10 @@
 					<li data-ng-show="authentication.user.provider === 'local'">
 						<a href="/#!/settings/password">Change Password</a>
 					</li>
-					<li class="divider"></li>
-					<li>
+                    <li data-ng-show="authentication.user.roles.indexOf('admin') != -1">
+                        <a href="/#!/settings/password">Mode Administrateur</a>
+                    </li>
+                    <li>
 						<a href="/auth/signout">Signout</a>
 					</li>
 				</ul>

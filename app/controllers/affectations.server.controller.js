@@ -14,9 +14,11 @@ var mongoose = require('mongoose'),
 exports.create = function (req, res) {
     var affectation = new Affectation(req.body);
     affectation.user = req.user;
+    console.log("yow yow"+affectation.titre+affectation.description);
 
     affectation.save(function (err) {
         if (err) {
+            console.log(errorHandler.getErrorMessage(err));
             return res.status(400).send({
                 message: errorHandler.getErrorMessage(err)
             });
@@ -58,6 +60,7 @@ exports.update = function (req, res) {
 exports.delete = function (req, res) {
     var affectation = req.affectation;
 
+    console.log("deleting");
     affectation.remove(function (err) {
         if (err) {
             return res.status(400).send({

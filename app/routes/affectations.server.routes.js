@@ -11,8 +11,8 @@ module.exports = function (app) {
 
     app.route('/affectations/:affectationId')
         .get(affectations.read)
-        .put(users.requiresLogin, affectations.hasAuthorization, affectations.update)
-        .delete(users.requiresLogin, affectations.hasAuthorization, affectations.delete);
+        .put(users.requiresLogin, affectations.update)
+        .delete(users.requiresLogin, affectations.delete);
 
     // Finish by binding the Affectation middleware
     app.param('affectationId', affectations.affectationByID);

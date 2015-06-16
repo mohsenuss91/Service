@@ -6,15 +6,69 @@
         <form class="form-horizontal" data-ng-submit="create()" novalidate>
             <fieldset>
                 <div class="form-group">
-                    <label class="control-label" for="name">Name</label>
+                    <label class="control-label" for="titre">Titre</label>
 
                     <div class="controls">
-                        <input type="text" data-ng-model="name" id="name" class="form-control" placeholder="Name"
+                        <input type="text" data-ng-model="titre" id="titre" class="form-control" placeholder="Titre"
                                required>
                     </div>
                 </div>
                 <div class="form-group">
+                    <label class="control-label" for="description">Description</label>
+
+                    <div class="controls">
+                        <input type="text" data-ng-model="description" id="description" class="form-control" placeholder="Description"
+                               required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="type">Type</label>
+
+                    <div class="controls">
+                        <input type="text" data-ng-model="type" id="type" class="form-control" placeholder="Type"
+                               required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="semestre">Semestre</label>
+
+                    <div class="controls">
+                        <select ng-model="semestre" id="semestre" class="form-control">
+                            <option value=""></option>
+                            <option value="1">Semestre 1</option>
+                            <option value="2">Semestre 2</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="specialite">Specialite</label>
+
+                    <div class="controls">
+                        <select ng-model="specialite" id="specialite" class="form-control">
+                            <option value=""></option>
+                            <option value="sil">SIL</option>
+                            <option value="sit">SIT</option>
+                            <option value="siq">SIQ</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="annee">Année</label>
+
+                    <div class="controls">
+                        <select ng-model="annee" id="annee" class="form-control">
+                            <option value=""></option>
+                            <option value="1">Niveau 1</option>
+                            <option value="2">Niveau 2</option>
+                            <option value="3">Niveau 3</option>
+                            <option value="4">Niveau 4</option>
+                            <option value="5">Niveau 5</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
                     <input type="submit" class="btn btn-default">
+                    <button class="btn btn-default"ng-click="changeViewListe()">Annuler</button>
                 </div>
                 <div data-ng-show="error" class="text-danger">
                     <strong data-ng-bind="error"></strong>
