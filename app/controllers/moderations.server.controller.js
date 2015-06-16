@@ -73,7 +73,7 @@ exports.delete = function (req, res) {
  * List of Moderations
  */
 exports.list = function (req, res) {
-    Moderation.find().sort('-created').populate('user', 'displayName').exec(function (err, moderations) {
+    Moderation.find(req.modere).sort('-created').exec(function (err, moderations) {
         if (err) {
             return res.status(400).send({
                 message: errorHandler.getErrorMessage(err)
@@ -100,8 +100,16 @@ exports.moderationByID = function (req, res, next, id) {
  * Moderation authorization middleware
  */
 exports.hasAuthorization = function (req, res, next) {
-    if (req.moderation.user.id !== req.user.id) {
-        return res.status(403).send('User is not authorized');
+    /*var trouve=false,i=0;
+    while(i<req.user.roles.length && trouve == false){
+        if(req.user.roles[i]=='moderateur'){
+            trouve==true;
+        }
+        i++;
     }
+    if (trouve==false) {
+        return res.status(403).send('User is not authorized');
+    }*/
     next();
 };
+

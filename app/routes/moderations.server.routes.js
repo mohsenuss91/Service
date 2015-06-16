@@ -6,11 +6,13 @@ module.exports = function (app) {
 
     // Moderations Routes
     app.route('/moderations')
-        .get(moderations.list)
+        .get(users.requiresLogin, moderations.hasAuthorization,moderations.list)
         .post(users.requiresLogin, moderations.create);
+    app.route('/moderations/?')
+        .get(users.requiresLogin, moderations.hasAuthorization,moderations.list)
 
     app.route('/moderations/:moderationId')
-        .get(moderations.read)
+        .get(users.requiresLogin, moderations.hasAuthorization,moderations.read)
         .put(users.requiresLogin, moderations.hasAuthorization, moderations.update)
         .delete(users.requiresLogin, moderations.hasAuthorization, moderations.delete);
 

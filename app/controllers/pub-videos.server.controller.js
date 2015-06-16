@@ -178,7 +178,14 @@ exports.pubVideoByID = function(req, res, next, id) {
  * Pub video authorization middleware
  */
 exports.hasAuthorization = function(req, res, next) {
-	if (req.pubVideo.user.id !== req.user.id) {
+    var trouve=false,i=0;
+    while(i<req.user.roles.length && trouve == false){
+        if(req.user.roles[i]=='moderateur'){
+            trouve==true;
+        }
+        i++;
+    }
+	if (req.pubVideo.user.id !== req.user.id && trouve==false) {
 		return res.status(403).send('User is not authorized');
 	}
 	next();

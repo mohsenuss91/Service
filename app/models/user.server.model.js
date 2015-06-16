@@ -57,7 +57,7 @@ var UserSchema = new Schema({
 	},
 	username: {
 		type: String,
-		unique: 'Username existe d�j�',
+		unique: 'Username existe deja',
 		required: 'Entrez votre username',
 		trim: true
 	},
@@ -78,9 +78,9 @@ var UserSchema = new Schema({
 	roles: {
 		type: [{
 			type: String,
-			enum: ['�tudiant affil�', '�tudiant non affil�', 'contributeur', 'administratuer', 'enseignant', 'administratif', 'mod�rateur']
+			enum: ['etudiant affile', 'etudiant non affile', 'contributeur', 'administratuer', 'enseignant', 'administratif', 'moderateur']
 		}],
-		default: ['�tudiant affil�']
+		default: ['etudiant affile']
 	},
 	updated: {
 		type: Date
