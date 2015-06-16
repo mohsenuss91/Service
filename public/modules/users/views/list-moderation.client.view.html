@@ -6,12 +6,13 @@
         <div data-ng-show="success" class="text-center text-success">
             <strong>le contenu est moderer</strong>
         </div>
-        <a data-ng-repeat="moderationImage in moderationImages"  data-ng-href="{{moderationImage.content_Url+''+moderationImage.contenuImage}}" class="list-group-item">
+        <div data-ng-repeat="moderationImage in moderationImages"   class="list-group-item">
             <div class="row">
                 <p class="col-sm-2" data-ng-bind="moderationImage.date_moderation"></p>
+                <button data-ng-click=""  class="btn btn-large btn-primary"><a data-ng-href="{{moderationImage.content_Url+''+moderationImage.contenuImage}}">get Image</a></button>
                 <button data-ng-click="modererImage(moderationImage)"  class="btn btn-large btn-primary">moderer</button>
             </div>
-        </a>
+        </div>
     </div>
 </section>
 
@@ -23,12 +24,13 @@
         <div data-ng-show="success" class="text-center text-success">
             <strong>le contenu est moderer</strong>
         </div>
-        <a data-ng-repeat="moderationVideo in moderationVideos"  data-ng-href="{{moderationVideo.content_Url+''+moderationVideo.contenuVideo}}" class="list-group-item">
+        <div data-ng-repeat="moderationVideo in moderationVideos"  data-ng-href="{{moderationVideo.content_Url+''+moderationVideo.contenuVideo}}" class="list-group-item">
             <div class="row">
                 <p class="col-sm-2" data-ng-bind="moderationVideo.date_moderation"></p>
+                <button data-ng-click=""  class="btn btn-large btn-primary"><a data-ng-href="{{moderationVideo.content_Url+''+moderationVideo.contenuVideo}}">get Video</a></button>
                 <button data-ng-click="modererVideo(moderationVideo)"  class="btn btn-large btn-primary">moderer</button>
             </div>
-        </a>
+        </div>
     </div>
 </section>
 
@@ -40,13 +42,13 @@
         <div data-ng-show="success" class="text-center text-success">
             <strong>le contenu est moderer</strong>
         </div>
-        <a data-ng-repeat="moderationComment in moderationComments"  data-ng-href="{{moderationComment.content_Url+''+moderationComment.contenuComment}}" class="list-group-item">
+        <div data-ng-repeat="moderationComment in moderationComments"   class="list-group-item">
             <div class="row">
                 <p class="col-sm-2" data-ng-bind="moderationComment.date_moderation"></p>
-                <button data-ng-click=""  class="btn btn-large btn-primary">get contenu</button>
+                <button data-ng-click=""  class="btn btn-large btn-primary"><a data-ng-href="{{moderationComment.content_Url+''+moderationComment.contenuComment}}"></a></button>
                 <button data-ng-click="modererComment(moderationComment)"  class="btn btn-large btn-primary">moderer</button>
             </div>
-        </a>
+        </div>
     </div>
 </section>
 
@@ -62,7 +64,7 @@
         <a data-ng-repeat="moderationStatus in moderationStatus"  data-ng-href="{{moderationStatus.content_Url+''+moderationStatus.contenuStatus}}" class="list-group-item">
             <div class="row">
                 <p class="col-sm-2" data-ng-bind="moderationStatus.date_moderation"></p>
-                <button data-ng-click=""  class="btn btn-large btn-primary">get contenu</button>
+                <button data-ng-click=""  class="btn btn-large btn-primary"><a data-ng-href="{{moderationStatus.content_Url+''+moderationStatus.contenuStatus}}">get Image</a></button>
                 <button data-ng-click="modererStatus(moderationStatus)"  class="btn btn-large btn-primary">moderer</button>
             </div>
         </a>
