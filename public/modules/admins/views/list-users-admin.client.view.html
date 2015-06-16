@@ -1,0 +1,85 @@
+<section data-ng-controller="AdminsController" data-ng-init="findUsers()">
+    <div class="page-header">
+        <h1>Liste des utilisateurs</h1>
+    </div>
+
+    <div class="input-group" ng-hide="avance">
+        <input type="text" data-ng-model="search" class="form-control" placeholder="Rechercher par une valeur quelconque...">
+        <span class="input-group-btn">
+            <button class="btn btn-default" ng-click="avance=true">Activer filtrage avancé!</button>
+        </span>
+    </div>
+
+    <table class="table" ng-show="avance">
+        <thead>
+        <tr>
+            <th>
+                <div class="input-group">
+                    <label>Nom:
+                        <input type="text" data-ng-model="search.displayName" class="form-control" placeholder="Rechercher par nom...">
+                    </label>
+                </div>
+            </th>
+            <th>
+                <div class="input-group">
+                    <label>Affectation:
+                        <input type="text" data-ng-model="search.affectations[0].titre" class="form-control" placeholder="Rechercher par afectation...">
+                    </label>
+                </div>
+            </th>
+            <th>
+                <div class="input-group">
+                    <label>Type:
+                        <input type="text" data-ng-model="search.roles" class="form-control" placeholder="Rechercher par type...">
+                    </label>
+                </div>
+            </th>
+            <th><button class="btn btn-default" ng-click="avance=false">Activer filtrage générale!</button></th>
+            <th>&nbsp;</th>
+        </tr>
+        </thead>
+    </table>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>L'utilisateur</th>
+            <th>Affectation</th>
+            <th>Type</th>
+            <th>Bloquer</th>
+            <th>&nbsp;</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="user in usersList| filter:search" >
+            <td>{{user.displayName}}</td>
+            <td>
+                <form name="form1">
+                    <select data-ng-model="user.affectations[0]" ng-options="affectation.titre for affectation in affectationsList">
+                        <option value="">{{user.affectations[0].titre}}</option>
+                    </select>
+                </form>
+            </td>
+            <td>
+                <form name="form">
+                    <select ng-model="user.roles">
+                        <option value="etudiant affile">Etudiant affilé</option>
+                        <option value="etudiant non affile">Etudiant non affilé</option>
+                        <option value="contributeur">Contributeur</option>
+                        <option value="administrateur">Administrateur</option>
+                        <option value="administratif">Administratif</option>
+                        <option value="moderateur">Moderateur</option>
+                    </select>
+                </form>
+
+            </td>
+            <td>
+                <form name="form">
+                    <label><input type="checkbox" ng-model="user.bloque">Bloqué</label>
+
+                </form>
+            </td>
+            <td><button ng-disabled="!form.$dirty&&!form1.$dirty" class="btn btn-info" ng-click="update(user)">Valider</button></td>
+        </tr>
+        </tbody>
+    </table>
+</section>
