@@ -100,7 +100,14 @@ exports.moderationByID = function (req, res, next, id) {
  * Moderation authorization middleware
  */
 exports.hasAuthorization = function (req, res, next) {
-    if (req.moderation.user.id !== req.user.id) {
+    var i=0,trouve=false;
+    while(i<req.user.roles.length && trouve==false){
+        if(req.user.roles[i]=='moderateur'){
+            trouve=true;
+        }
+        i++;
+    }
+    if (trouve==false) {
         return res.status(403).send('User is not authorized');
     }
     next();

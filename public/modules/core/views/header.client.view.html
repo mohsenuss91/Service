@@ -56,22 +56,24 @@
 		<ul class="nav navbar-nav navbar-user" data-ng-show="authentication.user">
 			<li class="dropdown" dropdown>
 				<a href="#" class="dropdown-toggle" data-toggle="dropdown" dropdown-toggle>
-					<img src="images/people/50/guy-5.jpg" width="35" alt="Bill" class="img-circle"/>
+					<img src="{{authentication.user.providerData.picture || authentication.user.additionalProvidersData.google.picture ||'images/people/50/guy-5.jpg' }}" width="35" alt="Bill" class="img-circle"/>
 					<span data-ng-bind="authentication.user.displayName"></span> <b class="caret"></b>
 				</a>
 				<ul class="dropdown-menu" role="menu">
 					<li>
-						<a href="/#!/settings/profile">Edit Profile</a>
+						<a href="/#!/settings/profile">Modifer Profile</a>
 					</li>
 					<li>
-						<a href="/#!/settings/accounts">Manage Social Accounts</a>
+						<a href="/#!/settings/accounts">Gérer les comptes sociales</a>
 					</li>
 					<li data-ng-show="authentication.user.provider === 'local'">
-						<a href="/#!/settings/password">Change Password</a>
+						<a href="/#!/settings/password">Changer le mot de passe</a>
 					</li>
-					<li class="divider"></li>
-					<li>
-						<a href="/auth/signout">Signout</a>
+                    <li data-ng-show="authentication.user.roles.indexOf('admin') != -1">
+                        <a href="/#!/settings/password">Mode Administrateur</a>
+                    </li>
+                    <li>
+						<a href="/auth/signout">Se déconnecter</a>
 					</li>
 				</ul>
 			</li>
@@ -94,7 +96,7 @@
 		<div class="input-group" data-ng-controller="ContenusController">
 			<span class="input-group-addon"><i class="icon-search"></i></span>
 			<!--<input type="text" class="form-control" placeholder="Trouver un Amis">-->
-			<span  class="form-control container"><tags-input class="fixed-witdh"
+			<span  class="form-control container"><tags-input class="bootstrap fixed-witdh"
 						ng-model="$root.tags"
 						placeholder="Chercher Avec un Tag"
 						replace-spaces-with-dashes="false">

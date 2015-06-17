@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('users').controller('SettingsController', ['$scope','$upload', '$http', '$location', 'Users', 'Authentication',
-	function($scope, $upload,$http, $location, Users,Authentication) {
+angular.module('users').controller('SettingsController', ['$scope','$upload', '$http', '$location', 'Users', 'Authentication','Contenus',
+	function($scope, $upload,$http, $location, Users,Authentication,Contenus) {
 		$scope.user = Authentication.user;
 
         $scope.image_data_thumbnail = "/images/260x180.png";
@@ -117,8 +117,8 @@ angular.module('users').controller('SettingsController', ['$scope','$upload', '$
                 $scope.EstSuivis=response.estSuivi;
                 $scope.Suits=response.suit;
                 $scope.showlist=true;
-            }).error(function(response) {
-
+            }).error(function(errResponse) {
+                console.log(errResponse)
             });
         }
 	}

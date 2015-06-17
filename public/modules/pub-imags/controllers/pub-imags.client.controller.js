@@ -2,12 +2,12 @@
 
 
 // Pub imags controller
-angular.module('pub-imags').controller('PubImagsController', ['$scope','$upload','$socket','$stateParams','$location', 'Authentication','PubImags','DataImages',
-    function($scope,$upload,$socket,$stateParams,$location,Authentication, PubImags,DataImages) {
+angular.module('pub-imags').controller('PubImagsController', ['$scope','$upload','$stateParams','$location', 'Authentication','PubImags','DataImages',
+    function($scope,$upload,$stateParams,$location,Authentication, PubImags,DataImages) {
 		$scope.authentication = Authentication;
 
         $scope.image_data_thumbnail = "/images/260x180.png";
-        $scope.upload = function(files) {
+        $scope.upload = this.upload = function(files) {
             if (files && files.length) {
                 var file = files[0];
                 $upload.upload({
@@ -18,6 +18,7 @@ angular.module('pub-imags').controller('PubImagsController', ['$scope','$upload'
                     var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
                     document.getElementById('bar1').style.width= progressPercentage+"%";
                 }).success(function(data, status, headers, config) {
+					console.log("success");
                     $scope.originalFile = data.originalFile;
                     $scope.image_data_thumbnail = data.data;
                     $scope.image_data_type = data.typeData;
@@ -26,18 +27,23 @@ angular.module('pub-imags').controller('PubImagsController', ['$scope','$upload'
         };
 
         // Create new Pub imag
-		$scope.create = function() {
+		$scope.create = this.create = function() {
+			console.log('create');
 			// Create new Pub imag object
 			var pubImag = new PubImags ({
-                id_file_original: this.originalFile._id,
-                image_data_thumbnail:this.image_data_thumbnail,
-                typeImage: this.image_data_type,
-                description: this.description
+                id_file_original: $scope.originalFile._id,
+                //image_data_thumbnail:this.image_data_thumbnail,
+                typeImage: $scope.image_data_type,
+                description: $scope.description
 			});
             // Redirect after save
 			pubImag.$save(function(response) {
 				//$location.path('/pub-imags/'+response._id);
 				// Clear form fields
+				response.user = Authentication.user;
+				console.log('response in');
+				console.log(response);
+				$scope.contenus.push(response);
                 document.getElementById('bar1').style.width= "0%";
                 $scope.find();
                 $scope.image_data = "/images/260x180.png";
@@ -66,7 +72,7 @@ angular.module('pub-imags').controller('PubImagsController', ['$scope','$upload'
 		};
 
 		// Update existing Pub imag
-		$scope.update = function() {
+		$scope.update = this.update = function() {
 			var pubImag = $scope.pubImag;
 
 			pubImag.$update(function() {
@@ -78,17 +84,27 @@ angular.module('pub-imags').controller('PubImagsController', ['$scope','$upload'
 
 		// Find a list of Pub imags
 		$scope.find = function() {
-			$scope.pubImags = PubImags.query();
+			console.log('list');
+			$scope.pubImags = PubImags.query(function(){
+				var i=0;
+				for (i=0;i<$scope.pubImags.length;i++){
+					$scope.pubImags[i].dataImageUrl = DataImages.get({
+						dataImageId: $scope.pubImags[i]._id
+					});
+				}
+			});
 		};
 
 		// Find existing Pub imag
-		$scope.findOne = function() {
+		$scope.findOne = this.findOne = function(id) {
+			console.log(id);
             $scope.pubImag = PubImags.get({
-				pubImagId: $stateParams.pubImagId
+				pubImagId: id
 			});
             $scope.dataImageUrl = DataImages.get({
-                dataImageId: $stateParams.pubImagId
+                dataImageId: id
             });
+			console.log($scope.dataImageUrl);
         };
 	}
 ]);

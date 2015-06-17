@@ -190,9 +190,9 @@ angular.module('evenements').controller('EvenementsController', ['$scope', '$htt
         };
 
         // Find existing Evenement
-        $scope.findOne = function() {
+        $scope.findOne = this.findOne = function(id) {
             $scope.evenement = Evenements.get({
-                evenementId: $stateParams.evenementId
+                evenementId: id
             });
         };
     }]);

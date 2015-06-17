@@ -1,7 +1,79 @@
-<section data-ng-controller="AffectationsController" data-ng-init="find()">
+<section data-ng-controller="AffectationsController" data-ng-init="findAffectations()">
     <div class="page-header">
         <h1>Affectations</h1>
     </div>
+    <div class="text-center">
+        <a ng-click="changeViewCreate()">Créer un offre d'emploie</a>?
+    </div>
+    <div class="input-group">
+        <input type="text" data-ng-model="search" class="form-control" placeholder="Rechercher...">
+        <span class="input-group-btn">
+            <button class="btn btn-default">Rechercher</button>
+        </span>
+    </div>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Titre</th>
+            <th>Description</th>
+            <th>Type</th>
+            <th>Semestre</th>
+            <th>Specialite</th>
+            <th>Année</th>
+            <th>&nbsp;</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="affectation in affectationsList| filter:search" >
+                <td>
+                    <span ng-show="!update">{{affectation.titre}}</span>
+                    <input ng-hide="!update" type="text" data-ng-model="affectation.titre" class="form-control">
+                </td>
+                <td>
+                    <span ng-show="!update">{{affectation.description}}</span>
+                    <input ng-hide="!update" type="text" data-ng-model="affectation.description" class="form-control">
+                </td>
+                <td>
+                    <span ng-show="!update">{{affectation.type}}</span>
+                    <input ng-hide="!update" type="text" data-ng-model="affectation.type" class="form-control">
+                </td>
+                <td>
+                    <span ng-show="!update">{{affectation.semestre}}</span>
+                    <select ng-hide="!update" ng-model="affectation.semestre" class="form-control">
+                        <option value=""></option>
+                        <option value="1">Semestre 1</option>
+                        <option value="2">Semestre 2</option>
+                    </select>
+                </td>
+                <td>
+                    <span ng-show="!update">{{affectation.specialite}}</span>
+                    <select ng-hide="!update" ng-model="affectation.specialite" class="form-control">
+                        <option value=""></option>
+                        <option value="sil">SIL</option>
+                        <option value="sit">SIT</option>
+                        <option value="siq">SIQ</option>
+                    </select>
+                </td>
+                <td>
+                    <span ng-show="!update">{{affectation.annee}}</span>
+                    <select ng-hide="!update" ng-model="affectation.annee" class="form-control">
+                        <option value=""></option>
+                        <option value="1">Niveau 1</option>
+                        <option value="2">Niveau 2</option>
+                        <option value="3">Niveau 3</option>
+                        <option value="4">Niveau 4</option>
+                        <option value="5">Niveau 5</option>
+                    </select>
+                </td>
+                <td><button ng-show="!update" class="btn btn-danger"ng-click="remove(affectation)">Supprimer</button></td>
+                <td>
+                    <button ng-show="!update" class="btn btn-success"ng-click="update=true">Modifier</button>
+                    <button ng-hide="!update" class="btn btn-success"ng-click="update=false;updateAffec(affectation)">Confirmer</button>
+                </td>
+
+        </tr>
+        </tbody>
+    </table>
     <div class="list-group">
         <a data-ng-repeat="affectation in affectations" data-ng-href="#!/affectations/{{affectation._id}}"
            class="list-group-item">

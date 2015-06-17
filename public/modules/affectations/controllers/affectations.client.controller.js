@@ -1,20 +1,35 @@
 'use strict';
 
 // Affectations controller
-angular.module('affectations').controller('AffectationsController', ['$scope', '$stateParams', '$location', 'Authentication', 'Affectations',
-    function ($scope, $stateParams, $location, Authentication, Affectations) {
+angular.module('affectations').controller('AffectationsController', ['$scope', '$http', '$stateParams', '$location', 'Authentication', 'Affectations',
+    function ($scope, $http, $stateParams, $location, Authentication, Affectations) {
         $scope.authentication = Authentication;
+
+        // Find a list of Affectations
+        $scope.findAffectations = function () {
+            $http.get('affectations/')
+                .success(function (response) {
+                    console.log("i got the data affectationsList  " + response.length);
+                    $scope.affectationsList = response;
+                });
+        };
+
 
         // Create new Affectation
         $scope.create = function () {
             // Create new Affectation object
             var affectation = new Affectations({
-                name: this.name
+                titre: this.titre,
+                description: this.description,
+                type: this.type,
+                semestre: this.semestre,
+                specialite : this.specialite,
+                annee : this.annee
             });
 
             // Redirect after save
             affectation.$save(function (response) {
-                $location.path('affectations/' + response._id);
+                $location.path('affectations');
 
                 // Clear form fields
                 $scope.name = '';
@@ -26,35 +41,26 @@ angular.module('affectations').controller('AffectationsController', ['$scope', '
         // Remove existing Affectation
         $scope.remove = function (affectation) {
             if (affectation) {
-                affectation.$remove();
-
-                for (var i in $scope.affectations) {
-                    if ($scope.affectations [i] === affectation) {
-                        $scope.affectations.splice(i, 1);
-                    }
-                }
-            } else {
-                $scope.affectation.$remove(function () {
-                    $location.path('affectations');
+                $http.delete("/affectations/" + affectation._id).success(function (response) {
+                    $scope.findAffectations();
                 });
             }
         };
+        $scope.changeViewCreate = function(){
+            $location.path('affectations/create');
+        }
+        $scope.changeViewListe = function(){
+            $location.path('affectations');
+        }
 
         // Update existing Affectation
-        $scope.update = function () {
-            var affectation = $scope.affectation;
-
-            affectation.$update(function () {
-                $location.path('affectations/' + affectation._id);
-            }, function (errorResponse) {
-                $scope.error = errorResponse.data.message;
-            });
+        $scope.updateAffec = function (affectation) {
+            var newAffectation = affectation;
+            $http.put('affectations/'+affectation._id, newAffectation)
+                .success(function (response) {
+                });
         };
 
-        // Find a list of Affectations
-        $scope.find = function () {
-            $scope.affectations = Affectations.query();
-        };
 
         // Find existing Affectation
         $scope.findOne = function () {

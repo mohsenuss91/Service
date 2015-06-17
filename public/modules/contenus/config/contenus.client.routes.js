@@ -6,8 +6,9 @@ angular.module('contenus').config(['$stateProvider',
 		// Contenus state routing
 		$stateProvider.
 		state('listContenus', {
-			url: '/contenus',
-			templateUrl: 'modules/contenus/views/list-contenus.client.view.html'
+				url: '/contenus',
+				templateUrl: 'modules/contenus/views/list-contenus.client.view.html'
+
 		}).
 		state('createContenu', {
 			url: '/contenus/create',

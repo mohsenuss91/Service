@@ -19,12 +19,9 @@ conn.once('open', function () {
     gfs = Grid(conn.db);
 });
 
-var SpawnStream = require('spawn-stream');
+
 
 exports.upload = function(req,res){
-    var ffmpeg = SpawnStream("ffmpeg", ['-i', 'pipe:0', '-f', 'yuyv422', '-vf', 'thumbnail,scale=400:300',
-        '-r', '1', '-frames:v', '1', '-f', 'mjpeg', '-pix_fmt', 'yuyv422', 'pipe:1'
-    ]);
     var busboy = new Busboy({ headers: req.headers });
     busboy.on('file', function(fieldname, file, filename, encoding, mimetype) {
         var dataResp= {
@@ -44,8 +41,7 @@ exports.upload = function(req,res){
             });
 
         /*******    thumbnail video    ******/
-        file.pipe(ffmpeg)
-            .on('data',function(chunk){
+        file.on('data',function(chunk){
                 bufs.push(chunk);
             })
             .on('end',function(){
