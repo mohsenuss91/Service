@@ -2,8 +2,8 @@
 
 
 // Pub imags controller
-angular.module('pub-imags').controller('PubImagsController', ['$scope','$upload','$stateParams','$location', 'Authentication', 'PubImags','DataImages',
-    function($scope,$upload,$stateParams,$location,Authentication, PubImags,DataImages) {
+angular.module('pub-imags').controller('PubImagsController', ['$scope','$upload','$socket','$stateParams','$location', 'Authentication','PubImags','DataImages',
+    function($scope,$upload,$socket,$stateParams,$location,Authentication, PubImags,DataImages) {
 		$scope.authentication = Authentication;
 
         $scope.image_data_thumbnail = "/images/260x180.png";

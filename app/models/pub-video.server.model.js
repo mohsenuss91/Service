@@ -11,9 +11,22 @@ var mongooseFS = require('mongoose-fs');
  * Pub video Schema
  */
 var PubVideoSchema = new Schema({
-    id_file_video:
+    id_file_original:
     {
         type: mongoose.Schema.Types.ObjectId
+    },
+    video_data_thumbnail:
+    {
+        type: String,
+        default: '',
+        required: 'Please fill Pub imag description',
+        trim: true
+    },
+    typeVideo: {
+        type: String,
+        default: '',
+        required: 'Please fill Pub imag description',
+        trim: true
     },
     description: {
         type: String,

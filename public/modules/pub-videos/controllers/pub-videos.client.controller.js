@@ -5,6 +5,7 @@ angular.module('pub-videos').controller('PubVideosController', ['$scope','$uploa
 	function($scope,$upload,$stateParams, $location, Authentication, PubVideos, DataVideos) {
 		$scope.authentication = Authentication;
 
+        $scope.video_data_thumbnail = "/images/260x180.png";
         $scope.upload = function(files) {
             if (files && files.length) {
                 var file = files[0];
@@ -16,7 +17,9 @@ angular.module('pub-videos').controller('PubVideosController', ['$scope','$uploa
                     var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
                     document.getElementById('bar1').style.width= progressPercentage+"%";
                 }).success(function(data, status, headers, config) {
-
+                    $scope.originalFile = data.originalFile;
+                    $scope.video_data_thumbnail = data.data;
+                    $scope.video_data_type = data.typeData;
                 });
             }
         };
@@ -25,8 +28,15 @@ angular.module('pub-videos').controller('PubVideosController', ['$scope','$uploa
 		$scope.create = function() {
 			// Create new Pub video object
 			var pubVideo = new PubVideos ({
+<<<<<<< .merge_file_a09728
                 id_file_video: $scope.file._id,
                 description: $scope.description
+=======
+                id_file_original: this.originalFile._id,
+                video_data_thumbnail:this.video_data_thumbnail,
+                typeVideo: this.video_data_type,
+                description: this.description
+>>>>>>> .merge_file_a10992
             });
 
 			// Redirect after save
@@ -77,6 +87,9 @@ angular.module('pub-videos').controller('PubVideosController', ['$scope','$uploa
 			$scope.pubVideo = PubVideos.get({
 				pubVideoId: $stateParams.pubVideoId
 			});
+            $scope.dataVideoUrl = DataVideos.get({
+                dataVideoId: $stateParams.pubVideoId
+            });
 		};
 	}
 ]);

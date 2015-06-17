@@ -4,28 +4,26 @@
  * Module dependencies.
  */
 var mongoose = require('mongoose'),
-    errorHandler = require('./errors.server.controller'),
-    Affectation = mongoose.model('Affectation'),
-    _ = require('lodash');
+	errorHandler = require('./errors.server.controller'),
+	Affectation = mongoose.model('Affectation'),
+	_ = require('lodash');
 
 /**
  * Create a Affectation
  */
-exports.create = function (req, res) {
-    var affectation = new Affectation(req.body);
-    affectation.user = req.user;
-    console.log("yow yow"+affectation.titre+affectation.description);
+exports.create = function(req, res) {
+	var affectation = new Affectation(req.body);
+	affectation.user = req.user;
 
-    affectation.save(function (err) {
-        if (err) {
-            console.log(errorHandler.getErrorMessage(err));
-            return res.status(400).send({
-                message: errorHandler.getErrorMessage(err)
-            });
-        } else {
-            res.jsonp(affectation);
-        }
-    });
+	affectation.save(function(err) {
+		if (err) {
+			return res.status(400).send({
+				message: errorHandler.getErrorMessage(err)
+			});
+		} else {
+			res.jsonp(affectation);
+		}
+	});
 };
 
 /**

@@ -1,0 +1,50 @@
+<section class="row" data-ng-controller="SettingsController">
+    <div class="panel panel-default">
+        <div class="panel-heading panel-heading-gray">
+            <a href="#!/settings/profile" class="btn btn-white btn-xs pull-right"><i class="fa fa-pencil"></i></a>
+            <img ng-src="{{user.file_image}}" width="35"  class="img-circle">
+        </div>
+        <div class="panel-body">
+            <ul class="list-unstyled profile-about">
+                <li>
+                    <div class="row">
+                        <div class="col-sm-4"><span class="text-muted">Nom</span></div>
+                        <div class="col-sm-8" data-ng-bind="user.firstName"></div>
+                    </div>
+                </li>
+                <li>
+                    <div class="row">
+                        <div class="col-sm-4"><span class="text-muted">Prenom</span></div>
+                        <div class="col-sm-8" data-ng-bind="user.lastName"></div>
+                    </div>
+                </li>
+                <li>
+                    <div class="row">
+                        <div class="col-sm-4"><span class="text-muted">Adresse Email</span></div>
+                        <div class="col-sm-8" data-ng-bind="user.email"></div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+    </div>
+    </div>
+    <div class="row col-md-offset-5 col-md-2">
+        <button data-ng-click="listSuivis()"  class="btn btn-large btn-primary">tes suivis</button>
+    </div>
+    <br/>
+    <br/>
+    <br/>
+    <div class="">
+        <h3 ng-show="showlist">list user qui te suive</h3>
+        <a data-ng-repeat="estSuiv in EstSuivis"  data-ng-href="" class="list-group-item">
+            <p data-ng-bind="estSuiv.lastName+' '+estSuiv.firstName"></p>
+        </a>
+    </div>
+    <div>
+        <h3 ng-show="showlist">list user suivis</h3>
+        <a data-ng-repeat="suit in Suits"  data-ng-href="" class="list-group-item">
+            <p data-ng-bind="suit.lastName+' '+suit.firstName"></p>
+        </a>
+    </div>
+</section>

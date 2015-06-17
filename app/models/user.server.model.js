@@ -25,6 +25,13 @@ var validateLocalStrategyPassword = function(password) {
  * User Schema
  */
 var UserSchema = new Schema({
+    file_image:
+    {
+        type: String
+    },
+    typeImage: {
+        type: String
+    },
 	firstName: {
 		type: String,
 		trim: true,
@@ -50,7 +57,7 @@ var UserSchema = new Schema({
 	},
 	username: {
 		type: String,
-		unique: 'Username existe d√©j√†',
+		unique: 'Username existe dÈj‡',
 		required: 'Entrez votre username',
 		trim: true
 	},
