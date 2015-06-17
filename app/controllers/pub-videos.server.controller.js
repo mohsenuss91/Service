@@ -31,7 +31,7 @@ exports.upload = function(req,res){
         };
         /*******    save in gridFs    ******/
         var writeStreamOrginal = gfs.createWriteStream({
-            filename: filename+'original'
+            filename: filename
         });
         var bufs=[];
         file.pipe(writeStreamOrginal)
@@ -87,15 +87,12 @@ exports.readData=function(req,res){
                         endPos: file.chunkSize
                 }});
                 var bufs = [];
-                readStream.on('data',function(chunk){
-                    bufs.push(chunk);
+                console.log(file);
+                var writeStream =  fs.createWriteStream('./public/videos/'+file.filename);
+                readStream.pipe(writeStream).on('close',function(){
+                    res.jsonp({data:'/videos/'+file.filename});
                 });
-                readStream.on('close',function() {
-                    var fbuf = Buffer.concat(bufs);
-                    var base64 = (fbuf.toString('base64'));
-                    var data = 'data:' + pubVideo.typeVideo + ';base64,' + base64 + '';
-                    res.jsonp({data: data});
-                });
+
             }
         }
     });
