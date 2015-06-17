@@ -40,16 +40,6 @@ exports.upload = function(req,res){
                 res.jsonp(dataResp);
             });
 
-        /*******    thumbnail video    ******/
-        file.on('data',function(chunk){
-                bufs.push(chunk);
-            })
-            .on('end',function(){
-                var fbuf = Buffer.concat(bufs);
-                var base64 = (fbuf.toString('base64'));
-                var data = 'data:image/jpeg;base64,' + base64 + '';
-                dataResp.data = data;
-            });
     });
     busboy.on('finish', function() {
         console.log('uploade finish');

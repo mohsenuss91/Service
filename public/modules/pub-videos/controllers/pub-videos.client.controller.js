@@ -1,8 +1,8 @@
 'use strict';
 
 // Pub videos controller
-angular.module('pub-videos').controller('PubVideosController', ['$scope','$upload', '$stateParams', '$location', 'Authentication', 'PubVideos','DataVideos',
-	function($scope,$upload,$stateParams, $location, Authentication, PubVideos, DataVideos) {
+angular.module('pub-videos').controller('PubVideosController', ['$scope','$sce','$upload', '$stateParams', '$location', 'Authentication', 'PubVideos','DataVideos',
+	function($scope,$sce,$upload,$stateParams, $location, Authentication, PubVideos, DataVideos) {
 		$scope.authentication = Authentication;
 
         $scope.video_data_thumbnail = "/images/260x180.png";
@@ -18,7 +18,6 @@ angular.module('pub-videos').controller('PubVideosController', ['$scope','$uploa
                     document.getElementById('bar1').style.width= progressPercentage+"%";
                 }).success(function(data, status, headers, config) {
                     $scope.originalFile = data.originalFile;
-                    $scope.video_data_thumbnail = data.data;
                     $scope.video_data_type = data.typeData;
                 });
             }
@@ -29,7 +28,6 @@ angular.module('pub-videos').controller('PubVideosController', ['$scope','$uploa
 			// Create new Pub video object
 			var pubVideo = new PubVideos ({
                 id_file_original: this.originalFile._id,
-                video_data_thumbnail:this.video_data_thumbnail,
                 typeVideo: this.video_data_type,
                 description: this.description
             });

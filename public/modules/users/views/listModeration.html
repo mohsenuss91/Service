@@ -18,14 +18,14 @@
                     <td data-ng-bind="contenuUser.user.displayName">{{}}</td>
                     <td data-ng-bind="contenuUser.created"></td>
                     <td>
-                        <button ng-hide="photo" class="btn btn-primary" ng-click="findOneContenu(contenuUser) ; photo = true">get image</button>
-                        <button ng-show="photo" class="btn btn-primary" ng-click="photo = false">hide image</button>
+                        <button ng-hide="cond"   class="btn btn-primary" ng-click="findOneContenu(contenuUser) ; cond = true">get image</button>
+                        <button ng-show="cond" class="btn btn-primary" ng-click="cond = false">hide image</button>
                     </td>
-                    <td><button  class="btn btn-info" ng-click="modererContenu(contenuUser)">moderer</button></td>
+                    <td><button  class="btn btn-info" ng-click="modererContenu(contenuUser);cond=false">moderer</button></td>
                 </div>
-                <div ng-hide="photo" class="list-item-group">
-                    <p data-ng-bind="contenuU.description"/>
-                    <img data-ng-src="{{dataU.data}}">
+                <div ng-hide="cond"  class="list-item-group">
+                    <p  data-ng-bind="contenuU.description"/>
+                    <img  data-ng-src="{{dataU.data}}">
                 </div>
             </tr>
         </tbody>

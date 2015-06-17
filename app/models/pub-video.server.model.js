@@ -15,13 +15,6 @@ var PubVideoSchema = new Schema({
     {
         type: mongoose.Schema.Types.ObjectId
     },
-    video_data_thumbnail:
-    {
-        type: String,
-        default: '',
-        required: 'Please fill Pub imag description',
-        trim: true
-    },
     typeVideo: {
         type: String,
         default: '',
