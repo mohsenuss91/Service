@@ -60,7 +60,7 @@
                 </form>
             </td>
             <td>
-                <form name="form">
+                <form name="form2">
                     <select ng-model="user.roles">
                         <option value="etudiant affile">Etudiant affilé</option>
                         <option value="etudiant non affile">Etudiant non affilé</option>
@@ -78,7 +78,7 @@
 
                 </form>
             </td>
-            <td><button ng-disabled="!form.$dirty&&!form1.$dirty" class="btn btn-info" ng-click="update(user)">Valider</button></td>
+            <td><button ng-disabled="!form.$dirty&&!form1.$dirty&&!form2.$dirty" class="btn btn-info" ng-click="update(user)">Valider</button></td>
         </tr>
         </tbody>
     </table>
