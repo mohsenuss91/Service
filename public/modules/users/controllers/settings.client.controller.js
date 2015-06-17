@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('users').controller('SettingsController', ['$scope','$upload', '$http', '$location', 'Users', 'Authentication','Contenus',
-	function($scope, $upload,$http, $location, Users,Authentication,Contenus) {
+angular.module('users').controller('SettingsController', ['$scope','$upload','$stateParams','$http', '$location', 'Users', 'Authentication','Contenus','PubImags','PubVideos','DataImages','DataVideos','Moderations',
+	function($scope, $upload,$http, $stateParams,$location, Users,Authentication,Contenus,PubImags,PubVideos,DataImages,DataVideos,Moderations) {
 		$scope.user = Authentication.user;
 
         $scope.image_data_thumbnail = "/images/260x180.png";
@@ -110,6 +110,7 @@ angular.module('users').controller('SettingsController', ['$scope','$upload', '$
                 $scope.error = response.data.message;
             });
         }
+        /******************************/
         $scope.showlist=false;
         $scope.listSuivis=function(){
             $http.get('/users/me', {
@@ -119,6 +120,45 @@ angular.module('users').controller('SettingsController', ['$scope','$upload', '$
                 $scope.showlist=true;
             }).error(function(errResponse) {
                 console.log(errResponse)
+            });
+        }
+        /*************************************/
+        $scope.findContenu = function(){
+            $scope.ContenuUsers = Contenus.query();
+        }
+        /************************************/
+        $scope.findOneContenu = function(contenuUser)
+        {
+            if(contenuUser.typeC='image'){
+                $scope.contenuU = PubImags.get({
+                    pubImagId : contenuUser.pubImag
+                });
+                $scope.dataU = DataImages.get({
+                    dataImageId: contenuUser.pubImag
+                });
+            }else {
+                if (contenuUser.typeC = 'video') {
+                    $scope.contenuU = PubVideos.get({
+                        pubVideoId: contenuUser.PubVideo
+                    });
+                    $scope.dataU = DataVideos.get({
+                        dataVideoId: contenuUser.PubVideo
+                    });
+                }
+            }
+        }
+        /*************************************/
+        $scope.modererContenu = function(contenuUser){
+            $scope.success = $scope.error = null;
+            var moderationContenu = contenuUser.moderation;
+            moderationContenu.moderer_par = $scope.user._id;
+            moderationContenu.modere = true;
+            var moderation = new Moderations(moderationContenu);
+            moderation.$update(function(response) {
+                $scope.success = true;
+                Authentication.user = response;
+            }, function(response) {
+                $scope.error = response.data.message;
             });
         }
 	}

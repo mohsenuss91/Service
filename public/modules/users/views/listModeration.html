@@ -1,1 +1,36 @@
+<section data-ng-controller="SettingsController" data-ng-init="findContenu()">
+    <h3>list des contenue non moderer</h3>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>L'utilisateur</th>
+            <th>date creation</th>
+            <th>Contenu</th>
+            <th>moderation</th>
+            <th>&nbsp;</th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr data-ng-repeat="contenuUser in ContenuUsers" ng-show="contenuUser.moderation.modere == false &&
+            (contenuUser.typeC == 'image' || contenuUser.typeC == 'video')">
+                <div class="list-item-group">
+                    <td data-ng-bind="contenuUser.user.displayName">{{}}</td>
+                    <td data-ng-bind="contenuUser.created"></td>
+                    <td>
+                        <button ng-hide="photo" class="btn btn-primary" ng-click="findOneContenu(contenuUser) ; photo=true">get image</button>
+                        <button ng-show="photo" class="btn btn-primary" ng-click="photo=false">hide image</button>
+                    </td>
+                    <td><button   class="btn btn-info" ng-click="modererContenu(contenuUser)">moderer</button></td>
+                </div>
+                <div ng-hide="photo" class="list-item-group">
+                    <img data-ng-src="{{dataU.data}}">
+                </div>
+            </tr>
+        </tbody>
+    </table>
+</section>
+
+
+
 
