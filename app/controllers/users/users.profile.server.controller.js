@@ -111,13 +111,8 @@ exports.me = function(req, res) {
             if (err) {
                 return err;
             }else{
-                var suiv={
-                    firstName:'',
-                    lastName:''
-                };
-                suiv.firstName=user.firstName;
-                suiv.lastName=user.lastName;
-                userProfile.estSuivi.push(suiv);
+                user.password = '';
+                userProfile.estSuivi.push(user);
             }
         });
         i++;
@@ -125,17 +120,12 @@ exports.me = function(req, res) {
     /*************list des user qui tu suive***********/
     var k= 0,suit=req.user.suit;
     while(k<suit.length){
-        User.findById(suit[k]).exec(function(err,user) {
+        User.findById(suit[k]-1).exec(function(err,user) {
             if (err) {
                 return err;
             }else{
-                var suiv={
-                    firstName:'',
-                    lastName:''
-                };
-                suiv.firstName=user.firstName;
-                suiv.lastName=user.lastName;
-                userProfile.suit.push(suiv);
+                user.password = '';
+                userProfile.suit.push(user);
             }
         });
         if(k== suit.length-1){
@@ -143,13 +133,8 @@ exports.me = function(req, res) {
                 if (err) {
                     return err;
                 }else{
-                    var suiv={
-                        firstName:'',
-                        lastName:''
-                    };
-                    suiv.firstName=user.firstName;
-                    suiv.lastName=user.lastName;
-                    userProfile.suit.push(suiv);
+                    user.password = '';
+                    userProfile.suit.push(user);
                     res.jsonp(userProfile || null);
                 }
             });
@@ -177,16 +162,8 @@ exports.list = function(req, res){
                         j++;
                     }
                     if(j==req.user.suit.length){
-                        var user={
-                            _id : '',
-                            firstName:'',
-                            lastName:'',
-                            estSuivi:[]
-                        };
-                        user.firstName = Users[i].firstName;
-                        user.lastName = Users[i].lastName;
-                        user._id = Users[i]._id;
-                        listUsers.push(user);
+                        Users[i].password = '';
+                        listUsers.push(Users[i]);
                     }
                 }
                 i++;

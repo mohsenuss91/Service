@@ -1,17 +1,30 @@
 <section data-ng-controller="SettingsController" data-ng-init="find()">
     <div class="page-header">
-        <h1>List Utilisateur</h1>
+        <h1>Liste des utilisateurs</h1>
     </div>
     <div class="list-group" class="col-sm-8">
         <div data-ng-show="success" class="text-center text-success">
             <strong>l'utilisateur est ajouté a votre liste des suivis</strong>
         </div>
-        <a data-ng-repeat="userOther in Users"  data-ng-href="" class="list-group-item">
-            <div class="row">
-                <p class="col-sm-2" data-ng-bind="userOther.lastName+' '+userOther.firstName"></p>
-                <button data-ng-click="ajoutSuiv(userOther)"  class="btn btn-large btn-primary">suiv+</button>
+
+        <div class="panel panel-default">
+            <div class="panel-heading panel-heading-gray">
+                <i class="icon-user-1"></i> Liste des suivis
             </div>
-        </a>
+            <div data-ng-repeat="suit in Users" class="list-group-item">
+                <div class="media">
+                    <a href="" class="pull-left">
+                        <img class="media-object" src="{{suit.providerData.picture || suit.additionalProvidersData.google.picture ||'images/people/50/guy-2.jpg' }}" width="35" alt="Bill" class="img-circle"/>
+                    </a>
+                    <div class="media-body" >
+                        <span data-ng-bind="suit.displayName"></span><br/>
+                        <span>En <span data-ng-bind="suit.created | date:'medium'"></span></span>
+                    </div>
+                    <a data-ng-click="ajoutSuiv(userOther)" class="btn btn-primary btn-xs pull-right">Ajouter <i class="fa fa-plus"></i></a>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
     </div>
 </section>
 
