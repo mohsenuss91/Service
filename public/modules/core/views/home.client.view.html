@@ -5,7 +5,7 @@
 		<div id="menu" data-scrollable>
 			<ul >
 				<li class="category">Navigation</li>
-				<li data-ng-repeat="item in menu.items | orderBy: 'position'"
+				<li data-ng-repeat="item in menu.items | orderBy: 'position'" data-ng-if="item.shouldRender(authentication.user);"
 					ng-switch="item.menuItemType"
 					ui-route="{{item.uiRoute}}" ng-class="{active: ($uiRoute)}"
 						>

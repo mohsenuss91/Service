@@ -7,7 +7,7 @@ angular.module('contenus').run(['Menus',
 		Menus.addMenuItem('topbar', 'Contenus', 'contenus', 'icon-ship-wheel', '/contenus(/create)?');
 		Menus.addMenuItem('topbar', 'Images', 'pub-imags', 'fa fa-picture-o', '/pub-imags(/create)?');
 		Menus.addMenuItem('topbar', 'Videos', 'pub-videos', 'fa fa-group', '/pub-videos(/create)?');
-		Menus.addMenuItem('topbar', 'Offres', 'offres', 'icon-user-1', '/offres(/create)?');
-		Menus.addMenuItem('topbar', 'Evenements', 'evenements', 'icon-comment-fill-1', '/evenements(/create)?');
+		Menus.addMenuItem('topbar', 'Administrateur', 'admin/users', 'icon-comment-fill-1', '/evenements(/create)?',false,['administrateur']);
+		Menus.addMenuItem('topbar', 'Affectation', 'affectations', 'icon-user-1', '/evenements(/create)?',false,['administrateur']);
 	}
 ]);

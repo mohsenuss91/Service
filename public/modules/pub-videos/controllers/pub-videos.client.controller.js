@@ -25,8 +25,8 @@ angular.module('pub-videos').controller('PubVideosController', ['$scope','$uploa
 		$scope.create = function() {
 			// Create new Pub video object
 			var pubVideo = new PubVideos ({
-                id_file_video: this.file._id,
-                description: this.description
+                id_file_video: $scope.file._id,
+                description: $scope.description
             });
 
 			// Redirect after save
