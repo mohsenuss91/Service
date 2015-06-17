@@ -163,6 +163,10 @@ exports.list = function(req, res){
                     }
                     if(j==req.user.suit.length){
                         Users[i].password = '';
+                        Users[i].bloque = true;
+                        listUsers.push(Users[i]);
+                    }else{
+                        Users[i].bloque = false;
                         listUsers.push(Users[i]);
                     }
                 }

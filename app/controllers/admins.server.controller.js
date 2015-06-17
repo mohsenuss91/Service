@@ -8,6 +8,7 @@ var mongoose = require('mongoose'),
 	User = mongoose.model('User'),
     Affectation = mongoose.model('Affectation'),
     Signalement = mongoose.model('Signalement'),
+    Contenu = mongoose.model('Contenu'),
 	_ = require('lodash');
 
 /**
@@ -77,6 +78,25 @@ exports.userUpdate = function(req, res) {
 exports.signalementApdate = function(req, res) {
     var signalement = req.signalement ;
 
+    Contenu.findByIdAndRemove(
+        req.signalement.contenu,
+        function (err, contenu) {
+            if (err) {
+                console.log(err);
+                return res.send(err);
+            }
+            else {
+                signalement.remove(function (err) {
+                    if (err) {
+                        return res.status(400).send({
+                            message: errorHandler.getErrorMessage(err)
+                        });
+                    } else {
+                        res.jsonp(signalement);
+                    }
+                });
+            }
+        })/*
     User.findByIdAndUpdate(
         req.signalement.user_signale,
         {$set: {bloque: true}},
@@ -96,7 +116,7 @@ exports.signalementApdate = function(req, res) {
                     }
                 });
             }
-        })
+        })*/
 };
 
 /**

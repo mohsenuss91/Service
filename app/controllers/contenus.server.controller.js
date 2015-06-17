@@ -74,7 +74,7 @@ exports.delete = function(req, res) {
  */
 exports.list = function(req, res) {
 
-	Contenu.find().sort('-created').populate('user', 'displayName')
+	Contenu.find().sort('-created').populate('user')
 		.deepPopulate('likes.user.displayName')
 		.exec(function (err, contenus) {
 		if (err) {

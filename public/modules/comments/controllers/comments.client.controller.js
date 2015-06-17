@@ -17,6 +17,8 @@ angular.module('comments').controller('CommentsController', ['$scope', '$http', 
             // Redirect after save
             comment.$save({contenuId: contenu._id},
                 function (response) {
+                    $scope.comment.push(response);
+
                     //$location.path('contenues/' + contenu._id);
 
                     // Clear form fields

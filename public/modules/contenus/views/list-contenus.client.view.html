@@ -12,7 +12,7 @@
                             <ul class="nav nav-tabs nav-justified">
                                 <li ng-class="{'active': navbar == 'status'}"><a href ng-click="navbar = 'status'"><i class="fa fa-pencil"></i> Status</a></li>
                                 <li ng-class="{'active': navbar == 'photo' }"><a href ng-click="navbar = 'photo'"><i class="fa fa-photo"></i> Photo</a></li>
-                                <li ng-class="{'active': navbar == 'video' }"><a href ng-click="navbar = 'video'"><i class="fa fa-video-camera"></i> Video</a></li>
+                                <li ng-class="{'active': navbar == 'video' }"><a href="#!/pub-videos" ng-click="navbar = 'video'"><i class="fa fa-video-camera"></i> Video</a></li>
                                 <li ng-class="{'active': navbar == 'offre' }" data-ng-controller="OffresController as OffresCtrl">
                                     <a href ng-click="navbar = 'offre'; OffresCtrl.modalCreate(); OffresCtrl.find()">
                                     <i class="fa fa-graduation-cap"></i>
@@ -97,7 +97,9 @@
              class="panel panel-default" ng-class="{'profile-card':contenu.typeC == 'offre'|| contenu.typeC == 'evenement'}">
             <div class="panel-heading" ng-hide="contenu.typeC == 'offre'|| contenu.typeC == 'evenement'">
                 <div class="media">
-                    <a href="" class="pull-left"><img src="images/people/50/guy-2.jpg" class="media-object"></a>
+                    <a href="" class="pull-left">
+                        <img class="media-object" src="{{contenu.user.providerData.picture || contenu.user.additionalProvidersData.google.picture ||'images/people/50/guy-2.jpg' }}" width="35" alt="Bill" class="img-circle"/>
+                    </a>
 
                     <div class="media-body" >
                         <a href="#" class="pull-right text-muted"><i class="icon-reply-all-fill fa fa-2x "></i></a>
@@ -148,9 +150,9 @@
                             <a href="" class="pull-left"><img src="images/people/50/guy-2.jpg" class="media-object"></a>
 
                             <div class="media-body">
-                                <a class="pull-right text-muted" ng-click="EvenementsCtrl.modalUpdate('lg',offre)">
+                               <!-- <a class="pull-right text-muted" ng-click="EvenementsCtrl.modalUpdate('lg',offre)">
                                     <i class="glyphicon glyphicon-pencil"></i>
-                                </a>
+                                </a>-->
                                 <a class="pull-right text-muted" data-ng-click="EvenementsCtrl.remove(contenu)">
                                     <i class="glyphicon glyphicon-trash"></i>
                                 </a>
@@ -175,7 +177,7 @@
                 </div>
                 <p ng-show="contenu.typeC == 'status'" data-ng-bind="contenu.name"></p>
                 <a ng-show="contenu.typeC == 'image'" data-ng-controller="PubImagsController as PubImagsCtrl" data-ng-init="contenu.pubImag ? PubImagsCtrl.findOne(contenu.pubImag) : null">
-                    <h1 data-ng-bind="pubImag.description"></h1>
+                    <h2 data-ng-bind="pubImag.description"></h2>
                     <div class="thumbnail"><img ng-src="{{dataImageUrl.data}}" /></div>
                 </a>
             </div>

@@ -20,7 +20,7 @@
                         <span data-ng-bind="suit.displayName"></span><br/>
                         <span>En <span data-ng-bind="suit.created | date:'medium'"></span></span>
                     </div>
-                    <a data-ng-click="ajoutSuiv(userOther)" class="btn btn-primary btn-xs pull-right">Ajouter <i class="fa fa-plus"></i></a>
+                    <a data-ng-click="ajoutSuiv(suit)" ng-show="suit.bloque" class="btn btn-primary btn-xs pull-right">Ajouter <i class="fa fa-plus"></i></a>
                 </div>
             </div>
             <div class="clearfix"></div>

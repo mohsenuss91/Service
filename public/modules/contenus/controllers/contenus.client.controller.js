@@ -19,7 +19,6 @@ angular.module('contenus').controller('ContenusController', ['$scope', '$rootSco
 			console.log(contenu);
 			// Redirect after save
 			contenu.$save(function(response) {
-				console.log('zadha');
 				$scope.contenus.push(response);
 				// Clear form fields
 				$scope.name = '';
